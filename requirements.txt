@@ -3,3 +3,5 @@ dspy-ai==2.5.6
 seaborn==0.13.2
 matplotlib==3.9.2
 scikit-learn==1.5.2 
+torch==2.5.1
+transformers==4.46.1
