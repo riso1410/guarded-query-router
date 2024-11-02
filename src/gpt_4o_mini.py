@@ -33,7 +33,7 @@ class GPT4Model:
         configure(lm=self.lm)
 
 
-class DataPreparation:
+class DataPreparationLLM:
     """Handles data loading and processing for training and testing."""
 
     def __init__(self, config: Config):
@@ -93,6 +93,7 @@ class Trainer:
         self.module_class = module_class
         self.train_data = train_data
         self.evaluator = evaluator
+        self.optimized_model = None
 
     def comparison_metric(self, example, pred, trace=None) -> bool:
         """Metric function for comparing predicted label with actual label, using parse_answer for consistency."""
@@ -112,7 +113,13 @@ class Trainer:
 
         # Compile the classification module with optimized settings
         compiled_classification = fewshot_optimizer.compile(self.module_class(), trainset=self.train_data)
+        self.optimized_model = compiled_classification
         return compiled_classification
+    
+    def save_model(self, model_path: str):
+        """Save the optimized model."""
+        self.optimized_model.save(model_path)
+        print(f"Model saved to {model_path}")
 
 
 class Evaluator:
