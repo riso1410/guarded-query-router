@@ -1,7 +1,6 @@
 import re
 import dspy
 import random
-import tiktoken
 import pandas as pd
 from sklearn.metrics import accuracy_score
 from dspy.teleprompt import BootstrapFewShotWithRandomSearch
@@ -11,19 +10,12 @@ from utilities import Config
 class GPT4Model:
     """Setup for GPT-4 model configuration and initialization."""
 
-    def __init__(self, api_key: str, proxy_url: str, model_name="gpt-4o-mini", temperature=0.2,
-                 price_per_million_tokens_input=0.15, price_per_million_tokens_output=0.60):
+    def __init__(self, api_key: str, proxy_url: str, model_name="gpt-4o-mini", temperature=0.2):
         self.api_key = api_key
         self.proxy_url = proxy_url
         self.model_name = model_name
         self.temperature = temperature
-        self.price_per_million_tokens_input = price_per_million_tokens_input
-        self.price_per_million_tokens_output = price_per_million_tokens_output
-
-        if not self.api_key:
-            raise ValueError("API key not found. Please check your environment variables.")
         
-        self.encoder = tiktoken.encoding_for_model(self.model_name)
         self.lm = LM(
             api_key=self.api_key,
             model=self.model_name,
@@ -111,9 +103,9 @@ class Trainer:
             num_candidate_programs=5,
         )
 
-        # Compile the classification module with optimized settings
         compiled_classification = fewshot_optimizer.compile(self.module_class(), trainset=self.train_data)
         self.optimized_model = compiled_classification
+
         return compiled_classification
     
     def save_model(self, model_path: str):
@@ -124,12 +116,7 @@ class Trainer:
 
 class Evaluator:
     """Model evaluation and cost calculation."""
-
-    def __init__(self, gpt_model: GPT4Model):
-        self.encoder = gpt_model.encoder
-        self.price_per_million_tokens_input = gpt_model.price_per_million_tokens_input
-        self.price_per_million_tokens_output = gpt_model.price_per_million_tokens_output
-
+    
     @staticmethod
     def parse_answer(answer) -> bool:
         """Parse answers into a consistent binary format."""
@@ -145,9 +132,6 @@ class Evaluator:
         parsed_preds = [self.parse_answer(pred) for pred in predictions]
         parsed_labels = [self.parse_answer(label) for label in true_labels]
         return accuracy_score(parsed_labels, parsed_preds)
-
-    def count_tokens(self, text: str) -> int:
-        return len(self.encoder.encode(text))
-
+    
     def calculate_price(self, token_count: int) -> float:
         return (token_count / 1_000_000) * self.price_per_million_tokens_input
