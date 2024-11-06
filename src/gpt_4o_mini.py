@@ -5,17 +5,20 @@ import pandas as pd
 from sklearn.metrics import accuracy_score
 from dspy.teleprompt import BootstrapFewShotWithRandomSearch
 from dspy import LM, Example, configure
-from utilities import Config
 
 class GPT4Model:
     """Setup for GPT-4 model configuration and initialization."""
 
-    def __init__(self, api_key: str, proxy_url: str, model_name="gpt-4o-mini", temperature=0.2):
+    def __init__(self, api_key: str, proxy_url: str, domain: str, model_name: str, temperature=0.2, train_size=100, test_size=200, seed=22):
         self.api_key = api_key
         self.proxy_url = proxy_url
+        self.domain = domain
         self.model_name = model_name
         self.temperature = temperature
-        
+        self.train_size = train_size
+        self.test_size = test_size
+        self.seed = seed
+
         self.lm = LM(
             api_key=self.api_key,
             model=self.model_name,
@@ -23,19 +26,11 @@ class GPT4Model:
             temperature=self.temperature
         )
         configure(lm=self.lm)
-
-
-class DataPreparationLLM:
-    """Handles data loading and processing for training and testing."""
-
-    def __init__(self, config: Config):
-        self.train_size = config.train_size
-        self.test_size = config.test_size
-        self.seed = config.seed
-
+        
     @staticmethod
-    def create_example(row: pd.Series) -> Example:
+    def create_example(domain: str, row: pd.Series) -> Example:
         return Example(
+            target=domain,
             prompt=row["question"],
             completion=row["answer"],
             label=row["label"],
@@ -45,8 +40,8 @@ class DataPreparationLLM:
         open_data = pd.read_csv(open_path)
         specific_data = pd.read_csv(specific_path)
 
-        open_examples = [self.create_example(row) for _, row in open_data.iterrows()]
-        specific_examples = [self.create_example(row) for _, row in specific_data.iterrows()]
+        open_examples = [self.create_example(self.domain, row) for _, row in open_data.iterrows()]
+        specific_examples = [self.create_example(self.domain, row) for _, row in specific_data.iterrows()]
 
         final_data = open_examples + specific_examples
         random.seed(self.seed)
@@ -60,12 +55,13 @@ class DataPreparationLLM:
 
 
 class ClassificationSignature(dspy.Signature):
-    """Classify if a text is specific for a domain or not. Target domain is law."""
-
+    """Classify if a text is specific for a domain or not."""
+    
+    target = dspy.OutputField(desc="The target domain to classify the prompt against.")
     prompt = dspy.InputField(desc="The prompt to classify.")
     
     #explanation = dspy.OutputField(desc="Reasoning behind the classification.")
-    label = dspy.OutputField(desc="1, if the input text is law domain, 0 otherwise.")
+    label = dspy.OutputField(desc="1, if the input text belong to domain, 0 otherwise.")
     
 
 class ClassificationModule(dspy.Module):
@@ -81,42 +77,10 @@ class ClassificationModule(dspy.Module):
 class Trainer:
     """Handles model optimization using few-shot learning with BootstrapFewShotWithRandomSearch."""
 
-    def __init__(self, module_class, train_data, evaluator: 'Evaluator'):
-        self.module_class = module_class
+    def __init__(self, train_data):
         self.train_data = train_data
-        self.evaluator = evaluator
         self.optimized_model = None
 
-    def comparison_metric(self, example, pred, trace=None) -> bool:
-        """Metric function for comparing predicted label with actual label, using parse_answer for consistency."""
-        parsed_example_label = self.evaluator.parse_answer(example.label)
-        parsed_pred_label = self.evaluator.parse_answer(pred.label)
-        return parsed_example_label == parsed_pred_label
-
-    def optimize_model(self):
-        """Optimize the model using few-shot learning."""
-        fewshot_optimizer = BootstrapFewShotWithRandomSearch(
-            metric=self.comparison_metric,
-            max_bootstrapped_demos=4,
-            max_labeled_demos=5,
-            max_rounds=1,
-            num_candidate_programs=5,
-        )
-
-        compiled_classification = fewshot_optimizer.compile(self.module_class(), trainset=self.train_data)
-        self.optimized_model = compiled_classification
-
-        return compiled_classification
-    
-    def save_model(self, model_path: str):
-        """Save the optimized model."""
-        self.optimized_model.save(model_path)
-        print(f"Model saved to {model_path}")
-
-
-class Evaluator:
-    """Model evaluation and cost calculation."""
-    
     @staticmethod
     def parse_answer(answer) -> bool:
         """Parse answers into a consistent binary format."""
@@ -132,6 +96,36 @@ class Evaluator:
         parsed_preds = [self.parse_answer(pred) for pred in predictions]
         parsed_labels = [self.parse_answer(label) for label in true_labels]
         return accuracy_score(parsed_labels, parsed_preds)
+
+    def comparison_metric(self, example, pred, trace=None) -> bool:
+        """Metric function for comparing predicted label with actual label, using parse_answer for consistency."""
+        parsed_example_label = self.parse_answer(example.label)
+        parsed_pred_label = self.parse_answer(pred.label)
+        return parsed_example_label == parsed_pred_label
+
+    def optimize_model(self):
+        """Optimize the model using few-shot learning."""
+        fewshot_optimizer = BootstrapFewShotWithRandomSearch(
+            metric=self.comparison_metric,
+            max_bootstrapped_demos=4,
+            max_labeled_demos=5,
+            max_rounds=1,
+            num_candidate_programs=5,
+        )
+
+        compiled_classification = fewshot_optimizer.compile(ClassificationModule(), trainset=self.train_data)
+        self.optimized_model = compiled_classification
+
+        return compiled_classification
     
-    def calculate_price(self, token_count: int) -> float:
-        return (token_count / 1_000_000) * self.price_per_million_tokens_input
+    def test_model(self, test_data):
+        """Test the optimized model on the test data."""
+        predictions = [self.optimized_model(prompt=example.prompt).label for example in test_data]
+        true_labels = [example.label for example in test_data]
+
+        return self.evaluate_model(predictions, true_labels)
+
+    def save_model(self, model_path: str):
+        """Save the optimized model."""
+        self.optimized_model.save(model_path)
+        print(f"Model saved to {model_path}")

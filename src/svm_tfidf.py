@@ -1,82 +1,78 @@
-import pandas as pd
+import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score, precision_score, recall_score, make_scorer
-from sklearn.model_selection import cross_val_score, cross_validate
-from utilities import Config
-import joblib
+from sklearn.metrics import accuracy_score, precision_score, recall_score, classification_report
+from sklearn.model_selection import cross_validate, StratifiedKFold
+import pandas as pd
+from sklearn.metrics import make_scorer
 
 
-class DataPreparationSVM:
-    """Handles data loading, processing, and splitting with TF-IDF vectorization."""
 
-    def __init__(self, config: Config):
-        self.config = config
-        self.vectorizer = TfidfVectorizer()
-
-    def load_data(self, open_path: str, specific_path: str):
-        """Load and combine data from two CSV files."""
-        open_data = pd.read_csv(open_path)
-        specific_data = pd.read_csv(specific_path)
-        combined_data = pd.concat([open_data, specific_data], ignore_index=True)
-        return combined_data
-
-    def prepare_data(self, data):
-        """Shuffle, split, and vectorize the data using TF-IDF."""
-        data = data.sample(frac=1, random_state=self.config.seed).reset_index(drop=True) # Shuffle the data
-
-        train_data = data[:self.config.train_size]
-        test_data = data[self.config.train_size:self.config.train_size + self.config.test_size]
-
-        print(f'Train size: {len(train_data)}')
-        print(f'Test size: {len(test_data)}')
-
-        X_train = self.vectorizer.fit_transform(train_data['question'])
-        X_test = self.vectorizer.transform(test_data['question'])
-
-        y_train = train_data['label']
-        y_test = test_data['label']
-
-        return X_train, X_test, y_train, y_test
-
+# Redefining the SVMClassifier with necessary imports and corrections
 
 class SVMClassifier:
-    """SVM classifier using TF-IDF vectorization."""
+    """SVM classifier with TF-IDF, cross-validation, and evaluation functionality."""
+    def __init__(self, C: float, train_size=100, test_size=200, seed=22):
+        # Initialize configuration settings
+        self.train_size = train_size
+        self.test_size = test_size
+        self.seed = seed
+        self.vectorizer = TfidfVectorizer()
+        self.model = SVC(C=C, random_state=seed)
 
-    def __init__(self, config: Config):
-        self.config = config
-        self.model = SVC(C=0.1, random_state=self.config.seed)
-        self.model_name = "SVM_TFIDF"
+    def prepare_data(self, open_path: str, specific_path: str):
+        """Load, shuffle, split, and vectorize data for training and testing."""
+        data = pd.concat([pd.read_csv(open_path), pd.read_csv(specific_path)], ignore_index=True)
+        data = data.sample(frac=1, random_state=self.seed).reset_index(drop=True)  # Shuffle the data
 
-    def cross_validate_model(self, X, y, cv=5):
-        """Perform cross-validation and return scores."""
-        scoring = {
-            'accuracy': make_scorer(accuracy_score),
-            'precision': make_scorer(precision_score),
-            'recall': make_scorer(recall_score)
-        }
-        scores = cross_validate(self.model, X, y, cv=cv, scoring=scoring)
-        return scores
+        # Split into train and test data
+        train_data, test_data = data[:self.train_size], data[self.train_size:self.train_size + self.test_size]
+        X_train = self.vectorizer.fit_transform(train_data['question'])
+        X_test = self.vectorizer.transform(test_data['question'])
+        y_train, y_test = train_data['label'], test_data['label']
+
+        return X_train, X_test, y_train, y_test
 
     def train(self, X_train, y_train):
         """Train the SVM model on the training data."""
         self.model.fit(X_train, y_train)
 
+    def cross_validate_model(self, X, y, cv=5):
+        """Perform cross-validation and return average accuracy, precision, and recall scores."""
+        # Scoring metrics with zero_division=1 to avoid warnings for undefined metrics
+        scoring = {
+            'accuracy': 'accuracy',
+            'precision': make_scorer(precision_score, average='binary', zero_division=1),
+            'recall': make_scorer(recall_score, average='binary', zero_division=1)
+        }
+
+        # Stratified cross-validation to maintain class balance across folds
+        skf = StratifiedKFold(n_splits=cv)
+        cv_results = cross_validate(self.model, X, y, cv=skf, scoring=scoring)
+        # Calculate and return average scores
+        return {
+            'average_accuracy': cv_results['test_accuracy'].mean(),
+            'average_precision': cv_results['test_precision'].mean(),
+            'average_recall': cv_results['test_recall'].mean()
+        }
+
     def evaluate(self, X_test, y_test):
-        """Evaluate the model and return accuracy and a classification report."""
+        """Evaluate the model with accuracy, precision, recall, and a classification report."""
         predictions = self.model.predict(X_test)
         accuracy = accuracy_score(y_test, predictions)
-        precision = precision_score(y_test, predictions)
-        recall = recall_score(y_test, predictions)
+        precision = precision_score(y_test, predictions, zero_division=1)
+        recall = recall_score(y_test, predictions, zero_division=1)
 
-        return accuracy, precision, recall
-    
+        # Display the classification report
+        print("Classification Report:\n", classification_report(y_test, predictions, zero_division=1))
+        return {'accuracy': accuracy, 'precision': precision, 'recall': recall}
+
     def save_model(self, model_path: str):
-        """Save the SVM model and TF-IDF vectorizer to disk."""
-        joblib.dump(self.model, model_path)
+        """Save the SVM model and TF-IDF vectorizer."""
+        joblib.dump((self.model, self.vectorizer), model_path)
         print(f"Model saved to {model_path}")
 
     def load_model(self, model_path: str):
-        """Load the SVM model and TF-IDF vectorizer from disk."""
-        self.model = joblib.load(model_path)
+        """Load the SVM model and TF-IDF vectorizer."""
+        self.model, self.vectorizer = joblib.load(model_path)
         print(f"Model loaded from {model_path}")
