@@ -7,18 +7,17 @@ import pandas as pd
 from sklearn.metrics import make_scorer
 
 
-
-# Redefining the SVMClassifier with necessary imports and corrections
-
 class SVMClassifier:
     """SVM classifier with TF-IDF, cross-validation, and evaluation functionality."""
-    def __init__(self, C: float, train_size=100, test_size=200, seed=22):
+    def __init__(self, config):
         # Initialize configuration settings
-        self.train_size = train_size
-        self.test_size = test_size
-        self.seed = seed
+        self.C = config.get('C')
+        self.train_size = config.get('train_size')
+        self.test_size = config.get('test_size')
+        self.seed = config.get('seed')
+        self.model = SVC(C=self.C)
         self.vectorizer = TfidfVectorizer()
-        self.model = SVC(C=C, random_state=seed)
+        self.model_name = "SVM_TFIDF"
 
     def prepare_data(self, open_path: str, specific_path: str):
         """Load, shuffle, split, and vectorize data for training and testing."""
@@ -39,7 +38,6 @@ class SVMClassifier:
 
     def cross_validate_model(self, X, y, cv=5):
         """Perform cross-validation and return average accuracy, precision, and recall scores."""
-        # Scoring metrics with zero_division=1 to avoid warnings for undefined metrics
         scoring = {
             'accuracy': 'accuracy',
             'precision': make_scorer(precision_score, average='binary', zero_division=1),
@@ -67,6 +65,11 @@ class SVMClassifier:
         print("Classification Report:\n", classification_report(y_test, predictions, zero_division=1))
         return {'accuracy': accuracy, 'precision': precision, 'recall': recall}
 
+    def predict(self, text: str):
+        """Predict the label of a single text."""
+        vectorized_text = self.vectorizer.transform([text])
+        return self.model.predict(vectorized_text)[0]
+    
     def save_model(self, model_path: str):
         """Save the SVM model and TF-IDF vectorizer."""
         joblib.dump((self.model, self.vectorizer), model_path)

@@ -6,8 +6,8 @@ from sklearn.metrics import accuracy_score
 from dspy.teleprompt import BootstrapFewShotWithRandomSearch
 from dspy import LM, Example, configure
 
-class GPT4Model:
-    """Setup for GPT-4 model configuration and initialization."""
+class LMClassifier:
+    """Setup for LM configuration and initialization."""
 
     def __init__(self, api_key: str, proxy_url: str, domain: str, model_name: str, temperature=0.2, train_size=100, test_size=200, seed=22):
         self.api_key = api_key
@@ -70,11 +70,16 @@ class ClassificationModule(dspy.Module):
         self.prog = dspy.ChainOfThought(ClassificationSignature)
         
     def forward(self, prompt: str) -> ClassificationSignature:
-        prediction = self.prog(prompt=prompt)
+        try:
+            prediction = self.prog(prompt=prompt)
+        except Exception as e:
+            print(f"An error occurred while classifying the prompt: {e}\nPrompt: {prompt}")
+            prediction = ClassificationSignature(label=0)
+
         return prediction
 
 
-class Trainer:
+class LMTrainer:
     """Handles model optimization using few-shot learning with BootstrapFewShotWithRandomSearch."""
 
     def __init__(self, train_data):
@@ -125,7 +130,17 @@ class Trainer:
 
         return self.evaluate_model(predictions, true_labels)
 
+    def predict(self, prompt: str):
+        """Predict the label for a given prompt."""
+        return self.optimized_model(prompt=prompt).label
+    
     def save_model(self, model_path: str):
         """Save the optimized model."""
         self.optimized_model.save(model_path)
         print(f"Model saved to {model_path}")
+
+    def load_model(self, model_path: str):
+        """Load the optimized model."""
+        self.optimized_model = ClassificationModule()
+        self.optimized_model.load(model_path)
+        print(f"Model loaded from {model_path}")
