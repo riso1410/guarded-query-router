@@ -22,7 +22,7 @@ def remove_outliers(df, question_col='question'):
     Remove rows where the length of the text in the question column is less than 3 or greater than 25.
     """
     print(f"Removing outliers from {len(df)} rows...")
-    df = df[df[question_col].str.len().between(3, 100)]
+    df = df[df[question_col].str.len().between(2, 100)]
     print(f"Outliers removed. Remaining rows: {len(df)}")
     return df
 

@@ -1,0 +1,409 @@
+__label__1 Unreasonable Time After ETA
+__label__0 What is the main aim of this paper?
+__label__0 What is the main purpose of the study by Xcite?
+__label__1 Is this a Prima Facie case for State Tax Fraud?
+__label__1 Can a non-insurance company create a financial "float" like insurance companies do?
+__label__0 What are some of early discoveries expected at the LHC?
+__label__1 mitigation of joint and several liability when renting shared housing
+__label__1 Can a US bank disallow a lawful permanent US resident from opening an account?
+__label__0 What is the two-way relay network shown in Figure [fig:relay] used for?
+__label__0 What challenges remain in the field of studying star cluster systems in galaxies?
+__label__1 Is airline ticket overbooking fraud?
+__label__0 What is the focus of the essay?
+__label__1 Why was it formerly illegal to use the Swiss coat of arms in the United States?
+__label__0 what type of physics is associated with ultracold atoms,ions and molecules?
+__label__0 What is the main idea of the AGN outflow production paradigm?
+__label__0 What is one observation made using the Suzaku telescope?
+__label__0 What is the conclusion that can be drawn from the passage about the capture of Triton?
+__label__0 What is the main role played by Matsui and Satz in the realm of quark-gluon-plasma formation?
+__label__0 How does magnetohydrostatic equilibrium help us understand sunspots?
+__label__0 How many hyperplane arrangements can be counted using representation theory?
+__label__0 What is the focus of the article?
+__label__0 How is Gamma Ray bursts related to massive stars?
+__label__0 What are the main features of cognitive radios?
+__label__0 What are the results of the cosmological 4-body simulations?
+__label__0 What are self-propelled particles and what different types exist?
+__label__0 What physical parameters and properties of the galaxy NGC 300 were determined by previous works?
+__label__0 What is the main focus of this paper?
+__label__1 Does an Equipment Failure Count as a Test Failure for California DMV?
+__label__1 Can an immigration law firm in Bulgaria sue me in the US?
+__label__0 What is the primary focus of this passage?
+__label__0 What is the main topic of this paper?
+__label__0 What are the advantages of using silicon for single electron tunneling (SET) devices?
+__label__1 Has anyone been charged for stealing their own stuff?
+__label__0 What is the third interesting development concerning sdss j 1426 + 5752?
+__label__0 What are the main findings of the numerical simulation of the stellar and planetary magnetic fields?
+__label__1 Which regions trademark has precedence in Google Play and Apple's app store?
+__label__0 What is the Nijmegen Soft-Core potential?
+__label__0 What does the standard model explain?
+__label__1 Which part of the US constitution protects the life and safety of US citizens?
+__label__1 Can my landlord double-dip rent after my month-to-month lease termination?
+__label__1 Can sexting as a minor be prosecuted as an adult?
+__label__1 When do I need to guard against falsehoods from someone else's attorney?
+__label__1 Is a randomly-generated book a violation of copyright?
+__label__1 Verbal Agreement vs Written Agreement
+__label__1 Ex-housemate cancelling NHS appointments (United Kingdom)
+__label__0 What are two ways galaxies might have formed?
+__label__0 What do we know about the high-specific frequency globular cluster systems in cD-type galaxies?
+__label__1 Dispute unpaid debt of a deceased family member
+__label__1 What are some good sources for the rights of individual in an international context?
+__label__1 Would a parking policy which is not posted be contestable in court?
+__label__0 What are the questions that remain open?
+__label__1 Is it illegal or against the ToS to have two facebook accounts?
+__label__0 What is the purpose of this research paper?
+__label__1 Would showing code in a book which was written with a student or personal license not be allowed?
+__label__0 What is the purpose of this paper?
+__label__0 What is the purpose of the soft-collinear effective theory (SCET)?
+__label__1 How would this non-grantor trust be taxed?
+__label__0 How can treatment effect heterogeneity be estimated?
+__label__0 What is the main result obtained by ground based cosmic ray detectors?
+__label__0 What keywords would best describe the ideal site for a telescope mentioned in the passage?
+__label__1 Is it illegal to NOT store logs within the UK? (VPN related)
+__label__0 What is double refraction?
+__label__0 What are general reasons for the interest in the possibility of CP violation in the scalar sector?
+__label__0 What is the purpose of this research?
+__label__1 Is publishing copyrighted material (product brochure) is an acceptable fair use?
+__label__0 What kind of network topology is used in the model?
+__label__0 Where do we study the limit points of normalized prime gaps?
+__label__0 What are the constraints for the coefficients of the top quark anomalous couplings?
+__label__0 Based on the text above, what is the purpose of the similarity transformation?
+__label__1 How much from the trial is won/lost by the contract itself?
+__label__1 Break Contract after company sells to new owners and changes names
+__label__0 What model is the unified model for active galaxies based on?
+__label__1 Can one use data extracted from images (in-game screenshots)?
+__label__0 What topics are addressed in studies of the $\pi$-nucleus interaction?
+__label__0 How does transport of inertial particles relate to technological applications?
+__label__0 What is the purpose of the generalizations of the logarithmic and exponential functions?
+__label__1 Could a British monarch "go full dictator" if they wish to do so?
+__label__0 What is P.A. Smith Theory and how is it used in transformation groups?
+__label__0 What are the goals of the research?
+__label__0 What is the paper primarily discussing?
+__label__1 Where is the "fantasist" defense taught?
+__label__1 How can you say a developer is bad without being subject to a defamation lawsuit?
+__label__1 Property lien expiration and removal in North Carolina
+__label__1 Terminlogy: lack of cause due to context
+__label__0 What are the characteristics of giant resonance vibrations in nuclei?
+__label__1 Requested to remove YouTube embeds?
+__label__0 What are the applications of non-diffracting accelerating optical beams?
+__label__1 Have there ever been any thought crimes?
+__label__0 What are quantum fluctuations in Ising systems and how are they related to phase transitions?
+__label__1 Is editing a comment in SO copyright infringement?
+__label__1 Can a non-us citizen grandparent apply for US citizen child's passport?
+__label__1 Is it possible to leave canada by train or car unvaccinated and vice versa?
+__label__0 How can scientists determine the distances and sizes of asteroids in the main belt?
+__label__1 Is it illegal to give handouts to panhandlers?
+__label__1 Can you copyright data?
+__label__0 What effect does a Coulomb glass have on the metal-insulator transition?
+__label__0 what corrections have been given in ref. for direct photon production?
+__label__0 What is the expected value of the neutron star's magnetic field, according to the authors?
+__label__0 what are lovelock theories ?
+__label__0 What is galaxy morphology used for?
+__label__0 How does the atmosphere of Titan compare to that of Earth?
+__label__1 I received a notice of toll violation, but I believe I paid my tolls. How to dispute?
+__label__0 | & psi  ;
+__label__1 Legal basis for "discretionary spending" vs. "mandatory spending" in the USA
+__label__1 Without reasonable suspicion do you have more rights than the police?
+__label__1 Can I purchase the right of attribution from the creator in a work released under CC BY-SA?
+__label__0 What does the paper discuss?
+__label__0 What is the main source of activity in quasars and Seyfert galaxies?
+__label__0 Can supersymmetry account for the high value of CP violation in the neutral kaon system?
+__label__0 What is the Acceleration Theorem?
+__label__0 What is the purpose of the work being discussed in the given paragraph?
+__label__1 Does a remodel affect grandfathered-in electrical systems?
+__label__1 Assuming a mortgage in a divorce
+__label__0 What is the main conclusion of this passage regarding Type Ia Supernovae?
+__label__1 Landlord refuses to do anything about tenants who do a lot of drugs
+__label__0 What are the advantages of using recursive filters to perform gaussian convolution?
+__label__0 What is the main purpose of spectral energy distribution models?
+__label__1 How does "apparent authority" work for a company's directors?
+__label__0 27 are the surface density , temperature , and scale height , respectively .
+__label__0 What is the 0-perimeter of a measurable set?
+__label__1 Public Schools and Religion
+__label__0 What are the two advantages of the coherent photoproduction of neutral pions on nuclei?
+__label__1 Rental lease agreement, what does Provided Further mean?
+__label__0 What is the hydrogeology lag time between two time series?
+__label__1 GDPR Requiring consent to give up privacy
+__label__0 What type of data reduction was used to prepare the HST observations of the Orion silhouette disks?
+__label__1 Is it blackmail to menace someone with reporting them to an authority if they don't comply?
+__label__0 What is the main topic of this passage?
+__label__1 Can my gym charge me monthly dues even though it shut down due to the coronavirus epidemic?
+__label__1 How to cite a supreme court opinion in author-year format
+__label__0 How does the embedding approach proposed in the text help in treating bulk materials accurately?
+__label__1 Can a landlord require a tenant to pay for utilities that are not explicity required in the lease?
+__label__1 If I sue someone for a small amount, and win, do they have to pay for my lawyer?
+__label__0 What is the covariant causal set approach to discrete quantum gravity?
+__label__1 Why wasn't Acosta arrested on conspiracy charges and/or the obstruction of justice?
+__label__0 What are regular expressions?
+__label__0 What is cross-correlation?
+__label__0 What is the main claim of the article?
+__label__0 What is the total instantaneous radiated power of a particle carrying charge q?
+__label__1 How was retroactive copyright extension ever approved of?
+__label__0 What is the purpose of this paper?
+__label__1 Self Defense- Lethal Force- Taser & Knife Vs. Fire Arm
+__label__0 How has the 3-bit quantum error correction code been implemented in liquid state NMR?
+__label__0 What is the purpose of Grand Unification in higher dimensions?
+__label__0 What is the main purpose of the paper?
+__label__0 What is one variant of the prime number theorem?
+__label__1 Is it illegal to withhold someone's passport and green card in California?
+__label__0 Can macromolecules pass through nanoscopic holes?
+__label__0 What type of particles are studied in this paper?
+__label__1 GDPR - Confirm company terms and conditions by button click
+__label__1 copyright, fair use and online dictionaries/translations/word list
+__label__0 What is the last phase of a low to intermediate mass star's evolution?
+__label__1 Is downloading YouTube videos legal for personal use?
+__label__0 What is the main goal of this work ?
+__label__0 What are four schemes used to calculate the in-medium modification of light partons?
+__label__1 Could I convert an HTML template under MIT to a WordPress theme and sell it?
+__label__0 What is known about the optical emission of neutron star LMXBs during outbursts?
+__label__0 What is the transformation, upon charge doping, of an antiferromagnetic Mott insulator?
+__label__1 Was the Haitorei ever repealed?
+__label__0 What is the main topic of the passage?
+__label__0 What filters were used to observe the HH 1 and 2?
+__label__1 Is it legal to record streaming video for time shifting?
+__label__0 What are the two main drawbacks of the NJL model?
+__label__0 How does the investigation of conjugated polymers relate to ladder-type poly-p-phenylenes?
+__label__1 Do I have to move right away if the Unlawful Detainer Judgement is in favor of the defendant?
+__label__1 Is/Was funding or conducting gain of function research illegal?
+__label__0 What are the parameters input for intermediate- Mass Star (IMS) models?
+__label__0 What is the quality of the GRB 990123 afterglow emission?
+__label__1 Question about recorded conversations
+__label__0 What is the purpose of the Laser Interferometer Space Antenna?
+__label__0 What arXiv are related to the kinetic studies of the quark gluon plasma?
+__label__0 What are the implications of deeply inelastic diffractive scattering in lepton-nucleon scattering?
+__label__1 What entitlements do I have if someone uses my video on Facebook and gets millions of views?
+__label__1 Declaration of war on a de-facto state?
+__label__0 What is the purpose of the Hamiltonian used in the HFB canonical basis method?
+__label__0 What set is the Grassmannian, and what linear action does it admit?
+__label__1 What motions to file or action to take with an uncooperative court clerk?
+__label__0 What is the purpose of this paper?
+__label__0 How may category theory be applied to the life and cognitive sciences?
+__label__0 What is the main idea presented in this paragraph?
+__label__1 Are tenants responsible for ensuring their guests follow the terms?
+__label__1 Gaining possession of adjoining building (garages)
+__label__1 How can I confirm that an attorney is legit?
+__label__0 How can financial institutions utilize a multi-factor economic capital (EC) model?
+__label__1 International Cybercrime Based in China. Who's Jurisdiction is it?
+__label__1 Is a Hacking EULA legal?
+__label__0 What is the analysis of dynamic processes in complex networks?
+__label__1 Is spitting on someone an assault? US and UK
+__label__0 What is the importance of relativistic motion of GRB sources?
+__label__0 How does the Randall-Sundrum model help with the hierarchical problem of the standard model?
+__label__1 Persuasive authority using other jurisdiction's opinions
+__label__1 Should I be taxed on electricity in Florida as a private resident?
+__label__1 Does the New York State Governor have the authority to impose fines?
+__label__1 Exclusion based on Ethnicity, a Private event in a Public Space
+__label__0 What twofold motivation does this work have?
+__label__0 What is the review by ?
+__label__0 What questions does the standard model of particle physics leave unanswered?
+__label__1 Resolving question of conflict of Laws
+__label__1 Could a charity manufacture patented medications for free?
+__label__1 Assessments for Condo
+__label__0 How is the energy-level statistics described?
+__label__1 Translation of witness testimony
+__label__1 How "infectious" is Unreal Engine 4 license? What is the scope of "product" definition?
+__label__0 Is this manuscript dedicated to Gerald E. Brown?
+__label__1 How to provide users with ability to report copyright infringement
+__label__0 What is the main topic discussed in this paper?
+__label__0 What has led to recent challenges to the Fermi surface of cuprate superconductors?
+__label__1 When, if ever, do you need license to read (and only read) copyrighted material in the USA?
+__label__1 What options does a wife have for cashing a check made out to both husband and wife?
+__label__1 What legal rights does ownership of music grant me?
+__label__1 Can we freely delete our questions and answers?
+__label__0 What is the main topic discussed in the article?
+__label__1 Do public schools have the authority to fine parents money for being late?
+__label__1 Multiple claimants for a single act of deceit in UK law
+__label__1 Is statement of objectives of a bill considered part of the law?
+__label__0 What is the most accurate way to determine radial velocity outside the Solar System?
+__label__0 What is the main focus of this paper?
+__label__0 What is the importance of Ricci curvature in Geometric analysis?
+__label__1 Criminal federal laws regarding functions of civil officers
+__label__0 What is the total Hamiltonian in a liquid helium system?
+__label__1 Can you be arrested the day a law is enacted?
+__label__1 Can an auto insurance firm ( US) raise rates based on old age?
+__label__0 Objective question: What is the Kolmogorov complexity of an individual finite object?
+__label__0 What is the main aim of this paper?
+__label__1 Algorithm (pseudo)code in academic papers -- what is the copyright/license status?
+__label__1 What makes laws against wearing masks constitutional?
+__label__0 What are the advantages of graphene in optoelectronics, photonics, and plasmonics?
+__label__0 what is the main point of the text?
+__label__0 What is the fundamental paradigm of solar system astronomy prior to the time of Copernicus?
+__label__0 What are the main concepts of dependence and independence?
+__label__0 How does AGN feedback influence galaxy formation and evolution?
+__label__0 What is the purpose of the surface brightness fluctuations (sbf) method?
+__label__0 What will be the consequences of black hole merging?
+__label__1 Is stolen property being seen on my property grounds for a search warrant?
+__label__0 What is the purpose of the higgs search?
+__label__1 Is a license necessary to produce patented inventions?
+__label__0 In what context are nonlocal conserved charges used in quantum integrability?
+__label__0 What is the difference between classical and quantum unpredictability?
+__label__0 What is the underlying question addressed in this passage?
+__label__1 Weather my comments committed coercion in the second degree in NY?
+__label__0 What did Pareto observe about the distribution of wealth?
+__label__0 What did Einstein and Smoluchowski show about Brown's motion?
+__label__1 What are the types of authority required for the release of medical records?
+__label__0 What quantum many-body effects does the study of ultracold atomic systems allow for?
+__label__0 What is a Compact Symmetric Object?
+__label__1 Estate agents faking an offer on a property
+__label__1 How to find out if photocopying a marriage certificate is legal in my state?
+__label__1 What can be done if work is completed on a vehicle without consent in the United States?
+__label__0 What is the set of two-planes inside a Grassmannian?
+__label__0 What is a filled-center structure?
+__label__0 What is the relation between star formation and dynamo effect?
+__label__0 What is the purpose of this paper?
+__label__0 What is the dimension of the multiwire chambers deployed in modern high-energy physics experiments?
+__label__0 How many exoplanets have been discovered in well-detached binary star systems?
+__label__1 How can you guarantee deletion of consumer data on the internet?
+__label__0 What is the goal of weak gravitational lensing?
+__label__0 What applications can magneto-optical effects have?
+__label__1 Is sewage in Maryland, USA a utility and what protections come with that?
+__label__0 What is the paper about?
+__label__1 Contracting a builder 2nd time to fix their own negligence
+__label__0 What is the primary purpose of analyzing the cataclysmic variable HD Aqr?
+__label__0 What are the main points of the passage?
+__label__1 Would towels under floorboards (for sound insulation) be considered an unacceptable fire risk?
+__label__0 How can a two-dimensional electron system be approximately described?
+__label__0 How can the transition form factor of light mesons be used to study hadron properties?
+__label__1 What happens if there are multiple suspects but not enough evidence to convict any of them?
+__label__1 What are the relevant U.S. laws that cover businesses that disburse cash?
+__label__0 What is the main goal of the Antares telescope?
+__label__1 making a contract that includes video licence
+__label__0 What type of SN is 2006JC?
+__label__0 What are the main constituents of the galactic interstellar medium?
+__label__1 licencee and licensor
+__label__0 In recent years, what data did the TJINAF collective report on the xmath6 elastic scattering?
+__label__0 What are the physical parameters of the white dwarf in the cataclysmic variable RXJ1313?
+__label__0 What is the main goal of the paper?
+__label__1 No Blinker in a Left Turn Lane: Is It Illegal?
+__label__1 Why some US software companies ban their free products for some countries?
+__label__1 How is a settlement agreement in a civil case approved?
+__label__0 What is the two-dimensional principal chiral model?
+__label__1 Children and grandchildren must be explicitly disinherited in wills?
+__label__0 What question was posed by Felix Klein in 1882 regarding abstract Riemann surfaces?
+__label__0 Can quantum computers solve some problems faster than classical computers?
+__label__0 What does population synthesis predict?
+__label__0 What is the main aim of this paper?
+__label__0 What does the phrase "fast reconnection" refer to?
+__label__1 What is the "penalty" for placing fake orders of Treasury bonds?
+__label__1 How is a plain-clothes officer entering your house not an unreasonable search?
+__label__0 What observations and experiments are used to constrain supersymmetric models?
+__label__0 What is the main topic discussed in this passage?
+__label__0 What is the purpose of using NE distribution and spectral functions to study irreversible phenomena?
+__label__0 What are the particles we are searching for?
+__label__1 Is it allowed to non-consensually submit someone's diary as evidence?
+__label__0 What is the temperature of the water-ice found around V4332 Sgr?
+__label__1 Can one "donate" to enter a prize draw?
+__label__1 Can a judge consider recent events in an older case?
+__label__0 What are the two types of heating processes associated with the Sun's corona?
+__label__1 Right to privacy at place of work
+__label__1 What is unearned advance payment?
+__label__0 What evidence suggests that dypers may be an extension of the rcb phenomenon to lower temperatures?
+__label__0 Is the following proof correct?
+__label__0 What is the purpose of the study of boson Hubbard models?
+__label__1 Indemnity to help in another's defense? What does that mean?
+__label__0 What is superconductivity?
+__label__0 What is chaos-assisted tunneling?
+__label__0 What is the progress of spintronics and physics of heterostructures observed in recent years?
+__label__1 What intellectual property rights are being surrendered with this contract?
+__label__0 What models are studied in this paper?
+__label__0 What are the different sources of noise affecting gene expression?
+__label__1 Mistake in contract in my favor
+__label__0 What is the purpose of studying pattern formation?
+__label__0 What is the role of oscillatory integrals in the theory of pseudodifferential operators?
+__label__1 Did the judge try to order me to pierce the corporate veil?
+__label__1 When an EU directive is repealed, what happens to member state law?
+__label__0 What is the primary source of energy that powers supernova explosions of massive stars?
+__label__1 Can an abutter park on my property if they have a right of way easement?
+__label__0 What is the purpose of this paper?
+__label__0 Where does the highest energy cosmic neutrinos come from?
+__label__0 what are the filaments?
+__label__0 \to what is the purpose of the thin covers from another material?
+__label__0 What is the main advantage of the multi-domain hybrid method?
+__label__0 What is the primary proposed role of cold dark matter?
+__label__0 What are the two neutron-capture processes?
+__label__1 Do courts award legal costs to successful pro se litigants?
+__label__1 No roommate agreement. One roommates wants to move out early of 1 year lease. Who pays rent?
+__label__1 Does Double Jeopardy prohibit prosecution, for the same event, in both Federal and State court?
+__label__0 What mechanism is responsible for the stabilization of a BEC droplet in 3D free space?
+__label__0 What does this paper develop?
+__label__0 what did the sub-millimeter surveys of lensing clusters and blank fields demonstrate?
+__label__0 What algorithm is used for finding the ground states of spin glass systems?
+__label__0 How does the strong Coulomb coupling in graphene affect the behavior of its quasiparticles?
+__label__0 What are quantum rings and quantum dots?
+__label__0 does a. muronga have any works in 2004 ?
+__label__0 How does the environment effect the quantum entanglement of two systems?
+__label__0 What is the ising model?
+__label__0 What is the role of flavor models in this research?
+__label__0 What is the analogy of the classical theorem?
+__label__1 Is it possible to prove copyright infringement when artificial intelligence is used?
+__label__0 What is the goal of this study?
+__label__1 Which part of the Constitution was cited in Jacobson v. Williams?
+__label__0 What does the axion do?
+__label__0 What is the goal of this section?
+__label__1 Rainwater directed from neighbour's property by older construction
+__label__0 What is angular momentum projection?
+__label__0 What is Smith Theory?
+__label__1 Distribute Public Domain Material Hosted on a Website
+__label__0 What is the title of the paper?
+__label__0 What is the main result of this article?
+__label__1 When must I pay first month's and the deposit on a new lease?
+__label__0 What is the discovery of the hd 70642b planet highlighting?
+__label__0 What is quantum and statistical field theory?
+__label__1 What is the liability of a person who signs as a witness?
+__label__1 Fair Use of Photos as a Derivative Work
+__label__1 Something Less than an Injunction
+__label__1 What is "hostilities" in the context of the Military Commissions Act of 2006?
+__label__0 What has been the progress in the study of flavor physics in the past decade?
+__label__1 What is the rationale behind fair use exemptions?
+__label__0 What is the nature of the dynamo that operates in stratified isothermal shearing boxes?
+__label__1 In practice what kind of claims can't be brought to court after signing a settlement agreement?
+__label__0 What are the results of the paper?
+__label__0 What is the aim of this paper?
+__label__1 Copyright issues with grammar literature quotations on ELL StackExchange
+__label__0 What are the key components of an evolutionary algorithm?
+__label__1 What is it called when a country's laws apply to its citizens outside the country?
+__label__0 What processes does primordial black holes give valuable information about?
+__label__1 Do patent law firms also have services to help you license / sell your patent to large entities?
+__label__0 What is Superfluidity?
+__label__0 What are several ideas for dealing with strongly coupled theories?
+__label__0 What is the main contribution of this paper?
+__label__1 What is the legal source of the banned immigrants list?
+__label__0 What research methods are used in the study of iron pnictides?
+__label__0 What is the energy range of EGRET?
+__label__1 What happens if a judge renders a wrong verdict by misinterpreting the law?
+__label__0 What is the upper critical field of RbFeAsO at zero temperature?
+__label__1 Buying a car for temporary use outside of my home state?
+__label__0 What is a Frobenius Lie algebra?
+__label__1 Can a ® so small as to be reduced to a dot confer any legal protection?
+__label__0 What is the leading order estimate of hadron-hadron collider observables?
+__label__0 What differences are there between Pop III stars and Pop I and II stars?
+__label__1 Does an employer have any obligation to report an employee with possible covid-19 symptoms?
+__label__0 How can the use of cordons sanitaires affect an Ebola outbreak?
+__label__0 What processes can be used to model the interstellar medium?
+__label__0 What are some examples of tunneling processes?
+__label__1 What is the opposite of argumentative?
+__label__1 How can i check a curent investigation of a company?
+__label__0 How do symmetry and conservation laws relate?
+__label__0 What is intrinsic submanifolds inside the Heisenberg groups?
+__label__1 Is a retroactive patent infringement possible?
+__label__0 which methods have been employed to determine extragalactic distances?
+__label__0 What is the main topic of the paper?
+__label__0 What are impulsive gravitational or matter waves?
+__label__1 Can employer collect and share employee data such as skin colour?
+__label__0 What is sciboone and what particles does it focus on?
+__label__0 What techniques are being exploited for quantum computing and quantum information processing?
+__label__0 How does global sensitivity analysis take into account uncertainty in complex systems?
+__label__0 What is a topological insulator?
+__label__0 What is the purpose of the hadronic particle - antiparticle correlation?
+__label__0 What is the main point of this passage?
+__label__1 Forcing a person to remove a picture of me
+__label__1 Arbitral agreement vs amicable settlement
+__label__0 Why can the proof of this proposition be obtained from "obvious modifications of"?
+__label__0 What is the central focus in the investigation of the time variation of fundamental constants?
+__label__0 What is the acceleration of charged particles in the solar corona related to?
+__label__0 What is the main purpose of this article?
+__label__1 Can a person bring a translator to the driving test in Arkansas?
+__label__1 Are downhill speed grade highway signs required in some jurisdictions?
+__label__0 what is the derivation of the effective two body ( four fermion ) interaction?
+__label__1 Is it legal to keep a controlled substance at work?
+__label__1 When a contractor develops a program based on clients specifications, who owns the rights?
+__label__0 What are the advances in the SKIRT monte carlo radiative transfercode?

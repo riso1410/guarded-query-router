@@ -2,9 +2,11 @@ import re
 import dspy
 import random
 import pandas as pd
-from sklearn.metrics import accuracy_score
+from utilities import *
+from sklearn import metrics
 from dspy.teleprompt import BootstrapFewShotWithRandomSearch
 from dspy import LM, Example, configure
+import matplotlib.pyplot as plt
 
 class LMClassifier:
     """Setup for LM configuration and initialization."""
@@ -30,11 +32,11 @@ class LMClassifier:
     @staticmethod
     def create_example(domain: str, row: pd.Series) -> Example:
         return Example(
-            target=domain,
+            domain=domain,
             prompt=row["question"],
             completion=row["answer"],
             label=row["label"],
-        ).with_inputs("prompt")
+        ).with_inputs("prompt","domain")
 
     def load_data(self, open_path: str, specific_path: str):
         open_data = pd.read_csv(open_path)
@@ -57,7 +59,7 @@ class LMClassifier:
 class ClassificationSignature(dspy.Signature):
     """Classify if a text is specific for a domain or not."""
     
-    target = dspy.OutputField(desc="The target domain to classify the prompt against.")
+    domain = dspy.InputField(desc="The target domain to classify the prompt against.")
     prompt = dspy.InputField(desc="The prompt to classify.")
     
     #explanation = dspy.OutputField(desc="Reasoning behind the classification.")
@@ -67,11 +69,12 @@ class ClassificationSignature(dspy.Signature):
 class ClassificationModule(dspy.Module):
     def __init__(self) -> None:
         super().__init__()
-        self.prog = dspy.ChainOfThought(ClassificationSignature)
+        self.prog = dspy.Predict(ClassificationSignature)
         
-    def forward(self, prompt: str) -> ClassificationSignature:
+    def forward(self, prompt: str, domain: str) -> ClassificationSignature:        
         try:
-            prediction = self.prog(prompt=prompt)
+            prediction = self.prog(prompt=prompt, domain=domain)
+
         except Exception as e:
             print(f"An error occurred while classifying the prompt: {e}\nPrompt: {prompt}")
             prediction = ClassificationSignature(label=0)
@@ -81,7 +84,6 @@ class ClassificationModule(dspy.Module):
 
 class LMTrainer:
     """Handles model optimization using few-shot learning with BootstrapFewShotWithRandomSearch."""
-
     def __init__(self, train_data):
         self.train_data = train_data
         self.optimized_model = None
@@ -97,15 +99,27 @@ class LMTrainer:
             print(f"Unexpected non-binary label found: {answer}")
             return False
 
-    def evaluate_model(self, predictions, true_labels):
-        parsed_preds = [self.parse_answer(pred) for pred in predictions]
-        parsed_labels = [self.parse_answer(label) for label in true_labels]
-        return accuracy_score(parsed_labels, parsed_preds)
+    def evaluate(self, predictions, true_labels):
+        predicted_labels = [self.parse_answer(pred) for pred in predictions]
+        actual_labels = [self.parse_answer(label) for label in true_labels]
+
+        matrix = metrics.confusion_matrix(actual_labels, predicted_labels)
+        cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = matrix, display_labels = [0, 1])
+        cm_display.plot()
+        plt.show() 
+
+        f1 = metrics.f1_score(actual_labels, predicted_labels)
+        accuracy = metrics.accuracy_score(actual_labels, predicted_labels)
+        recall = metrics.recall_score(actual_labels, predicted_labels)
+        precision = metrics.precision_score(actual_labels, predicted_labels)
+
+        return f1, accuracy, recall, precision
 
     def comparison_metric(self, example, pred, trace=None) -> bool:
         """Metric function for comparing predicted label with actual label, using parse_answer for consistency."""
         parsed_example_label = self.parse_answer(example.label)
         parsed_pred_label = self.parse_answer(pred.label)
+
         return parsed_example_label == parsed_pred_label
 
     def optimize_model(self):
@@ -117,22 +131,15 @@ class LMTrainer:
             max_rounds=1,
             num_candidate_programs=5,
         )
-
+        
         compiled_classification = fewshot_optimizer.compile(ClassificationModule(), trainset=self.train_data)
         self.optimized_model = compiled_classification
 
         return compiled_classification
     
-    def test_model(self, test_data):
-        """Test the optimized model on the test data."""
-        predictions = [self.optimized_model(prompt=example.prompt).label for example in test_data]
-        true_labels = [example.label for example in test_data]
-
-        return self.evaluate_model(predictions, true_labels)
-
-    def predict(self, prompt: str):
+    def predict(self, prompt: str, domain: str):
         """Predict the label for a given prompt."""
-        return self.optimized_model(prompt=prompt).label
+        return self.optimized_model(prompt=prompt, domain=domain).label
     
     def save_model(self, model_path: str):
         """Save the optimized model."""
