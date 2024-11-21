@@ -1,6 +1,7 @@
 import joblib
 from sklearn.svm import SVC
 from sklearn import metrics
+from sklearn.model_selection import cross_val_score
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -33,6 +34,13 @@ class SVMClassifier:
         """Train the SVM model on the training data."""
         self.model.fit(X_train, y_train)
 
+    def cross_validate(self, X, y, cv=5):
+        """Perform cross-validation and return the mean score."""
+        scores = cross_val_score(self.model, X, y, cv=cv, scoring='accuracy')
+        print(f"Cross-validation scores: {scores}")
+        print(f"Mean cross-validation score: {scores.mean()}")
+        return scores.mean()
+    
     def predict(self, text: str):
         """Predict the label of a single text."""
         vectorized_text = list(self.vectorizer.embed(text))
