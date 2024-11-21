@@ -1,6 +1,5 @@
 import re
 import dspy
-import random
 import pandas as pd
 from utilities import *
 from sklearn import metrics
@@ -11,7 +10,8 @@ import matplotlib.pyplot as plt
 class LMClassifier:
     """Setup for LM configuration and initialization."""
 
-    def __init__(self, api_key: str, proxy_url: str, domain: str, model_name: str, temperature=0.2, train_size=100, test_size=200, seed=22):
+    def __init__(self, api_key: str, proxy_url: str, domain: str, model_name: str, 
+                 temperature=0.2, train_size=100, test_size=200):
         self.api_key = api_key
         self.proxy_url = proxy_url
         self.domain = domain
@@ -19,7 +19,6 @@ class LMClassifier:
         self.temperature = temperature
         self.train_size = train_size
         self.test_size = test_size
-        self.seed = seed
 
         self.lm = LM(
             api_key=self.api_key,
@@ -33,24 +32,16 @@ class LMClassifier:
     def create_example(domain: str, row: pd.Series) -> Example:
         return Example(
             domain=domain,
-            prompt=row["question"],
-            completion=row["answer"],
-            label=row["label"],
+            prompt=row['question'],
+            label=row['label'],
         ).with_inputs("prompt","domain")
 
-    def load_data(self, open_path: str, specific_path: str):
-        open_data = pd.read_csv(open_path)
-        specific_data = pd.read_csv(specific_path)
+    def load_data(self, train_data, test_data):
+        train_data = [self.create_example(self.domain, row) for _, row in train_data.iterrows()]
+        test_data = [self.create_example(self.domain, row) for _, row in test_data.iterrows()]
 
-        open_examples = [self.create_example(self.domain, row) for _, row in open_data.iterrows()]
-        specific_examples = [self.create_example(self.domain, row) for _, row in specific_data.iterrows()]
-
-        final_data = open_examples + specific_examples
-        random.seed(self.seed)
-        random.shuffle(final_data)
-
-        self.train_data = final_data[:self.train_size]
-        self.test_data = final_data[:self.test_size]
+        self.train_data = train_data[:self.train_size]
+        self.test_data = test_data[:self.test_size]
         
         print(f"Train data: {len(self.train_data)}")
         print(f"Test data: {len(self.test_data)}")

@@ -1,8 +1,13 @@
 import gradio as gr
 from langchain_openai import ChatOpenAI
 from langchain.schema import AIMessage, HumanMessage
+from llm_classifier import ClassificationModule
 import os 
 import dotenv
+import fasttext
+import joblib
+from fastembed import TextEmbedding
+from dspy import LM, configure
 
 dotenv.load_dotenv()
 
@@ -17,23 +22,38 @@ llm = ChatOpenAI(
     max_tokens=250,
     )
 
-def classify() -> bool:
-    return True
+lm = LM(
+    api_key=api_key,
+    model="gpt-4o-mini",
+    api_base=proxy_url,
+    temperature=0,
+    max_tokens=250
+    )
+configure(lm=lm)
+
+#classifier = fasttext.load_model("C:/Users/riso/Desktop/Prompt-Classification/models/Fasttext.bin")
+#classifier = joblib.load("C:/Users/riso/Desktop/Prompt-Classification/models/SVM_TFIDF.joblib")
+classifier = ClassificationModule()
+classifier.load("C:/Users/riso/Desktop/Prompt-Classification/models/gpt-4o-mini.json")
+
+#embedding = TextEmbedding(model_name="BAAI/bge-small-en-v1.5")
+
+def classify(msg: str) -> bool:
+    #label, _ = classifier.predict(msg)
+    #label = classifier.predict(list(embedding.embed(msg)))
+    label = classifier(prompt=msg, domain="law").label
+    return label in ["__label__1", "1", True]
 
 def respond(message: str, history: list) -> str:
-    # TODO 
-    # 1. Load model and embedding model 
-    # 2. Decide on the query to be sent to the model or not 
-    # 3. Send the query to the model
-    # 4. Return the response from the model
-
-    if classify():
+    if classify(message):
         history_langchain_format = []
+
         for msg in history:
             if msg['role'] == "user":
                 history_langchain_format.append(HumanMessage(content=msg['content']))
             elif msg['role'] == "assistant":
                 history_langchain_format.append(AIMessage(content=msg['content']))
+
         history_langchain_format.append(HumanMessage(content=message))
         gpt_response = llm.invoke(history_langchain_format)
         return gpt_response.content

@@ -10,25 +10,10 @@ class SVMClassifier:
     def __init__(self, config):
         # Initialize configuration settings
         self.C = config.get('C')
-        self.train_size = config.get('train_size')
-        self.test_size = config.get('test_size')
-        self.seed = config.get('seed')
         self.model = SVC(C=self.C)
         self.vectorizer = config.get('embedding')
         self.model_name = "SVM_TFIDF"
 
-    def prepare_data(self, open_path: str, specific_path: str):
-        """Load, shuffle, split, and vectorize data for training and testing."""
-        data = pd.concat([pd.read_csv(open_path), pd.read_csv(specific_path)], ignore_index=True)
-        data = data.sample(frac=1, random_state=self.seed).reset_index(drop=True)  # Shuffle the data
-
-        # Split into train and test data
-        train_data, test_data = data[:self.train_size], data[self.train_size:self.train_size + self.test_size]
-        X_train = list(self.vectorizer.embed(train_data['question']))
-        X_test = list(self.vectorizer.embed(test_data['question']))
-        y_train, y_test = train_data['label'], test_data['label']
-
-        return X_train, X_test, y_train, y_test
 
     def train(self, X_train, y_train):
         """Train the SVM model on the training data."""

@@ -19,7 +19,10 @@ def calculate_prompt_cost(
             "input_cost_per_token": 0.00000015,
             "output_cost_per_token": 0.00000060,
         },
-        # Add llama 
+        "llama3.1:70b": {
+            "input_cost_per_token": 0.0000006,
+            "output_cost_per_token": 0.00000088,
+        },
     }
 
     costs = model_dict.get(model_name, "gpt-4o-mini")
