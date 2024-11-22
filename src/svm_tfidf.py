@@ -4,6 +4,7 @@ from sklearn import metrics
 from sklearn.model_selection import cross_val_score
 import pandas as pd
 import matplotlib.pyplot as plt
+from utilities import preprocess_data
 
 class SVMClassifier:
     """SVM classifier with TF-IDF, cross-validation, and evaluation functionality."""
@@ -11,7 +12,7 @@ class SVMClassifier:
         # Initialize configuration settings
         self.C = config.get('C')
         self.model = SVC(C=self.C)
-        self.vectorizer = config.get('embedding')
+        self.embedding_model = config.get('embedding_model')
         self.model_name = "SVM_TFIDF"
 
 
@@ -28,7 +29,7 @@ class SVMClassifier:
     
     def predict(self, text: str):
         """Predict the label of a single text."""
-        vectorized_text = list(self.vectorizer.embed(text))
+        vectorized_text = list(self.embedding_model.embed(text))
         return self.model.predict(vectorized_text)
 
     def evaluate(self, X, y):
@@ -46,11 +47,11 @@ class SVMClassifier:
         return f1, accuracy, recall, precision
     
     def save_model(self, model_path: str):
-        """Save the SVM model and TF-IDF vectorizer."""
+        """Save the SVM model."""
         joblib.dump(self.model, model_path)
         print(f"Model saved to {model_path}")
 
     def load_model(self, model_path: str):
-        """Load the SVM model and TF-IDF vectorizer."""
+        """Load the SVM model."""
         self.model = joblib.load(model_path)
         print(f"Model loaded from {model_path}")
