@@ -5,6 +5,8 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
+import requests
+import os
 
 TOKENIZER = tiktoken.encoding_for_model("gpt-4o")
 
@@ -55,3 +57,17 @@ def preprocess_data(data):
     # Apply the cleaning function to the 'question' column
     data['question'] = data['question'].apply(clean_text)
     return data
+
+def get_models() -> list:
+    url = f"{os.getenv("PROXY_URL")}/models"
+    headers = {"Content-Type": "application/json", "Authorization": f"Bearer {os.getenv("OPENAI_API_KEY")}"}
+
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        models = response.json()
+        models = [model["id"] for model in models["data"]]
+        return models
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return None
