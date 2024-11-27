@@ -1,0 +1,66 @@
+{
+  "prog": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "domain": "law",
+        "prompt": "defendant retains solicitors a long way away and asks for hearing near them",
+        "label": 1
+      },
+      {
+        "domain": "law",
+        "prompt": "what are the implications of thermal emission measurements in the near infrared",
+        "label": 0
+      },
+      {
+        "domain": "law",
+        "prompt": "does the us government monitor andor revoke newly naturalized citizens",
+        "label": 1
+      },
+      {
+        "domain": "law",
+        "prompt": "what are wetting phenomena",
+        "label": 0
+      },
+      {
+        "domain": "law",
+        "prompt": "what materials can be used to generate magnetic fields in cosmicastrophysical environments",
+        "label": 0
+      },
+      {
+        "domain": "law",
+        "prompt": "is it a fault if an item cannot be repaired",
+        "label": 1
+      },
+      {
+        "domain": "law",
+        "prompt": "how does quantum chromodynamics qcd change at finite temperature and baryon density",
+        "label": 0
+      },
+      {
+        "domain": "law",
+        "prompt": "what does the comparison of hydrodynamical models to data from heavy ion collisions suggest",
+        "label": 0
+      }
+    ],
+    "signature": {
+      "instructions": "Classify if a text is specific for a domain or not.",
+      "fields": [
+        {
+          "prefix": "Domain:",
+          "description": "The target domain to classify the prompt against."
+        },
+        {
+          "prefix": "Prompt:",
+          "description": "The prompt to classify."
+        },
+        {
+          "prefix": "Label:",
+          "description": "1, if the input text belong to domain, 0 otherwise."
+        }
+      ]
+    }
+  }
+}

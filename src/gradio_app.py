@@ -31,15 +31,16 @@ lm = LM(
     )
 configure(lm=lm)
 
-classifier = fasttext.load_model("C:/Users/riso/Desktop/Prompt-Classification/models/Fasttext.bin")
-#classifier = joblib.load("C:/Users/riso/Desktop/Prompt-Classification/models/SVM_TFIDF.joblib")
+#classifier = fasttext.load_model("C:/Users/riso/Desktop/Prompt-Classification/models/Fasttext.bin")
+classifier = joblib.load("C:/Users/riso/Desktop/Prompt-Classification/models/SVM_TFIDF.joblib")
 #classifier = ClassificationModule()
 #classifier.load("C:/Users/riso/Desktop/Prompt-Classification/models/gpt-4o-mini.json")
 
 embedding = TextEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
 def classify(msg: str) -> bool:
-    label, _ = classifier.predict(msg)
+    msg = list(embedding.embed(msg))
+    label = classifier.predict(msg)
 
     #label = classifier(prompt=msg, domain="law").label
     return label in ["__label__1", "1", True]

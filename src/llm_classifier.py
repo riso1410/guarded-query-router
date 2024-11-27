@@ -117,10 +117,10 @@ class LMTrainer:
         """Optimize the model using few-shot learning."""
         fewshot_optimizer = BootstrapFewShotWithRandomSearch(
             metric=self.comparison_metric,
-            max_bootstrapped_demos=4,
-            max_labeled_demos=5,
+            max_bootstrapped_demos=8,
+            max_labeled_demos=8,
             max_rounds=1,
-            num_candidate_programs=5,
+            num_candidate_programs=4,
         )
         
         compiled_classification = fewshot_optimizer.compile(ClassificationModule(), trainset=self.train_data)
