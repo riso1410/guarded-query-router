@@ -3,7 +3,6 @@ from collections import Counter
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-import tiktoken
 
 
 def plot_word_count(df: pd.DataFrame, domain: str, text_col: str = 'prompt') -> None:
