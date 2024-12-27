@@ -1,3 +1,9 @@
+# TODO
+ 
+ - add comments 
+ - further testing
+ - gradio w chosen classifier as semantic router
+
 # Prompt validation model for Large Language Models based on domain knowledge
 
 This project implements a comparative analysis of various machine learning models for natural language processing tasks, including XGBoost, SVM, MonernBERT fine-tuned on NLI, fastText, and GPT-4o-mini using DSPy framework as baseline.
