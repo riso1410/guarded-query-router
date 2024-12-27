@@ -1,0 +1,32 @@
+{
+  "prog": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature": {
+      "instructions": "Classify if a text is specific for a domain or not.",
+      "fields": [
+        {
+          "prefix": "Domain:",
+          "description": "The target domain to classify the prompt against."
+        },
+        {
+          "prefix": "Prompt:",
+          "description": "The prompt to classify."
+        },
+        {
+          "prefix": "Label:",
+          "description": "1, if the input text belong to domain, 0 otherwise."
+        }
+      ]
+    }
+  },
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.11.11",
+      "dspy": "2.5.43",
+      "cloudpickle": "3.1.0"
+    }
+  }
+}

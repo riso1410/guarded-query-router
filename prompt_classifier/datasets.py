@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from datasets import load_dataset
 
@@ -14,6 +15,8 @@ def load_datasets() -> pd.DataFrame:
     finance_df = pd.DataFrame(finance_dataset['train'])
     healthcare_df = pd.DataFrame(healthcare_dataset['train'])
     general_df = pd.DataFrame(general_dataset['test'])
+
+    os.makedirs('data/raw', exist_ok=True)
 
     law_df.to_csv('data/raw/law_dataset.csv', index=False, sep=';')
     finance_df.to_csv('data/raw/finance_dataset.csv', index=False, sep=';')

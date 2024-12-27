@@ -1,10 +1,12 @@
 import re
 
 import dspy
+import time
 import pandas as pd
 from dspy import LM, Example, configure
 from dspy.teleprompt import BootstrapFewShotWithRandomSearch
 from tqdm import tqdm
+from prompt_classifier.metrics import calculate_cost
 
 
 class GPT4oMini:
@@ -16,6 +18,7 @@ class GPT4oMini:
         self.model_name = model_name
         self.train_data = [self.create_example(self.domain, row) for _, row in train_data.iterrows()]
         self.test_data = [self.create_example(self.domain, row) for _, row in test_data.iterrows()]
+        self.cost = 0.0
 
         self.lm = LM(
             api_key=self.api_key,
@@ -70,13 +73,21 @@ class GPT4oMini:
         """Predict the label for a given prompt."""
         predictions = []
         actuals = []
+        prediction_times = []
+
 
         for example in tqdm(self.test_data, total=len(self.test_data)):
+            self.cost += calculate_cost(example.prompt, input=True)
+            start_time = time.perf_counter_ns()
             pred = self.optimized_model(prompt=example.prompt, domain=example.domain)
+            end_time = time.perf_counter_ns()
+            prediction_times.append(end_time - start_time)
+            self.cost += calculate_cost(pred.label, input=False)
             predictions.append(self.parse_answer(pred.label))
             actuals.append(self.parse_answer(example.label))
 
-        return predictions, actuals
+        mean_latency = sum(prediction_times) / len(prediction_times)
+        return predictions, actuals, mean_latency
 
     def save_model(self, model_path: str) -> None:
         """Save the optimized model."""
