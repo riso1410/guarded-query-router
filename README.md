@@ -1,5 +1,7 @@
 # TODO
  
+ - fix ModernBERT import
+ - add text preprocessing 
  - add comments 
  - further testing
  - gradio w chosen classifier as semantic router
