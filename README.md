@@ -3,6 +3,7 @@
  - add comments 
  - further testing
  - gradio w chosen classifier as semantic router
+ - add reports to project structure and add wandb sweep for hyperparam tuning
 
 # Prompt validation model for Large Language Models based on domain knowledge
 
