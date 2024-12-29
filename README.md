@@ -1,8 +1,6 @@
 # TODO
  
- - fix ModernBERT import
- - add text preprocessing 
- - gradio w chosen classifier as semantic router
+ - fix ModernBERT import (wait for transformers newer version)
  - add wandb sweep for hyperparam tuning
 
 # Prompt validation model for Large Language Models based on domain knowledge
