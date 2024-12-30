@@ -1,8 +1,8 @@
 import os
-import tiktoken
 
 import matplotlib.pyplot as plt
 import pandas as pd
+import tiktoken
 from sklearn import metrics
 
 
@@ -25,7 +25,7 @@ def evaluate(predictions: list, true_labels: list, domain: str, model_name: str,
     accuracy = metrics.accuracy_score(true_labels, predictions)
     recall = metrics.recall_score(true_labels, predictions)
     precision = metrics.precision_score(true_labels, predictions)
-    
+
     if not cost:
         cost = 0.0
 
