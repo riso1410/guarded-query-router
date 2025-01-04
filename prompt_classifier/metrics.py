@@ -15,7 +15,7 @@ def calculate_cost(prompt: str, input: bool) -> float:
     return total_cost
 
 def evaluate(predictions: list, true_labels: list, domain: str, model_name: str,
-             embed_model: str, cost: float = None, latency: float = None) -> None:
+             embed_model: str, latency: float, train_acc: float, cost: float=0) -> None:
     matrix = metrics.confusion_matrix(true_labels, predictions)
     cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = matrix, display_labels = [0, 1])
     cm_display.plot()
@@ -31,10 +31,11 @@ def evaluate(predictions: list, true_labels: list, domain: str, model_name: str,
 
     metrics_df = pd.DataFrame({
         'model': [f'{model_name}_{domain}_{embed_model}'],
-        'f1': [f1],
-        'accuracy': [accuracy],
-        'recall': [recall],
-        'precision': [precision],
+        'f1': [round(f1 * 100, 2)],
+        'accuracy': [round(accuracy * 100, 2)],
+        'train_accuracy': [round(train_acc * 100, 2)],
+        'recall': [round(recall * 100, 2)],
+        'precision': [round(precision * 100, 2)],
         'cost': [cost],
         'latency': [latency],
         'date': [pd.Timestamp.now()],
