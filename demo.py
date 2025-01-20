@@ -28,4 +28,4 @@ def classify_prompt(prompt: str, history: list) -> str:
         qa_bot = dspy.Predict("question -> answer: str")
         return qa_bot(question=prompt).answer
 
-demo = gr.ChatInterface(classify_prompt, type="messages").launch()
+demo = gr.ChatInterface(classify_prompt, type="messages", share=False).launch()
