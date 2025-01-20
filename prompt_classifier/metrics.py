@@ -15,29 +15,28 @@ def calculate_cost(prompt: str, input: bool) -> float:
     return total_cost
 
 def evaluate(predictions: list, true_labels: list, domain: str, model_name: str,
-             embed_model: str, cost: float = None, latency: float = None) -> None:
+             embed_model: str, latency: float, train_acc: float, train_loss: float, test_loss: float, cost: float=0.0) -> dict:
     matrix = metrics.confusion_matrix(true_labels, predictions)
     cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = matrix, display_labels = [0, 1])
     cm_display.plot()
     plt.show()
 
-    f1 = metrics.f1_score(true_labels, predictions)
-    accuracy = metrics.accuracy_score(true_labels, predictions)
-    recall = metrics.recall_score(true_labels, predictions)
-    precision = metrics.precision_score(true_labels, predictions)
-
-    if not cost:
-        cost = 0.0
+    accuracy = round(metrics.accuracy_score(true_labels, predictions) * 100, 2)
+    recall = round(metrics.recall_score(true_labels, predictions) * 100, 2)
+    precision = round(metrics.precision_score(true_labels, predictions) * 100, 2)
+    date = pd.Timestamp.now()
 
     metrics_df = pd.DataFrame({
         'model': [f'{model_name}_{domain}_{embed_model}'],
-        'f1': [f1],
         'accuracy': [accuracy],
+        'train_accuracy': [train_acc],
+        'train_loss': [train_loss],
+        'test_loss': [test_loss],
         'recall': [recall],
         'precision': [precision],
         'cost': [cost],
         'latency': [latency],
-        'date': [pd.Timestamp.now()],
+        'date': [date],
     })
 
     metrics_file = 'reports/model_metrics.csv'
@@ -45,3 +44,15 @@ def evaluate(predictions: list, true_labels: list, domain: str, model_name: str,
         metrics_df.to_csv(metrics_file, mode='a', header=False, index=False)
     else:
         metrics_df.to_csv(metrics_file, index=False)
+
+    return {
+        'accuracy': accuracy,
+        'train_accuracy': train_acc,
+        'train_loss': train_loss,
+        'test_loss': test_loss,
+        'recall': recall,
+        'precision': precision,
+        'cost': cost,
+        'latency': latency,
+        'date': date
+    }
