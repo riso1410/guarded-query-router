@@ -32,11 +32,8 @@ It also compare two embedding models and TF-IDF approach using sklearn and faste
 3. Install the required packages:
 
    ```bash
-   conda install --file requirements.txt
-   ```
-   OR
-   ```bash
    pip install -r requirements.txt
+   pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
    ```
 
 ## .env Template
