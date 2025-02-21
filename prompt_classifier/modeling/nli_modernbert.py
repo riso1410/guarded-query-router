@@ -7,4 +7,7 @@ class ModernBERTNLI:
         self.label = [domain, "general"]
 
     def predict(self, text: str) -> dict:
-        return self.classifier(text, self.label)
+        prediction = self.classifier(text, self.label)
+        if prediction == "general":
+            return 0
+        return 1
