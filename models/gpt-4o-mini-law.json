@@ -25,7 +25,7 @@
   "metadata": {
     "dependency_versions": {
       "python": "3.11.11",
-      "dspy": "2.5.43",
+      "dspy": "2.6.5",
       "cloudpickle": "3.1.1"
     }
   }
