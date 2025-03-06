@@ -1,0 +1,73 @@
+{
+  "prog": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "domain": "finance",
+        "prompt": "Find which of these words does not belong: Stir, Pressure, Jump",
+        "label": 0
+      },
+      {
+        "domain": "finance",
+        "prompt": "Write 3 alternatives of transportation.",
+        "label": 1
+      },
+      {
+        "domain": "finance",
+        "prompt": "What's the best way to get rid of ants in the house.",
+        "label": 0
+      },
+      {
+        "domain": "finance",
+        "prompt": "Shouldn't a Roth IRA accumulate more than 1 cent of interest per month?",
+        "label": 1
+      },
+      {
+        "domain": "finance",
+        "prompt": "Come up with a funny pun involving the word 'cat'.",
+        "label": 1
+      },
+      {
+        "domain": "finance",
+        "prompt": "No one will pay any attention to me, I'm sure it will be fine.",
+        "label": 0
+      },
+      {
+        "domain": "finance",
+        "prompt": "Saving tax for long term stock investment capital gain by quiting my current job?",
+        "label": 1
+      },
+      {
+        "domain": "finance",
+        "prompt": "Compare and contrast the benefits of using Apache Cassandra and MongoDB.",
+        "label": 1
+      }
+    ],
+    "signature": {
+      "instructions": "Classify if a text is specific for a domain or not.",
+      "fields": [
+        {
+          "prefix": "Domain:",
+          "description": "The target domain to classify the prompt against."
+        },
+        {
+          "prefix": "Prompt:",
+          "description": "The prompt to classify."
+        },
+        {
+          "prefix": "Label:",
+          "description": "1, if the input text belong to domain, 0 otherwise."
+        }
+      ]
+    }
+  },
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.11.11",
+      "dspy": "2.6.5",
+      "cloudpickle": "3.1.1"
+    }
+  }
+}
