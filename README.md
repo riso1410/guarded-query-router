@@ -71,34 +71,3 @@ Create a `.env` file in the project root using the following template:
 OPENAI_API_KEY=openai-api-key
 PROXY_URL=proxy/deployment-url
 ```
-
-## Usage
-
-1. To use this project, follow these steps:
-
-   - Create .env file, that is similar to .env.example file
-   - Run Prompt-Classification\notebooks\01_processing.ipynb notebook for dataloading from HuggingFace
-   - Run Prompt-Classification\notebooks\02_comparison.ipynb for running comparison of models 
-
-## Repository Structure
-
-```plaintext
-├── LICENSE            # License file
-├── README.md          # Project documentation
-├── data               # Datasets used in the project
-│   ├── raw            # Raw datasets
-│   ├── processed      # Processed datasets
-│   ├── fasttext       # Processed datasets for fastText
-├── notebooks          # Jupyter notebooks for analysis and experimentation
-├── prompt_classifier  # Main source code directory
-│   ├── __init__.py
-│   ├── datasets.py    # Data loading and preprocessing scripts
-│   ├── config.py      # Configuration settings
-│   ├── modeling       # Model training and evaluation scripts
-│   │   ├── dspy_gpt.py
-│   │   ├── fasttext.py
-│   │   └── nli_modernbert.py
-├── requirements.txt   # List of required Python packages
-├── pyproject.toml     # Used formatting
-└── .env.example       # Template for environment variables
-```
