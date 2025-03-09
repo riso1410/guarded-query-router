@@ -5,43 +5,50 @@
     "train": [],
     "demos": [
       {
+        "augmented": true,
+        "prompt": "No I think he's good and trained already.",
         "domain": "finance",
-        "prompt": "Find which of these words does not belong: Stir, Pressure, Jump",
-        "label": 0
+        "label": "0"
+      },
+      {
+        "augmented": true,
+        "prompt": "WTF I killed them so I could test the car. I just wanted to have a chance to feel what it was like. What do you know?",
+        "domain": "finance",
+        "label": "0"
+      },
+      {
+        "augmented": true,
+        "prompt": "Damn why do you have to be so defensive and think so hard about this.",
+        "domain": "finance",
+        "label": "0"
+      },
+      {
+        "augmented": true,
+        "prompt": "Discuss the importance of confidentiality in professional and ethical conduct.",
+        "domain": "finance",
+        "label": "1"
+      },
+      {
+        "augmented": true,
+        "prompt": "Yeah and I think the waiter discriminated against me too with how he was treating me.",
+        "domain": "finance",
+        "label": "0"
+      },
+      {
+        "augmented": true,
+        "prompt": "I'll make up a story about my pregnancy and maybe he'll believe me.",
+        "domain": "finance",
+        "label": "0"
+      },
+      {
+        "augmented": true,
+        "prompt": "Look up the definitions of the words \"calcium\" and \"oxygen\". ",
+        "domain": "finance",
+        "label": "0"
       },
       {
         "domain": "finance",
-        "prompt": "Write 3 alternatives of transportation.",
-        "label": 1
-      },
-      {
-        "domain": "finance",
-        "prompt": "What's the best way to get rid of ants in the house.",
-        "label": 0
-      },
-      {
-        "domain": "finance",
-        "prompt": "Shouldn't a Roth IRA accumulate more than 1 cent of interest per month?",
-        "label": 1
-      },
-      {
-        "domain": "finance",
-        "prompt": "Come up with a funny pun involving the word 'cat'.",
-        "label": 1
-      },
-      {
-        "domain": "finance",
-        "prompt": "No one will pay any attention to me, I'm sure it will be fine.",
-        "label": 0
-      },
-      {
-        "domain": "finance",
-        "prompt": "Saving tax for long term stock investment capital gain by quiting my current job?",
-        "label": 1
-      },
-      {
-        "domain": "finance",
-        "prompt": "Compare and contrast the benefits of using Apache Cassandra and MongoDB.",
+        "prompt": "Given the input, name a flower.",
         "label": 1
       }
     ],

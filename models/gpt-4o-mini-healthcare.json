@@ -3,49 +3,7 @@
     "lm": null,
     "traces": [],
     "train": [],
-    "demos": [
-      {
-        "augmented": true,
-        "prompt": "Nah my mom will be fine, don't worry. She's moved on.",
-        "domain": "healthcare",
-        "label": "0"
-      },
-      {
-        "domain": "healthcare",
-        "prompt": "I'm going to work late on Saturday and ask for today off in its place.",
-        "label": 0
-      },
-      {
-        "domain": "healthcare",
-        "prompt": "Hi, I have recently been getting a throbbing pain in the blood vessel on my left temple during sex and\/or masterbation. I used to get it infrequently sometimes but it hasnt happened for approximately 4 years. The pain continues indefinitely unless I sleep it off. Im a 25 yr old male.",
-        "label": 1
-      },
-      {
-        "domain": "healthcare",
-        "prompt": "Yes it does, even though I do similar things.",
-        "label": 0
-      },
-      {
-        "domain": "healthcare",
-        "prompt": "Of course not. I know that if I rape a woman, she will definitely claim it's not rape.",
-        "label": 0
-      },
-      {
-        "domain": "healthcare",
-        "prompt": "Hi Doctor, I am 41 years old woman just my father expired 10 days back I am feeling very anxious and having anxiety attach for last few day very frequent. When these attachks happen I have to sit up or go out from the room have some fresh air and I can not sleep after that feeling very low start thinking about non sense things. Also feel suffocated and can not breath properly. I went to doctor yester day he precribed me Nexpro - L capsule one daily in morning empty stomach, Cilpar LA 20mg one in the morning and Trika .5mg, I took Trika yesterday night I slept but it was not very sound keep awaking and need to sleep on pile of  pillow to make my head upwards and with light on, just checking if it is a temperory situation I am very scared have two very young kids. What should I do. Thanks a lot fro taking time for my question",
-        "label": 1
-      },
-      {
-        "domain": "healthcare",
-        "prompt": "what are the long-term effects of stress?",
-        "label": 0
-      },
-      {
-        "domain": "healthcare",
-        "prompt": "I got married in Nov. 2012, we were waiting for natural conception, but it doesn t worked out so we consulted gyanecologist and did all the necessary lab investigations, everything was normal, my wife was adviced to take some tablets and I was adviced to take Fertisure M, in what way it is going to help me. what is the need to take this Fertisure m. Kindly clarify me.",
-        "label": 1
-      }
-    ],
+    "demos": [],
     "signature": {
       "instructions": "Classify if a text is specific for a domain or not.",
       "fields": [
