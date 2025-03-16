@@ -87,8 +87,7 @@ class GPT4oMini:
             predictions.append(self.parse_answer(pred.label))
             actuals.append(self.parse_answer(example.label))
 
-        mean_latency = sum(prediction_times) / len(prediction_times)
-        return predictions, actuals, mean_latency
+        return predictions, actuals, prediction_times
 
     def save_model(self, model_path: str) -> None:
         """Save the optimized model."""
