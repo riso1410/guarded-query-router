@@ -21,7 +21,7 @@ def create_domain_dataset(target_domain_data: pd.DataFrame, other_domains_data: 
 
     other_domains = pd.concat(other_domains_data)
     other_domains['label'] = 0
-
+    
     return pd.concat([target_domain_data, other_domains]).sample(frac=1).reset_index(drop=True)
 
 def cross_validate(model: str, x: np.ndarray, y: np.ndarray, n_splits: int = 5) -> tuple[float, float]:
@@ -55,9 +55,9 @@ def train_and_evaluate_model(
     print(f"Training {embed_model} embeddings on {domain} domain using {model_name}")
 
     cv_accuracy, cv_std = cross_validate(
-        classifier, train_embeds, train_labels
+        classifier, train_embeds[:int(0.2 * len(train_embeds))], train_labels[:int(0.2 * len(train_labels))]
     )
-
+    print(f"Cross-validation accuracy: {cv_accuracy} ± {cv_std}")
     # Train the model
     classifier.fit(train_embeds, train_labels)
 

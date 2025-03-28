@@ -10,21 +10,37 @@ from tqdm import tqdm
 from prompt_classifier.metrics import calculate_cost
 
 
-class GPT4oMini:
-    def __init__(self, api_key: str, proxy_url: str, domain: str, model_name: str,
-                 train_data: pd.DataFrame, test_data: pd.DataFrame) -> None:
+class LlmClassifier:
+    def __init__(self, model_name: str, train_data: pd.DataFrame, test_data: pd.DataFrame, 
+                 domain: str, api_base: str, api_key: str) -> None:
         self.api_key = api_key
-        self.proxy_url = proxy_url
+        self.api_base = api_base
         self.domain = domain
         self.model_name = model_name
-        self.train_data = [self.create_example(self.domain, row) for _, row in train_data.iterrows()]
-        self.test_data = [self.create_example(self.domain, row) for _, row in test_data.iterrows()]
+
+        self.train_data = [
+            dspy.Example(
+                domain=str(domain),
+                prompt=str(row['prompt']),
+                label=str(int(row['label']))
+            ).with_inputs("domain", "prompt")
+            for _, row in train_data.iterrows()
+        ]
+
+        self.test_data = [
+            dspy.Example(
+                domain=str(domain),
+                prompt=str(row['prompt']),
+                label=str(int(row['label']))
+            ).with_inputs("domain", "prompt")
+            for _, row in test_data.iterrows()
+        ]
         self.cost = 0.0
 
         self.lm = LM(
             api_key=self.api_key,
             model=self.model_name,
-            api_base=self.proxy_url,
+            api_base=self.api_base,
             temperature=0.0,
         )
         configure(lm=self.lm)
@@ -38,22 +54,22 @@ class GPT4oMini:
         ).with_inputs("prompt","domain")
 
     @staticmethod
-    def parse_answer(answer: any) -> bool:
+    def parse_answer(answer) -> bool:
         """Parse answers into a consistent binary format."""
-        if isinstance(answer, str) and re.match(r"^[01]$", answer.strip()):
-            return bool(int(answer))
+        answer = answer.strip()
+        if isinstance(answer, str) and re.search(r"[01]", answer):
+            return bool(int(re.search(r"[01]", answer).group()))
         elif isinstance(answer, int) and answer in [0, 1] or (answer in ["True", "False"]):
             return bool(answer)
         else:
             print(f"Unexpected non-binary label found: {answer}")
             return False
 
-    def comparison_metric(self, example: any, pred: any, trace: any = None) -> bool:
+    def comparison_metric(self, example, pred, trace = None) -> bool:
         """Metric function for comparing predicted label with actual label, using parse_answer for consistency."""
-        parsed_example_label = self.parse_answer(example.label)
-        parsed_pred_label = self.parse_answer(pred.label)
-
-        return parsed_example_label == parsed_pred_label
+        parsed_example = self.parse_answer(example.label)
+        parsed_pred = self.parse_answer(pred.label)
+        return parsed_example == parsed_pred
 
     def optimize_model(self) -> dspy.Module:
         """Optimize the model using few-shot learning."""
@@ -75,7 +91,6 @@ class GPT4oMini:
         predictions = []
         actuals = []
         prediction_times = []
-
 
         for example in tqdm(self.test_data, total=len(self.test_data)):
             self.cost += calculate_cost(example.prompt, input=True)

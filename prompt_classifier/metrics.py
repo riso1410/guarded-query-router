@@ -37,7 +37,7 @@ def evaluate(predictions: list, true_labels: list, domain: str, model_name: str,
         'date': [date],
     })
 
-    metrics_file = 'reports/model_metrics_3.csv'
+    metrics_file = 'reports/model_metrics_4.csv'
     if os.path.exists(metrics_file):
         metrics_df.to_csv(metrics_file, mode='a', header=False, index=False)
     else:

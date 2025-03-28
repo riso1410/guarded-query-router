@@ -49,8 +49,6 @@ class FastTextClassifier:
                 input=train_path,
                 autotuneValidationFile=val_path,
                 autotuneDuration=300,  # 5 minutes of autotuning
-                lr=0.1e-2,
-                epoch=50
             )
 
             # Get accuracies
