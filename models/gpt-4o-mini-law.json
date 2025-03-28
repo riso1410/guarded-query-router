@@ -5,44 +5,51 @@
     "train": [],
     "demos": [
       {
+        "augmented": true,
+        "prompt": "Write a complex sentence using the provided words",
         "domain": "law",
-        "prompt": "I guess it's because I have a weird sense of humor.",
-        "label": 0
+        "label": "0"
+      },
+      {
+        "augmented": true,
+        "prompt": "What prevents tourists visiting the U.S. from buying firearms?Imagine an ordinary foreigner, arrived with a simple tourist visa into the US.In the U.S., there is no personal identification document. Most of the U.S. people doesn't have a passport.What prevents a simple tourist to go into a weapon shop and buy a rifle?",
+        "domain": "law",
+        "label": "1"
+      },
+      {
+        "augmented": true,
+        "prompt": "I had back surgery and Medtronic implant this past year\/. I am now experiencing pelvic area pain. I don t know if it is muscle or nerve pain. It may come from a vaginal mesh implant that worked well for 5 years, then stopped working. I have had to exercise a lot this past year to get well. I don t know if I pulled a muscle or what. I don t know if I have to get the mesh removed.",
+        "domain": "law",
+        "label": "0"
+      },
+      {
+        "augmented": true,
+        "prompt": "Hello, I live in XXXXXX. I am 26 yrs old. From 15 yrs of my age i am suffering from cold allergy . I had breathing problem too. Always cough appear in my throat. Can you please help what i will do? I have already got treatment from an Allergy specialist. My breathing problem was disappeared but cough was appeared in my throat, Recently my breathing problem start again. Plz help.",
+        "domain": "law",
+        "label": "0"
+      },
+      {
+        "augmented": true,
+        "prompt": "Sovergin Immunity with respect to criminal activity?I have been looking without immediate success for references speaking to the Sovereign Immunity Doctrine exceptions, especially with respect to financial crimes. Take embezzlement for one example. Misuse use of public funds for another. Fraud as a third. I am also looking for the same class of information with respect to Civil Rights violations.Any references or better search terms will be appreciated. Add on Unlawful Practice of Law. Would Sovereign Immunity apply to a public employee engaging in it?",
+        "domain": "law",
+        "label": "1"
+      },
+      {
+        "augmented": true,
+        "prompt": "Best Time to buy a stock in a day",
+        "domain": "law",
+        "label": "0"
+      },
+      {
+        "augmented": true,
+        "prompt": "What factors should be considered when forecasting cost of goods sold in income statements?",
+        "domain": "law",
+        "label": "0"
       },
       {
         "domain": "law",
-        "prompt": "Ugh, but I hate talking about it.",
-        "label": 0
-      },
-      {
-        "domain": "law",
-        "prompt": "I cut down the neighbors tree because it looked rather ugly",
-        "label": 0
-      },
-      {
-        "domain": "law",
-        "prompt": "Does it make sense that filling up my car with gas gives me anxiety?",
-        "label": 0
-      },
-      {
-        "domain": "law",
-        "prompt": "What do you think if I tell you that I finally found out the type of person my boyfriend truly is",
-        "label": 0
-      },
-      {
-        "domain": "law",
-        "prompt": "Yacht Rock and the Intellectual Property Rights of Work Trademarked by a Second PartySo I'm curious about the legal standing of an IP trademark owned by a party that did not originate the concept, but which is using it, potentially to the detriment of the original work, to suppress others from doing the same thing, essentially.Also, most of this is going to sound very silly.1. [In 2005, a group of entertainers created an Internet comedy series called \"Yacht Rock,\"](http:\/\/www.yachtrock.com\/yacht-rock-episodes) which told the imaginary histories of the careers of a number of AM Gold\/West Coast musicians (Kenny Loggins, Michael McDonald, The Doobie Bros., Steely Dan, Toto, etc.). They coined the phrase \"yacht rock\" to describe the (artificial, arbitrary) smooth-music genre in which these acts circulated. The series was produced as a parody, drawing inspiration from real-life figures and events, and inventing a fictional narrative around them.2. The success of the Yacht Rock web series has materially benefited the real-life musicians whose stories it purports to tell. Its success renewed popular interest in their catalogues sufficient for them to tour again. Some of these artists have acknowledged this publicly, [even seeking to promote their tours as \"yacht rock.\"](https:\/\/music.mxdwn.com\/2018\/07\/14\/reviews\/concert-review-monsters-of-yacht-rock-christopher-cross-kenny-loggins-and-michael-mcdonald-live-at-the-hollywood-bowl\/) Satellite radio entity [SIRIUS\/XM created a \"yacht rock\" genre channel](https:\/\/www.siriusxm.com\/yachtrockradio), while Rock Band [video game developers Harmonix recently released a \"yacht rock\" song pack](http:\/\/www.harmonixmusic.com\/blog\/yacht-rock-pack-01-sets-sail), capitalizing on this renewed interest.3. [In 2008, a cover act from Atlanta formed, calling itself \"Yacht Rock Revue,\"](http:\/\/www.atlantamagazine.com\/great-reads\/confessions-cover-band-yacht-rock-revue\/) and playing a number of songs both consistent and inconsistent with the genre, as defined by the comedy group that coined the term \"yacht rock.\" However, what Yacht Rock Revue did that the comedy series writers did not is trademark the term \"yacht rock.\" (A USPTO search reveals that Yacht Rock Revue claims ownership of U.S. Registration Number 3834195, and in June 2018 filed an additional TEAS Plus application for its merchandise.) The band has since used its trademark to cease-and-desist \"yacht rock\" marketing used by other musicians, including the recording artists whose work they perform.4. In 2016, the creators of the Yacht Rock comedy series began a podcast called \"Beyond Yacht Rock,\" which creates and defines artificial\/arbitrary genres of music. In the process, they honed their definition of \"yacht rock\" as a musical style, [created a \"Yachtski Scale\" to score the \"yachtiness\" of a given song](http:\/\/www.yachtrock.com\/yacht-or-nyacht-jay-gradient\/) along a series of (principally arbitrary) metrics, and wrote vigorous critical defenses of these definitions in a \"Captain's Blog.\" They even interviewed Yacht Rock Revue on the show, and discussed the merits of the band's \"yacht rock\" material vis-a-vis their definitions.5. Yacht Rock Revue has openly acknowledged that it nicked the term \"yacht rock\" from the web comedy series. *Yacht Rock*'s creators have been acknowledged as founders of the genre in interviews with with [Rolling Stone magazine](https:\/\/www.rollingstone.com\/tv\/tv-news\/sail-away-the-oral-history-of-yacht-rock-49343\/) and the NPR music show World Cafe. Yet various parties ([recently, sports writer Bill Simmons among them](https:\/\/twitter.com\/billsimmons\/status\/903346781273985024?lang=en)) continue to claim ownership of the \"yacht rock\" concept under some personal definition, Yacht Rock Revue included.Are there any legal remedies for the writers of the web comedy series to:1. keep the \"yacht rock\" term from being leveraged by parties likeYacht Rock Revue2. profit from their original coinage3. trademark their evolving definition\/terminology4. protect their future endeavors from similar behavior, which to me seems at least partly analogous to patent trolling",
-        "label": 1
-      },
-      {
-        "domain": "law",
-        "prompt": "can you hire a witness as your lawyer to exclude their testimony?I'm was just watching \"American Crime Story\" season 1 (O.J. Simpson trial), episode 4, around 38:30. The prosecutors were discussing the case when one asked about the testimony of Robert Kardashian, O.J. Simpson's best friend.> > God are they guilty! What does Kardashian say?> > > We're screwed on Kardashian. Now he's O.J.'s lawyer, so he's privileged. He doesn't have to talk....> > > This seems like a major loophole. Since Robert Kardashian was a long-time friend of Simpson before he was ever his lawyer, it would seem fair that the prosecutors could ask him about events previous to his being hired.If there were one star witness on the opposing side and they happened to be a lawyer, could you simply pay them off by hiring them as your lawyer? Could you do this multiple times? If you committed a crime at a law-firm and everyone who witnessed it was a lawyer, is there any rule preventing you from just hiring all of them?",
-        "label": 1
-      },
-      {
-        "domain": "law",
-        "prompt": "Refusal to terminate tenancy with months noticeI am renting property in UK and today tried to give my months notice, however letting agency refused to accept it claiming that they can only accept it on 25th - day when agreement started, and that this is in my contract. What this means that I would have to pay for period of 15 extra days while not living in a property... **EDIT:** as per comment> > The tenant may terminate the tenancy by giving 1 months notice in writing to the agent on the 25th day to vacate 1 month later on the 24th day of the month> > > Another thing I just realized that 25 of Dec is Christmas and I don't think they work on 25th! Can they really do this?**EDIT2:**My tenancy originally was 6 months and this period has passed, I didn't sigh anything after does this change anything?**Are there any regulations around this? Does months notice means month+ or is it actually a month?**",
-        "label": 1
+        "prompt": "Can placing prominent disclaimers prevent legal responsibility?I'm in the process of creating an app that facilitates communication between users to buy\/sell (legal) items. My team was talking about forming an LLC to prevent getting sued for personal assets. Keep in mind, we do not make money from the app nor do we handle money (digital or otherwise) anywhere in the app, we just facilitate the communication between users buying\/selling similar items and it's up to the users to meet and fulfill their agreed upon transaction. An auction of sorts, like craigslist, but in the US only.I've been doing research on LLCs and it seems like forming an LLC will not 100% relieve us of legal responsibility of a transaction gone wrong. So I figured (to save spending unnecessary money) it would be possible to just place disclaimers *very* prominently throughout the app and item transaction process. In the event something goes wrong during the transaction, we will not be liable.Will that resolve us of blame\/responsibility of someone shouting \"your app ripped me off! I'm suing you!\"?",
+        "label": "1"
       }
     ],
     "signature": {
@@ -66,7 +73,7 @@
   "metadata": {
     "dependency_versions": {
       "python": "3.11.11",
-      "dspy": "2.6.5",
+      "dspy": "2.6.14",
       "cloudpickle": "3.1.1"
     }
   }

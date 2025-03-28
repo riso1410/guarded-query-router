@@ -19,3 +19,4 @@ services:
               capabilities: [gpu]
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
+    network_mode: host
