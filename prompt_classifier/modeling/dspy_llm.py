@@ -104,6 +104,17 @@ class LlmClassifier:
 
         return predictions, actuals, prediction_times
 
+    def predict_single(self, prompt: str) -> bool:
+        """Predict the label for a single prompt."""
+        self.cost += calculate_cost(prompt, input=True)
+        start_time = time.perf_counter_ns()
+        pred = self.optimized_model(prompt=prompt, domain=self.domain)
+        end_time = time.perf_counter_ns()
+        self.cost += calculate_cost(pred.label, input=False)
+        prediction_time = end_time - start_time
+        return int(self.parse_answer(pred.label)), prediction_time
+    
+
     def save_model(self, model_path: str) -> None:
         """Save the optimized model."""
         self.optimized_model.save(model_path)
