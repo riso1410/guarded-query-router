@@ -13,3 +13,4 @@ ninja~=1.11.1.3
 gradio~=4.42.0
 seaborn~=0.13.2
 ollama~=0.4.7
+accelerate~=1.6.0
