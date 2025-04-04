@@ -7,6 +7,16 @@ from sklearn import metrics
 
 
 def calculate_cost(prompt: str, input: bool) -> float:
+    """
+    Calculate the cost of processing a prompt with GPT-4.
+
+    Args:
+        prompt (str): The input prompt text
+        input (bool): Whether this is an input token (True) or output token (False)
+
+    Returns:
+        float: Calculated cost in USD
+    """
     # Calculate and print total cost
     token_count = len(tiktoken.encoding_for_model("gpt-4o").encode(prompt))
     cost_per_1k = 0.00015 if input else 0.0006
@@ -14,8 +24,32 @@ def calculate_cost(prompt: str, input: bool) -> float:
 
     return total_cost
 
-def evaluate(predictions: list, true_labels: list, domain: str, model_name: str,
-             embed_model: str, latency: float, train_acc: float, cost: float=0.0) -> dict:
+def evaluate(
+    predictions: list,
+    true_labels: list,
+    domain: str,
+    model_name: str,
+    embed_model: str,
+    latency: float,
+    train_acc: float,
+    cost: float = 0.0
+) -> dict:
+    """
+    Evaluate model performance and save metrics.
+
+    Args:
+        predictions (list): Model predictions
+        true_labels (list): Ground truth labels
+        domain (str): Domain name
+        model_name (str): Name of the model
+        embed_model (str): Name of the embedding model
+        latency (float): Prediction latency
+        train_acc (float): Training accuracy
+        cost (float): Cost of model usage
+
+    Returns:
+        dict: Dictionary containing all evaluation metrics
+    """
     matrix = metrics.confusion_matrix(true_labels, predictions)
     cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = matrix, display_labels = [0, 1])
     cm_display.plot()

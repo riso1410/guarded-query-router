@@ -1,13 +1,23 @@
+from typing import Tuple, Optional
 import os
-
 import fasttext
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-
 class FastTextClassifier:
+    """FastText-based text classifier.
+    
+    Handles training and evaluation of FastText models for binary classification.
+    
+    Attributes:
+        model (Optional[fasttext.FastText]): Trained FastText model
+        train_data (pd.DataFrame): Processed training data
+        test_data (pd.DataFrame): Processed test data
+        val_data (pd.DataFrame): Validation split from training data
+    """
+
     def __init__(self, train_data: pd.DataFrame, test_data: pd.DataFrame) -> None:
-        self.model = None
+        self.model: Optional[fasttext.FastText] = None
         self.train_data = self.label_dataset(train_data)
         self.test_data = self.label_dataset(test_data)
 
@@ -16,13 +26,27 @@ class FastTextClassifier:
         )
 
     def label_dataset(self, dataset: pd.DataFrame) -> pd.DataFrame:
+        """Process and label dataset for FastText format.
+        
+        Args:
+            dataset (pd.DataFrame): Input dataset
+            
+        Returns:
+            pd.DataFrame: Processed dataset with FastText labels
+        """
         dataset = dataset.copy()
         dataset['prompt'] = dataset['prompt'].str.replace('\n', '')
         dataset['prompt'] = dataset['prompt'].str.strip().str.lower()
         dataset['label'] = dataset['label'].apply(lambda x: '__label__0' if x == 0 else '__label__1')
         return dataset
 
-    def write_to_file(self, data: str, path: str) -> None:
+    def write_to_file(self, data: pd.DataFrame, path: str) -> None:
+        """Write labeled data to FastText format file.
+        
+        Args:
+            data (pd.DataFrame): Labeled dataset
+            path (str): Output file path
+        """
         with open(path, encoding='utf-8', mode='w') as f:
             try:
                 for _, row in data.iterrows():
@@ -30,7 +54,7 @@ class FastTextClassifier:
             except Exception as e:
                 print(f"An error occurred while writing to {path}: {e}")
 
-    def train(self) -> tuple[float, float]:
+    def train(self) -> Tuple[float, float]:
         """
         Train the fastText model with validation.
         Returns:

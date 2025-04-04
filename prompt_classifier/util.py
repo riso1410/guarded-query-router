@@ -14,7 +14,14 @@ from prompt_classifier.metrics import evaluate
 
 def create_domain_dataset(target_domain_data: pd.DataFrame, other_domains_data: pd.DataFrame) -> pd.DataFrame:
     """
-    Create dataset where target domain = True (1) and other domains = False (0)
+    Create a binary classification dataset from target domain and other domains.
+
+    Args:
+        target_domain_data (pd.DataFrame): DataFrame containing target domain data
+        other_domains_data (pd.DataFrame): DataFrame containing data from other domains
+
+    Returns:
+        pd.DataFrame: Combined dataset with binary labels (1 for target domain, 0 for others)
     """
     target_domain_data = target_domain_data.copy()
     target_domain_data['label'] = 1
@@ -24,9 +31,18 @@ def create_domain_dataset(target_domain_data: pd.DataFrame, other_domains_data: 
     
     return pd.concat([target_domain_data, other_domains]).sample(frac=1).reset_index(drop=True)
 
-def cross_validate(model: str, x: np.ndarray, y: np.ndarray, n_splits: int = 5) -> tuple[float, float]:
+def cross_validate(model: SVC | XGBClassifier, x: np.ndarray, y: np.ndarray, n_splits: int = 5) -> tuple[float, float]:
     """
-    Perform cross validation and return mean accuracy and std
+    Perform k-fold cross validation on the model.
+
+    Args:
+        model: The classifier model (SVC or XGBClassifier)
+        x (np.ndarray): Input features
+        y (np.ndarray): Target labels
+        n_splits (int): Number of folds for cross validation
+
+    Returns:
+        tuple[float, float]: Mean accuracy and standard deviation
     """
     cv = KFold(n_splits=n_splits, shuffle=True, random_state=42)
     scores = cross_val_score(model, x, y, cv=cv, scoring='accuracy')
@@ -43,7 +59,23 @@ def train_and_evaluate_model(
     save_path: str,
     embedding_time: float = 0.0,
 ) -> None:
+    """
+    Train a classifier model and evaluate its performance.
 
+    Args:
+        model_name (str): Name of the model ('SVM' or 'XGBoost')
+        train_embeds (np.ndarray): Training embeddings
+        test_embeds (np.ndarray): Test embeddings
+        train_labels (pd.Series): Training labels
+        test_labels (pd.Series): Test labels
+        domain (str): Domain name for reporting
+        embed_model (str): Name of embedding model used
+        save_path (str): Path to save the trained model
+        embedding_time (float): Time taken for embedding generation
+
+    Raises:
+        ValueError: If model_name is not 'SVM' or 'XGBoost'
+    """
     # Initialize the classifier
     if model_name == "SVM":
         classifier = SVC(probability=True)

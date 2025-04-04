@@ -1,7 +1,18 @@
+from typing import List
 from transformers import pipeline
 
-
 class ModernBERTNLI:
+    """BERT model fine-tuned for Natural Language Inference classification tasks.
+    
+    Uses zero-shot classification to determine if text belongs to a specific domain.
+    
+    Attributes:
+        domain (str): Target domain for classification
+        threshold (float): Confidence threshold for classification
+        classifier: Transformer pipeline for zero-shot classification
+        labels (List[str]): Classification labels
+    """
+
     def __init__(self, domain: str, threshold: float = 0.7) -> None:
         self.domain = domain
         self.threshold = threshold
@@ -16,6 +27,14 @@ class ModernBERTNLI:
         self.labels = [f"related to {domain}", f"not related to {domain}"]
 
     def predict(self, text: str) -> int:
+        """Predict if text belongs to the specified domain.
+        
+        Args:
+            text (str): Input text to classify
+            
+        Returns:
+            int: 1 if text belongs to domain, 0 otherwise
+        """
         # The pipeline returns a dictionary with 'labels' and 'scores'
         prediction = self.classifier(text, self.labels)
         

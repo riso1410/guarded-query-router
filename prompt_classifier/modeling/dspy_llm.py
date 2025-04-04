@@ -1,3 +1,4 @@
+from typing import List, Tuple, Optional, Any
 import re
 import time
 
@@ -11,8 +12,25 @@ from prompt_classifier.metrics import calculate_cost
 
 
 class LlmClassifier:
-    def __init__(self, model_name: str, train_data: pd.DataFrame, test_data: pd.DataFrame, 
-                 domain: str, api_base: str, api_key: str) -> None:
+    """Large Language Model classifier using DSPy framework.
+    
+    Handles training, optimization and prediction for domain classification tasks.
+    
+    Attributes:
+        api_key (str): API key for LLM service
+        api_base (str): Base URL for API
+        domain (str): Target domain for classification
+        model_name (str): Name of the LLM model
+        train_data (List[Example]): Training examples
+        test_data (List[Example]): Test examples
+        cost (float): Accumulated API cost
+        lm: Language model instance
+        optimized_model: Optimized classification module
+    """
+
+    def __init__(self, model_name: str, train_data: pd.DataFrame, 
+                 test_data: pd.DataFrame, domain: str,
+                 api_base: str, api_key: str) -> None:
         self.api_key = api_key
         self.api_base = api_base
         self.domain = domain
@@ -47,6 +65,15 @@ class LlmClassifier:
 
     @staticmethod
     def create_example(domain: str, row: pd.Series) -> Example:
+        """Create a DSPy example from input data.
+        
+        Args:
+            domain (str): Target domain
+            row (pd.Series): Input data row
+            
+        Returns:
+            Example: DSPy example instance
+        """
         return Example(
             domain=domain,
             prompt=row['prompt'],
@@ -54,8 +81,15 @@ class LlmClassifier:
         ).with_inputs("prompt","domain")
 
     @staticmethod
-    def parse_answer(answer) -> bool:
-        """Parse answers into a consistent binary format."""
+    def parse_answer(answer: Any) -> bool:
+        """Parse model answers into binary format.
+        
+        Args:
+            answer: Raw model output
+            
+        Returns:
+            bool: Parsed binary prediction
+        """
         answer = answer.strip()
         if isinstance(answer, str) and re.search(r"[01]", answer):
             return bool(int(re.search(r"[01]", answer).group()))
@@ -65,7 +99,8 @@ class LlmClassifier:
             print(f"Unexpected non-binary label found: {answer}")
             return False
 
-    def comparison_metric(self, example, pred, trace = None) -> bool:
+    def comparison_metric(self, example: Example, pred: Example, 
+                         trace: Optional[Any] = None) -> bool:
         """Metric function for comparing predicted label with actual label, using parse_answer for consistency."""
         parsed_example = self.parse_answer(example.label)
         parsed_pred = self.parse_answer(pred.label)
@@ -86,8 +121,15 @@ class LlmClassifier:
 
         return compiled_classification
 
-    def predict(self) -> bool:
-        """Predict the label for a given prompt."""
+    def predict(self) -> Tuple[List[int], List[int], List[int]]:
+        """Predict labels for test data.
+        
+        Returns:
+            Tuple containing:
+                - List[int]: Predictions
+                - List[int]: Actual labels 
+                - List[int]: Prediction times in nanoseconds
+        """
         predictions = []
         actuals = []
         prediction_times = []
@@ -104,8 +146,17 @@ class LlmClassifier:
 
         return predictions, actuals, prediction_times
 
-    def predict_single(self, prompt: str) -> bool:
-        """Predict the label for a single prompt."""
+    def predict_single(self, prompt: str) -> Tuple[int, int]:
+        """Predict the label for a single prompt.
+        
+        Args:
+            prompt (str): Input prompt
+            
+        Returns:
+            Tuple containing:
+                - int: Prediction
+                - int: Prediction time in nanoseconds
+        """
         self.cost += calculate_cost(prompt, input=True)
         start_time = time.perf_counter_ns()
         pred = self.optimized_model(prompt=prompt, domain=self.domain)
@@ -141,6 +192,15 @@ class ClassificationModule(dspy.Module):
         self.prog = dspy.Predict(ClassificationSignature)
 
     def forward(self, prompt: str, domain: str) -> ClassificationSignature:
+        """Forward method for classification module.
+        
+        Args:
+            prompt (str): Input prompt
+            domain (str): Target domain
+            
+        Returns:
+            ClassificationSignature: Prediction signature
+        """
         try:
             prediction = self.prog(prompt=prompt, domain=domain)
 
