@@ -2,6 +2,7 @@ import pickle
 import statistics
 import time
 
+import torch
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import KFold, cross_val_score
@@ -9,7 +10,7 @@ from sklearn.svm import SVC
 from tqdm import tqdm
 from xgboost import XGBClassifier
 
-from prompt_classifier.metrics import evaluate
+from prompt_classifier.metrics import evaluate_run
 
 
 def create_domain_dataset(target_domain_data: pd.DataFrame, other_domains_data: pd.DataFrame) -> pd.DataFrame:
@@ -80,7 +81,7 @@ def train_and_evaluate_model(
     if model_name == "SVM":
         classifier = SVC(probability=True)
     elif model_name == "XGBoost":
-        classifier = XGBClassifier(n_jobs=-1)
+        classifier = XGBClassifier(n_jobs=-1, tree_method='auto', enable_categorical=False)
     else:
         raise ValueError("Invalid model_name. Choose 'SVM' or 'XGBoost'.")
 
@@ -90,6 +91,7 @@ def train_and_evaluate_model(
         classifier, train_embeds[:int(0.2 * len(train_embeds))], train_labels[:int(0.2 * len(train_labels))]
     )
     print(f"Cross-validation accuracy: {cv_accuracy} ± {cv_std}")
+    
     # Train the model
     classifier.fit(train_embeds, train_labels)
 
@@ -122,7 +124,7 @@ def train_and_evaluate_model(
 
 
     # Evaluate the predictions
-    evaluate(
+    evaluate_run(
         predictions,
         test_labels,
         domain,

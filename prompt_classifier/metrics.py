@@ -24,7 +24,7 @@ def calculate_cost(prompt: str, input: bool) -> float:
 
     return total_cost
 
-def evaluate(
+def evaluate_run(
     predictions: list,
     true_labels: list,
     domain: str,
@@ -32,7 +32,8 @@ def evaluate(
     embed_model: str,
     latency: float,
     train_acc: float,
-    cost: float = 0.0
+    cost: float = 0.0,
+    training: bool = False,
 ) -> dict:
     """
     Evaluate model performance and save metrics.
@@ -56,8 +57,8 @@ def evaluate(
     plt.show()
 
     accuracy = round(metrics.accuracy_score(true_labels, predictions) * 100, 2)
-    recall = round(metrics.recall_score(true_labels, predictions) * 100, 2)
-    precision = round(metrics.precision_score(true_labels, predictions) * 100, 2)
+    recall = round(metrics.recall_score(true_labels, predictions, zero_division=0) * 100, 2)
+    precision = round(metrics.precision_score(true_labels, predictions, zero_division=0) * 100, 2)
     date = pd.Timestamp.now()
 
     metrics_df = pd.DataFrame({
@@ -71,7 +72,11 @@ def evaluate(
         'date': [date],
     })
 
-    metrics_file = 'reports/model_metrics_4.csv'
+    if training:
+        metrics_file = 'reports/dencun_training.csv'
+    else:
+        metrics_file = 'reports/dencun_inference.csv'
+
     if os.path.exists(metrics_file):
         metrics_df.to_csv(metrics_file, mode='a', header=False, index=False)
     else:
