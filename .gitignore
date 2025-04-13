@@ -166,3 +166,4 @@ interim/
 processed/
 raw/
 wandb/
+*.bin
