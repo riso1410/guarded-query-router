@@ -59,6 +59,7 @@ def train_and_evaluate_model(
     embed_model: str,
     save_path: str,
     embedding_time: float = 0.0,
+    training: bool = False,
 ) -> None:
     """
     Train a classifier model and evaluate its performance.
@@ -80,7 +81,11 @@ def train_and_evaluate_model(
     # Initialize the classifier
     if model_name == "SVM":
         classifier = SVC(probability=True)
+        print("SVM")
+        print(type(train_embeds))
     elif model_name == "XGBoost":
+        print("XGB")
+        print(type(train_embeds))
         classifier = XGBClassifier(n_jobs=-1, tree_method='auto', enable_categorical=False)
     else:
         raise ValueError("Invalid model_name. Choose 'SVM' or 'XGBoost'.")
@@ -88,29 +93,19 @@ def train_and_evaluate_model(
     print(f"Training {embed_model} embeddings on {domain} domain using {model_name}")
 
     cv_accuracy, cv_std = cross_validate(
-        classifier, train_embeds[:int(0.2 * len(train_embeds))], train_labels[:int(0.2 * len(train_labels))]
+        classifier, train_embeds[:int(0.2 * train_embeds.shape[0])], train_labels[:int(0.2 * train_labels.shape[0])]
     )
     print(f"Cross-validation accuracy: {cv_accuracy} ± {cv_std}")
     
     # Train the model
     classifier.fit(train_embeds, train_labels)
+    
+    start_time = time.perf_counter_ns()
+    predictions = classifier.predict(test_embeds)
+    end_time = time.perf_counter_ns()
+    prediction_time = end_time - start_time
 
-    predictions = []
-    prediction_times = []
-
-    # Evaluate the model on test data
-    for _, test_embed in enumerate(
-        tqdm(test_embeds, desc=f"Evaluating {model_name} on {domain}")
-    ):
-        start_time = time.perf_counter_ns()
-        prediction = classifier.predict(test_embed.reshape(1, -1))
-        end_time = time.perf_counter_ns()
-
-        prediction_times.append(end_time - start_time)
-        predictions.append(prediction[0])
-
-    mean_prediction_time = statistics.mean(prediction_times)
-    total_latency = mean_prediction_time + (embedding_time / len(test_embeds))
+    total_latency = prediction_time + (embedding_time / test_embeds.shape[0])
 
     # Save the model
     if model_name == "SVM":
@@ -132,4 +127,5 @@ def train_and_evaluate_model(
         embed_model=embed_model,
         latency=total_latency,
         train_acc=cv_accuracy,
+        training=training,
     )

@@ -3,6 +3,7 @@ import os
 import matplotlib.pyplot as plt
 import pandas as pd
 import tiktoken
+import numpy as np
 from sklearn import metrics
 
 
@@ -51,8 +52,10 @@ def evaluate_run(
     Returns:
         dict: Dictionary containing all evaluation metrics
     """
+
+    unique_labels = np.unique(np.concatenate([predictions, true_labels]))
     matrix = metrics.confusion_matrix(true_labels, predictions)
-    cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = matrix, display_labels = [0, 1])
+    cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = matrix, display_labels=unique_labels)
     cm_display.plot()
     plt.show()
 

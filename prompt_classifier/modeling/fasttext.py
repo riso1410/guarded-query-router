@@ -1,5 +1,6 @@
 from typing import Tuple, Optional
 import os
+import gc
 import fasttext
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -34,20 +35,21 @@ class FastTextClassifier:
         Returns:
             pd.DataFrame: Processed dataset with FastText labels
         """
-        dataset = dataset.copy()
-        dataset['prompt'] = dataset['prompt'].str.replace('\n', '')
-        dataset['prompt'] = dataset['prompt'].str.strip().str.lower()
-        dataset['label'] = dataset['label'].apply(lambda x: '__label__0' if x == 0 else '__label__1')
-        return dataset
+        dataset_copy = dataset.copy()
+        dataset_copy['prompt'] = dataset_copy['prompt'].str.replace('\n', '')
+        dataset_copy['prompt'] = dataset_copy['prompt'].str.strip().str.lower()
+        dataset_copy['label'] = dataset_copy['label'].apply(lambda x: '__label__0' if x == 0 else '__label__1')
+        return dataset_copy
 
-    def write_to_file(self, data: pd.DataFrame, path: str) -> None:
+    def write_to_file(self, data: pd.DataFrame, path: str, mode: str = 'w') -> None:
         """Write labeled data to FastText format file.
         
         Args:
             data (pd.DataFrame): Labeled dataset
             path (str): Output file path
+            mode (str): File open mode ('w' for write, 'a' for append)
         """
-        with open(path, encoding='utf-8', mode='w') as f:
+        with open(path, encoding='utf-8', mode=mode) as f:
             try:
                 for _, row in data.iterrows():
                     f.write(f"{row['label']} {row['prompt']}\n")
@@ -56,39 +58,47 @@ class FastTextClassifier:
 
     def train(self) -> Tuple[float, float]:
         """
-        Train the fastText model with validation.
+        Train the fastText model with validation and memory management.
         Returns:
             Tuple[float, float]: (training accuracy, validation accuracy)
         """
         train_path = 'data/fasttext/train.txt'
         val_path = 'data/fasttext/valid.txt'
 
-        # Write train and validation files
-        self.write_to_file(self.train_data, train_path)
-        self.write_to_file(self.val_data, val_path)
-
         try:
+            # Write data in chunks to avoid memory issues
+            chunk_size = 1000
+            for i in range(0, len(self.train_data), chunk_size):
+                chunk = self.train_data.iloc[i:i+chunk_size]
+                mode = 'w' if i == 0 else 'a'
+                self.write_to_file(chunk, train_path, mode=mode)
+
+            for i in range(0, len(self.val_data), chunk_size):
+                chunk = self.val_data.iloc[i:i+chunk_size]
+                mode = 'w' if i == 0 else 'a'
+                self.write_to_file(chunk, val_path, mode=mode)
+
             # Train with validation and autotuning
             self.model = fasttext.train_supervised(
                 input=train_path,
                 autotuneValidationFile=val_path,
-                autotuneDuration=300,  # 5 minutes of autotuning
+                autotuneDuration=300,
             )
 
             # Get accuracies
-            train_acc = self.model.test(train_path)[1]  # [1] index contains accuracy
+            train_acc = self.model.test(train_path)[1]  
             val_acc = self.model.test(val_path)[1]
-
-            # Cleanup temporary files
-            os.remove(train_path)
-            os.remove(val_path)
 
             return train_acc, val_acc
 
         except Exception as e:
             print(f"An error occurred during training: {e}")
+            return 0.0, 0.0
+
+        finally:
+            # Cleanup
             if os.path.exists(train_path):
                 os.remove(train_path)
             if os.path.exists(val_path):
                 os.remove(val_path)
-            return 0.0, 0.0
+            gc.collect()
