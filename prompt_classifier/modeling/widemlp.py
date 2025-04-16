@@ -1,10 +1,10 @@
+import scipy.sparse as sp
+import tokenizers
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import scipy.sparse as sp
-from tqdm import tqdm
 from sklearn.feature_extraction.text import TfidfTransformer
-import tokenizers
+from tqdm import tqdm
 
 
 def inverse_document_frequency(encoded_docs, vocab_size):
