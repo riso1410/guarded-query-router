@@ -35,6 +35,7 @@ def evaluate_run(
     train_acc: float,
     cost: float = 0.0,
     training: bool = False,
+    batch_size: int = 1,
 ) -> dict:
     """
     Evaluate model performance and save metrics.
@@ -62,6 +63,7 @@ def evaluate_run(
     accuracy = round(metrics.accuracy_score(true_labels, predictions) * 100, 2)
     recall = round(metrics.recall_score(true_labels, predictions, zero_division=0) * 100, 2)
     precision = round(metrics.precision_score(true_labels, predictions, zero_division=0) * 100, 2)
+    f1 = round(metrics.f1_score(true_labels, predictions, zero_division=0) * 100, 2)
     date = pd.Timestamp.now()
 
     metrics_df = pd.DataFrame({
@@ -70,15 +72,17 @@ def evaluate_run(
         'train_accuracy': [train_acc],
         'recall': [recall],
         'precision': [precision],
+        'f1': [f1],
         'cost': [cost],
         'latency': [latency],
         'date': [date],
+        'batch_size': [batch_size],
     })
 
     if training:
-        metrics_file = 'reports/dencun_training.csv'
+        metrics_file = 'reports/rtx4060_training.csv'
     else:
-        metrics_file = 'reports/dencun_inference.csv'
+        metrics_file = 'reports/rtx4060_inference.csv'
 
     if os.path.exists(metrics_file):
         metrics_df.to_csv(metrics_file, mode='a', header=False, index=False)

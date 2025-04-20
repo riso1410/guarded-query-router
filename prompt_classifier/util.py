@@ -81,11 +81,7 @@ def train_and_evaluate_model(
     # Initialize the classifier
     if model_name == "SVM":
         classifier = SVC(probability=True)
-        print("SVM")
-        print(type(train_embeds))
     elif model_name == "XGBoost":
-        print("XGB")
-        print(type(train_embeds))
         classifier = XGBClassifier(n_jobs=-1, tree_method='auto', enable_categorical=False)
     else:
         raise ValueError("Invalid model_name. Choose 'SVM' or 'XGBoost'.")
