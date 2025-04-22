@@ -67,16 +67,14 @@ def evaluate_run(
     date = pd.Timestamp.now()
 
     metrics_df = pd.DataFrame({
-        'model': [f'{model_name}_{domain}_{embed_model}'],
+        'model': [f'{model_name}-{domain}-{embed_model}'],
         'accuracy': [accuracy],
         'train_accuracy': [train_acc],
         'recall': [recall],
         'precision': [precision],
-        'f1': [f1],
         'cost': [cost],
         'latency': [latency],
         'date': [date],
-        'batch_size': [batch_size],
     })
 
     if training:
