@@ -36,6 +36,7 @@ def evaluate_run(
     cost: float = 0.0,
     training: bool = False,
     batch_size: int = 1,
+    embed_flag: bool = True,
 ) -> dict:
     """
     Evaluate model performance and save metrics.
@@ -67,7 +68,11 @@ def evaluate_run(
     date = pd.Timestamp.now()
 
     metrics_df = pd.DataFrame({
-        'model': [f'{model_name}-{domain}-{embed_model}'],
+        'model': [{model_name}],
+        'domain': [domain],
+        'embed_model': [embed_model],
+        'embeedding' : [embed_flag],
+        'f1': [f1],
         'accuracy': [accuracy],
         'train_accuracy': [train_acc],
         'recall': [recall],
@@ -75,6 +80,7 @@ def evaluate_run(
         'cost': [cost],
         'latency': [latency],
         'date': [date],
+        'batch_size': [batch_size],
     })
 
     if training:

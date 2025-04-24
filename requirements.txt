@@ -14,3 +14,4 @@ gradio~=4.42.0
 seaborn~=0.13.2
 ollama~=0.4.7
 accelerate~=1.6.0
+cupy-cuda12x~=13.4.1
