@@ -156,15 +156,15 @@ def get_train_datasets(dataset_size: int=15000, split: float=0.2) -> dict:
     data = combined_dataset.train_test_split(test_size=split)
     return data
 
-def get_batch_data():
+def get_batch_data() -> pd.DataFrame:
     batch_data = []
     ood = get_eval_datasets()
-    
-    for dataset in ood.keys():
+
+    for dataset in ood:
         subset = ood[dataset]
         subset = subset.sample(100).reset_index(drop=True)
         batch_data.append(subset)
-    
+
     domain = get_train_datasets()
     domain = domain["test"].to_pandas()
 
@@ -195,10 +195,10 @@ def create_domain_dataset(target_domain_data: pd.DataFrame, other_domains_data: 
     other_domains = pd.concat(other_domains_data)
     other_domains['prompt'] = other_domains['prompt'].str.strip().str.replace(r'\n', ' ', regex=True)
     other_domains['label'] = 0
-    
+
     return pd.concat([target_domain_data, other_domains]).sample(frac=1).reset_index(drop=True)
 
-def get_domain_data():
+def get_domain_data() -> dict:
     law_dataset = load_dataset("dim/law_stackexchange_prompts")
     finance_dataset = load_dataset("4DR1455/finance_questions")
     healthcare_dataset = load_dataset("iecjsu/lavita-ChatDoctor-HealthCareMagic-100k")
@@ -230,6 +230,6 @@ def get_domain_data():
         "law": law_positive
     }
 
-def get_ood_data():
+def get_ood_data() -> pd.DataFrame:
     datasets_dict = get_eval_datasets()
     return pd.concat(datasets_dict.values()).reset_index(drop=True)

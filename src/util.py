@@ -1,23 +1,24 @@
-import random
 import os
-import numpy as np
-import torch
 import pickle
+import random
 import time
-import tiktoken
-import dataloader
+from collections import Counter
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-
+import tiktoken
+import torch
+from sklearn import metrics
 from sklearn.model_selection import KFold, cross_val_score
 from sklearn.svm import SVC
 from xgboost import XGBClassifier
-from sklearn import metrics
-from collections import Counter
 
-def set_seed(seed):
+import dataloader
+
+
+def set_seed(seed: int) -> None:
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -151,7 +152,7 @@ def plot_common_words(df: pd.DataFrame, domain:str, text_col: str = 'prompt', n_
     words = ' '.join(df[text_col]).lower().split()
     word_counts = Counter(words)
     common_words = pd.DataFrame(word_counts.most_common(n_words),
-                              columns=['Word', 'Count'])
+                        columns=['Word', 'Count'])
 
     plt.figure(figsize=(12, 6))
     sns.barplot(data=common_words, x='Count', y='Word')
@@ -175,7 +176,7 @@ def create_domain_dataset(target_domain_data: pd.DataFrame, other_domains_data: 
 
     other_domains = pd.concat(other_domains_data)
     other_domains['label'] = 0
-    
+
     return pd.concat([target_domain_data, other_domains]).sample(frac=1).reset_index(drop=True)
 
 def cross_validate(model: SVC | XGBClassifier, x: np.ndarray, y: np.ndarray, n_splits: int = 5) -> tuple[float, float]:
@@ -235,10 +236,10 @@ def train_and_evaluate_model(
     cv_accuracy, _ = cross_validate(
         classifier, train_embeds[:int(0.2 * train_embeds.shape[0])], train_labels[:int(0.2 * train_labels.shape[0])]
     )
-    
+
     # Train the model
     classifier.fit(train_embeds, train_labels)
-    
+
     start_time = time.perf_counter_ns()
     predictions = classifier.predict(test_embeds)
     end_time = time.perf_counter_ns()
@@ -268,7 +269,7 @@ def train_and_evaluate_model(
         training=training,
     )
 
-def load_batch_data():
+def load_batch_data() -> list:
     batch_data = dataloader.get_batch_data()
     return batch_data["prompt"].values.tolist()
 
