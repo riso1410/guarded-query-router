@@ -6,12 +6,18 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "datasets>=3.5.0",
+    "fasttext-wheel>=0.9.2",
     "ipykernel>=6.29.5",
+    "matplotlib>=3.10.1",
     "pandas>=2.2.3",
     "python-dotenv>=1.1.0",
-    "semantic-router>=0.1.7",
+    "rasterio",
+    "scikit-learn>=1.6.1",
+    "seaborn>=0.13.2",
+    "semantic-router[fastembed]>=0.1.7",
     "torch>=2.7.0",
     "tqdm>=4.67.1",
+    "xgboost>=3.0.0",
 ]
 
 [tool.ruff]

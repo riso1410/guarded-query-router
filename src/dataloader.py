@@ -97,7 +97,7 @@ def get_eval_datasets() -> dict:
     return datasets
 
 
-def get_train_datasets(dataset_size: int=15000, seed: int=42, split: float=0.2) -> dict:
+def get_train_datasets(dataset_size: int=15000, split: float=0.2) -> dict:
     law_dataset = load_dataset("dim/law_stackexchange_prompts")
     finance_dataset = load_dataset("4DR1455/finance_questions")
     healthcare_dataset = load_dataset("iecjsu/lavita-ChatDoctor-HealthCareMagic-100k")
@@ -153,7 +153,7 @@ def get_train_datasets(dataset_size: int=15000, seed: int=42, split: float=0.2) 
     combined_dataset = concatenate_datasets([law_data, finance_data, healthcare_data])
 
     # Split into train and test sets using dataset's train_test_split method
-    data = combined_dataset.train_test_split(test_size=split, seed=seed)
+    data = combined_dataset.train_test_split(test_size=split)
     return data
 
 def get_batch_data():
@@ -162,24 +162,73 @@ def get_batch_data():
     
     for dataset in ood.keys():
         subset = ood[dataset]
-        subset = subset.sample(100, random_state=42).reset_index(drop=True)
+        subset = subset.sample(100).reset_index(drop=True)
         batch_data.append(subset)
     
-    domain = get_train_datasets(15000, 42, 0.2)
+    domain = get_train_datasets()
     domain = domain["test"].to_pandas()
 
     # set pd seed for reproducibility
     for dataset in domain.domain.unique():
         subset = domain[domain["domain"] == dataset]
-        subset = subset.sample(100, random_state=42).reset_index(drop=True)
+        subset = subset.sample(100).reset_index(drop=True)
         subset =subset.rename(columns={"domain": "dataset", "text":"prompt"})
         batch_data.append(subset)
 
     return pd.concat(batch_data)
 
+def create_domain_dataset(target_domain_data: pd.DataFrame, other_domains_data: pd.DataFrame) -> pd.DataFrame:
+    """
+    Create a binary classification dataset from target domain and other domains.
+
+    Args:
+        target_domain_data (pd.DataFrame): DataFrame containing target domain data
+        other_domains_data (pd.DataFrame): DataFrame containing data from other domains
+
+    Returns:
+        pd.DataFrame: Combined dataset with binary labels (1 for target domain, 0 for others)
+    """
+    target_domain_data = target_domain_data.copy()
+    target_domain_data['prompt'] = target_domain_data['prompt'].str.strip().str.replace('\n', ' ')
+    target_domain_data['label'] = 1
+
+    other_domains = pd.concat(other_domains_data)
+    other_domains['prompt'] = other_domains['prompt'].str.strip().str.replace('\n', ' ')
+    other_domains['label'] = 0
+    
+    return pd.concat([target_domain_data, other_domains]).sample(frac=1).reset_index(drop=True)
+
 def get_domain_data():
-    domain = get_train_datasets(15000, 42, 0.2)
-    return domain["test"].to_pandas()
+    law_dataset = load_dataset("dim/law_stackexchange_prompts")
+    finance_dataset = load_dataset("4DR1455/finance_questions")
+    healthcare_dataset = load_dataset("iecjsu/lavita-ChatDoctor-HealthCareMagic-100k")
+
+    finance_dataset = finance_dataset["train"].to_pandas()
+    finance_dataset = finance_dataset.rename(columns={"instruction": "prompt"})
+    finance_dataset["label"] = 0
+    finance_dataset = finance_dataset[["prompt", "label"]]
+    finance_dataset = finance_dataset.sample(15000).reset_index(drop=True)
+
+    healthcare_dataset = healthcare_dataset["train"].to_pandas()
+    healthcare_dataset = healthcare_dataset.rename(columns={"input": "prompt"})
+    healthcare_dataset["label"] = 0
+    healthcare_dataset = healthcare_dataset[["prompt", "label"]]
+    healthcare_dataset = healthcare_dataset.sample(15000).reset_index(drop=True)
+
+    law_dataset = law_dataset["train"].to_pandas()
+    law_dataset["label"] = 0
+    law_dataset = law_dataset[["prompt", "label"]]
+    law_dataset = law_dataset.sample(15000).reset_index(drop=True)
+
+    finance_positive = create_domain_dataset(finance_dataset, [healthcare_dataset, law_dataset])
+    healthcare_positive = create_domain_dataset(healthcare_dataset, [finance_dataset, law_dataset])
+    law_positive = create_domain_dataset(law_dataset, [finance_dataset, healthcare_dataset])
+
+    return {
+        "finance": finance_positive,
+        "healthcare": healthcare_positive,
+        "law": law_positive
+    }
 
 def get_ood_data():
     datasets_dict = get_eval_datasets()
