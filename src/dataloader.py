@@ -189,11 +189,11 @@ def create_domain_dataset(target_domain_data: pd.DataFrame, other_domains_data: 
         pd.DataFrame: Combined dataset with binary labels (1 for target domain, 0 for others)
     """
     target_domain_data = target_domain_data.copy()
-    target_domain_data['prompt'] = target_domain_data['prompt'].str.strip().str.replace('\n', ' ')
+    target_domain_data['prompt'] = target_domain_data['prompt'].str.strip().str.replace(r'\n', ' ', regex=True)
     target_domain_data['label'] = 1
 
     other_domains = pd.concat(other_domains_data)
-    other_domains['prompt'] = other_domains['prompt'].str.strip().str.replace('\n', ' ')
+    other_domains['prompt'] = other_domains['prompt'].str.strip().str.replace(r'\n', ' ', regex=True)
     other_domains['label'] = 0
     
     return pd.concat([target_domain_data, other_domains]).sample(frac=1).reset_index(drop=True)

@@ -5,10 +5,13 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "cupy-cuda12x>=13.4.1",
     "datasets>=3.5.0",
+    "fastembed-gpu>=0.6.1",
     "fasttext-wheel>=0.9.2",
     "ipykernel>=6.29.5",
     "matplotlib>=3.10.1",
+    "onnx>=1.17.0",
     "pandas>=2.2.3",
     "python-dotenv>=1.1.0",
     "rasterio",

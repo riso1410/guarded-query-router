@@ -85,7 +85,7 @@ def evaluate_run(
     date = pd.Timestamp.now()
 
     metrics_df = pd.DataFrame({
-        'model': [{model_name}],
+        'model': [model_name],
         'domain': [domain],
         'embed_model': [embed_model],
         'embeedding' : [embed_flag],
@@ -232,7 +232,7 @@ def train_and_evaluate_model(
     else:
         raise ValueError("Invalid model_name. Choose 'SVM' or 'XGBoost'.")
 
-    cv_accuracy, cv_std = cross_validate(
+    cv_accuracy, _ = cross_validate(
         classifier, train_embeds[:int(0.2 * train_embeds.shape[0])], train_labels[:int(0.2 * train_labels.shape[0])]
     )
     
@@ -255,7 +255,6 @@ def train_and_evaluate_model(
             print(f"Error saving model: {e}")
     elif model_name == "XGBoost":
         classifier.save_model(save_path)
-
 
     # Evaluate the predictions
     evaluate_run(
