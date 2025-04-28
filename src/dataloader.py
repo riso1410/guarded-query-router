@@ -207,18 +207,18 @@ def get_domain_data() -> dict:
     finance_dataset = finance_dataset.rename(columns={"instruction": "prompt"})
     finance_dataset["label"] = 0
     finance_dataset = finance_dataset[["prompt", "label"]]
-    finance_dataset = finance_dataset.sample(15000).reset_index(drop=True)
+    finance_dataset = finance_dataset.sample(6000).reset_index(drop=True)
 
     healthcare_dataset = healthcare_dataset["train"].to_pandas()
     healthcare_dataset = healthcare_dataset.rename(columns={"input": "prompt"})
     healthcare_dataset["label"] = 0
     healthcare_dataset = healthcare_dataset[["prompt", "label"]]
-    healthcare_dataset = healthcare_dataset.sample(15000).reset_index(drop=True)
+    healthcare_dataset = healthcare_dataset.sample(6000).reset_index(drop=True)
 
     law_dataset = law_dataset["train"].to_pandas()
     law_dataset["label"] = 0
     law_dataset = law_dataset[["prompt", "label"]]
-    law_dataset = law_dataset.sample(15000).reset_index(drop=True)
+    law_dataset = law_dataset.sample(6000).reset_index(drop=True)
 
     finance_positive = create_domain_dataset(finance_dataset, [healthcare_dataset, law_dataset])
     healthcare_positive = create_domain_dataset(healthcare_dataset, [finance_dataset, law_dataset])

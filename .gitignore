@@ -167,3 +167,4 @@ processed/
 raw/
 wandb/
 *.bin
+cache/

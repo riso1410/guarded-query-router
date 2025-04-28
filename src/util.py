@@ -237,8 +237,10 @@ def train_and_evaluate_model(
         classifier, train_embeds[:int(0.2 * train_embeds.shape[0])], train_labels[:int(0.2 * train_labels.shape[0])]
     )
 
+    print(f"Cross-validation accuracy: {cv_accuracy:.2f}")
     # Train the model
     classifier.fit(train_embeds, train_labels)
+    print(f"Training accuracy: {classifier.score(train_embeds, train_labels):.2f}")
 
     start_time = time.perf_counter_ns()
     predictions = classifier.predict(test_embeds)
