@@ -162,9 +162,5 @@ cython_debug/
 #.idea/
 
 fasttext/
-interim/
-processed/
-raw/
 wandb/
-*.bin
 cache/
