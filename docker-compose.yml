@@ -7,7 +7,6 @@ services:
       - .:/app
       - ./data:/app/data
       - ./models:/app/models
-      - ./reports:/app/reports
     env_file:
       - .env
     deploy:

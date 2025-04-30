@@ -11,21 +11,21 @@ RUN apt-get update && \
     add-apt-repository -y ppa:deadsnakes/ppa && \
     apt-get update && \
     apt-get install -y \
-        python3.11 \
-        python3.11-distutils \
-        python3.11-dev \
-        python3.11-venv \
+        python3.12 \
+        python3.12-distutils \
+        python3.12-dev \
+        python3.12-venv \
         git \
         curl \
         build-essential && \
     rm -rf /var/lib/apt/lists/*
 
-# Install pip for Python 3.11
-RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11
+# Install pip for Python 3.12
+RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.12
 
-# Set Python 3.11 as default
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1 && \
-    update-alternatives --install /usr/bin/python python3 /usr/bin/python3.11 1
+# Set Python 3.12 as default
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1 && \
+    update-alternatives --install /usr/bin/python python3 /usr/bin/python3.12 1
 
 # Set timezone to Europe/Paris
 ENV TZ=Europe/Paris
@@ -48,12 +48,9 @@ RUN python -m pip install --no-cache-dir --upgrade pip && \
 
 # Create data directories if they don't exist
 RUN mkdir -p data/fasttext \
-    data/interim \
-    data/processed \
-    data/raw \
     models \
-    reports
-
+    data \
+    data/results \
 # Expose Jupyter port
 EXPOSE 8888
 
