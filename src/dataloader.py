@@ -3,6 +3,13 @@ from datasets import concatenate_datasets, load_dataset
 
 
 def get_eval_datasets() -> dict:
+    """
+    Load and prepare various evaluation datasets for toxicity and hate speech classification.
+    
+    Returns:
+        dict: A dictionary of pandas DataFrames where keys are dataset names and values are the prepared datasets.
+              Each dataset contains 'prompt' and 'label' columns.
+    """
     # Load Jigsaw dataset
     jigsaw_splits = {
         "train": "train_dataset.csv",
@@ -98,6 +105,16 @@ def get_eval_datasets() -> dict:
 
 
 def get_train_datasets(dataset_size: int=15000, split: float=0.2) -> dict:
+    """
+    Load and prepare training datasets from different domains (law, finance, healthcare).
+    
+    Args:
+        dataset_size (int): Maximum number of samples to use from each domain. Defaults to 15000.
+        split (float): Fraction of data to use for testing. Defaults to 0.2.
+        
+    Returns:
+        dict: A dictionary with 'train' and 'test' keys containing the respective datasets.
+    """
     law_dataset = load_dataset("dim/law_stackexchange_prompts")
     finance_dataset = load_dataset("4DR1455/finance_questions")
     healthcare_dataset = load_dataset("iecjsu/lavita-ChatDoctor-HealthCareMagic-100k")
@@ -157,6 +174,14 @@ def get_train_datasets(dataset_size: int=15000, split: float=0.2) -> dict:
     return data
 
 def get_batch_data() -> pd.DataFrame:
+    """
+    Create a balanced batch of data for evaluation from multiple datasets.
+    
+    Samples 100 examples from each evaluation dataset and each domain in the training data.
+    
+    Returns:
+        pd.DataFrame: Combined DataFrame containing sampled examples from all datasets.
+    """
     batch_data = []
     ood = get_eval_datasets()
 
@@ -199,6 +224,15 @@ def create_domain_dataset(target_domain_data: pd.DataFrame, other_domains_data: 
     return pd.concat([target_domain_data, other_domains]).sample(frac=1).reset_index(drop=True)
 
 def get_domain_data() -> dict:
+    """
+    Create binary classification datasets for each domain (finance, healthcare, law).
+    
+    For each domain, creates a dataset where samples from that domain are labeled as positive (1)
+    and samples from other domains are labeled as negative (0).
+    
+    Returns:
+        dict: Dictionary containing binary classification DataFrames for each domain.
+    """
     law_dataset = load_dataset("dim/law_stackexchange_prompts")
     finance_dataset = load_dataset("4DR1455/finance_questions")
     healthcare_dataset = load_dataset("iecjsu/lavita-ChatDoctor-HealthCareMagic-100k")
@@ -231,5 +265,11 @@ def get_domain_data() -> dict:
     }
 
 def get_ood_data() -> pd.DataFrame:
+    """
+    Load and combine all evaluation datasets (out-of-distribution data).
+    
+    Returns:
+        pd.DataFrame: Combined DataFrame containing all evaluation datasets.
+    """
     datasets_dict = get_eval_datasets()
     return pd.concat(datasets_dict.values()).reset_index(drop=True)

@@ -19,6 +19,15 @@ import dataloader
 
 
 def set_seed(seed: int) -> None:
+    """
+    Set random seeds for reproducibility across various libraries.
+    
+    Args:
+        seed (int): The seed value to use for random number generation
+    
+    Returns:
+        None
+    """
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -27,14 +36,14 @@ def set_seed(seed: int) -> None:
 
 def calculate_cost(prompt: str, input: bool) -> float:
     """
-    Calculate the cost of processing a prompt with GPT-4.
+    Calculate the cost of processing a prompt with GPT-4o.
 
     Args:
         prompt (str): The input prompt text
         input (bool): Whether this is an input token (True) or output token (False)
 
     Returns:
-        float: Calculated cost in USD
+        float: Calculated cost in USD based on token count
     """
     # Calculate and print total cost
     token_count = len(tiktoken.encoding_for_model("gpt-4o").encode(prompt))
@@ -65,14 +74,16 @@ def evaluate_run(
         domain (str): Domain name
         model_name (str): Name of the model
         embed_model (str): Name of the embedding model
-        latency (float): Prediction latency
+        latency (float): Prediction latency in seconds
         train_acc (float): Training accuracy
-        cost (float): Cost of model usage
+        cost (float, optional): Cost of model usage in USD. Defaults to 0.0.
+        training (bool, optional): Whether this is a training evaluation. Defaults to False.
+        batch_size (int, optional): Batch size used for processing. Defaults to 1.
+        embed_flag (bool, optional): Whether embeddings were used. Defaults to True.
 
     Returns:
         dict: Dictionary containing all evaluation metrics
     """
-
     unique_labels = np.unique(np.concatenate([predictions, true_labels]))
     matrix = metrics.confusion_matrix(true_labels, predictions)
     cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = matrix, display_labels=unique_labels)
@@ -128,7 +139,7 @@ def plot_word_count(df: pd.DataFrame, domain: str, text_col: str = 'prompt') -> 
     Args:
         df (pd.DataFrame): DataFrame containing the text data
         domain (str): Domain name for plot title
-        text_col (str): Name of the column containing text data
+        text_col (str, optional): Name of the column containing text data. Defaults to 'prompt'.
     """
     word_counts = df[text_col].str.split().str.len()
     plt.figure(figsize=(12, 6))
@@ -146,8 +157,8 @@ def plot_common_words(df: pd.DataFrame, domain:str, text_col: str = 'prompt', n_
     Args:
         df (pd.DataFrame): DataFrame containing the text data
         domain (str): Domain name for plot title
-        text_col (str): Name of the column containing text data
-        n_words (int): Number of top words to display
+        text_col (str, optional): Name of the column containing text data. Defaults to 'prompt'.
+        n_words (int, optional): Number of top words to display. Defaults to 20.
     """
     words = ' '.join(df[text_col]).lower().split()
     word_counts = Counter(words)
@@ -184,10 +195,10 @@ def cross_validate(model: SVC | XGBClassifier, x: np.ndarray, y: np.ndarray, n_s
     Perform k-fold cross validation on the model.
 
     Args:
-        model: The classifier model (SVC or XGBClassifier)
+        model (SVC | XGBClassifier): The classifier model (SVC or XGBClassifier)
         x (np.ndarray): Input features
         y (np.ndarray): Target labels
-        n_splits (int): Number of folds for cross validation
+        n_splits (int, optional): Number of folds for cross validation. Defaults to 5.
 
     Returns:
         tuple[float, float]: Mean accuracy and standard deviation
@@ -220,7 +231,8 @@ def train_and_evaluate_model(
         domain (str): Domain name for reporting
         embed_model (str): Name of embedding model used
         save_path (str): Path to save the trained model
-        embedding_time (float): Time taken for embedding generation
+        embedding_time (float, optional): Time taken for embedding generation in nanoseconds. Defaults to 0.0.
+        training (bool, optional): Whether this run is for training evaluation purposes. Defaults to False.
 
     Raises:
         ValueError: If model_name is not 'SVM' or 'XGBoost'
@@ -272,10 +284,30 @@ def train_and_evaluate_model(
     )
 
 def load_batch_data() -> list:
+    """
+    Load batch data from the dataloader module.
+    
+    Returns:
+        list: List of prompts from the batch data
+    """
     batch_data = dataloader.get_batch_data()
     return batch_data["prompt"].values.tolist()
 
 def label_dataset(dataset: pd.DataFrame) -> pd.DataFrame:
+    """
+    Clean and label a dataset for text classification.
+    
+    Performs the following operations:
+    - Replaces newlines with empty strings
+    - Strips whitespace and converts to lowercase
+    - Converts binary labels to string format (__label__0 or __label__1)
+    
+    Args:
+        dataset (pd.DataFrame): The dataset to label
+        
+    Returns:
+        pd.DataFrame: A copy of the dataset with cleaned prompts and formatted labels
+    """
     dataset_copy = dataset.copy()
     dataset_copy['prompt'] = dataset_copy['prompt'].str.replace('\n', '')
     dataset_copy['prompt'] = dataset_copy['prompt'].str.strip().str.lower()
@@ -283,6 +315,19 @@ def label_dataset(dataset: pd.DataFrame) -> pd.DataFrame:
     return dataset_copy
 
 def write_to_file(data: pd.DataFrame, path: str, mode: str = 'w') -> None:
+    """
+    Write labeled data to a text file in FastText format.
+    
+    Each line in the output file will be in the format: "__label__X text"
+    
+    Args:
+        data (pd.DataFrame): DataFrame containing 'label' and 'prompt' columns
+        path (str): Path to the output file
+        mode (str, optional): File opening mode ('w' for write, 'a' for append). Defaults to 'w'.
+        
+    Raises:
+        Exception: If errors occur during file writing
+    """
     with open(path, encoding='utf-8', mode=mode) as f:
         try:
             for _, row in data.iterrows():

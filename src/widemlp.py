@@ -11,7 +11,16 @@ from tqdm import tqdm
 def inverse_document_frequency(
     encoded_docs: list[int], vocab_size: int
 ) -> torch.FloatTensor:
-    """Returns IDF scores in shape [vocab_size]"""
+    """
+    Calculate inverse document frequency (IDF) scores for a corpus.
+    
+    Args:
+        encoded_docs (list[int]): List of documents where each document is represented as a list of token IDs
+        vocab_size (int): Size of the vocabulary
+    
+    Returns:
+        torch.FloatTensor: IDF scores for each token in the vocabulary
+    """
     num_docs = len(encoded_docs)
     counts = sp.dok_matrix((num_docs, vocab_size))
     for i, doc in tqdm(enumerate(encoded_docs), desc="Computing IDF"):
@@ -45,6 +54,16 @@ def inverse_document_frequency(
 def prepare_inputs(
     input_ids: list[int], device: str = None
 ) -> tuple[torch.LongTensor, torch.LongTensor]:
+    """
+    Prepare inputs for the MLP model by flattening documents and calculating offsets.
+    
+    Args:
+        input_ids (list[int]): List of documents where each document is represented as a list of token IDs
+        device (str, optional): Device to place tensors on. Defaults to None.
+    
+    Returns:
+        tuple[torch.LongTensor, torch.LongTensor]: A tuple containing the flattened input tensor and offsets tensor
+    """
     lens = [len(doc) for doc in input_ids]
     offsets = []
     current_offset = 0
@@ -63,7 +82,16 @@ def prepare_inputs(
 def prepare_inputs_optimized(
     input_ids: list[list[int]], device: str = None
 ) -> tuple[torch.LongTensor, torch.LongTensor]:
-    """WILLIAMs TRY TO optimize prepare_inputs using torch operations."""
+    """
+    Optimized version of prepare_inputs using torch operations for better performance.
+    
+    Args:
+        input_ids (list[list[int]]): List of documents where each document is represented as a list of token IDs
+        device (str, optional): Device to place tensors on. Defaults to None.
+    
+    Returns:
+        tuple[torch.LongTensor, torch.LongTensor]: A tuple containing the flattened input tensor and offsets tensor
+    """
     lens = torch.LongTensor([len(doc) for doc in input_ids]).to(device)
     offsets = torch.cumsum(lens, dim=0) - lens
     flat_inputs = torch.cat([torch.tensor(doc) for doc in input_ids])
@@ -76,7 +104,12 @@ def prepare_inputs_optimized(
 
 
 class MLP(nn.Module):
-    """Simple MLP"""
+    """
+    Simple Multi-Layer Perceptron for text classification.
+    
+    This model uses an embedding bag to efficiently process documents of varying lengths,
+    followed by one or more hidden layers with optional dropout.
+    """
 
     def __init__(
         self,
@@ -93,6 +126,26 @@ class MLP(nn.Module):
         embedding_dropout: float = 0.5,
         problem_type: str = "classification",
     ) -> None:
+        """
+        Initialize the MLP model.
+        
+        Args:
+            vocab_size (int): Size of the vocabulary
+            num_classes (int): Number of output classes
+            num_hidden_layers (int, optional): Number of hidden layers. Defaults to 1.
+            hidden_size (int, optional): Size of the hidden layers. Defaults to 1024.
+            hidden_act (int, optional): Activation function. Defaults to "relu".
+            dropout (float, optional): Dropout probability for hidden layers. Defaults to 0.5.
+            idf (torch.Tensor, optional): IDF weights for tokens. Defaults to None.
+            mode (str, optional): Pooling mode for EmbeddingBag ('sum', 'mean'). Defaults to "mean".
+            pretrained_embedding (torch.Tensor, optional): Pretrained embeddings. Defaults to None.
+            freeze (bool, optional): Whether to freeze embeddings. Defaults to True.
+            embedding_dropout (float, optional): Dropout probability for embeddings. Defaults to 0.5.
+            problem_type (str, optional): Type of problem ('classification', 'regression', 'multi_label_classification'). Defaults to "classification".
+        
+        Returns:
+            None
+        """
         nn.Module.__init__(self)
         # Treat TF-IDF mode appropriately
         mode = "sum" if idf is not None else mode
@@ -142,6 +195,17 @@ class MLP(nn.Module):
     def forward(
         self, input: torch.tensor, offsets: torch.tensor, labels: torch.tensor = None
     ) -> torch.tensor:
+        """
+        Forward pass through the MLP model.
+        
+        Args:
+            input (torch.tensor): Flattened token IDs for all documents in batch
+            offsets (torch.tensor): Offsets indicating the start of each document
+            labels (torch.tensor, optional): Ground truth labels. Defaults to None.
+        
+        Returns:
+            torch.tensor: If labels are provided, returns (loss, logits); otherwise just logits
+        """
         # Use idf weights if present
         idf_weights = self.idf[input] if self.idf is not None else None
 
