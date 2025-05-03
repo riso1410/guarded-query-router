@@ -18,7 +18,7 @@ pip install uv
 
 2. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/riso1410/guarded-query-router.git
 cd Prompt-Classification
 ```
 
