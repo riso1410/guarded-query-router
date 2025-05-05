@@ -53,9 +53,9 @@ The project implements and compares several machine learning approaches for prom
 
 - **XGBoost**: Gradient boosted decision trees for classification
 - **SVM**: Support Vector Machine classifier
-- **fastText**: Fast and efficient text classification
-- **WideMLP**: A custom multi-layer perceptron model for text classification
-- **Semantic Router**: A semantic routing approach using text embeddings
+- **fastText**: Fast and efficient text classification 
+- **WideMLP**: A custom multi-layer perceptron model for text classification https://github.com/lgalke/text-clf-baselines
+- **Semantic Router**: A semantic routing approach using text embeddings https://github.com/aurelio-labs/semantic-router
 
 Each model can use different embedding methods:
 - BAAI/bge-small-en-v1.5 embeddings
@@ -119,9 +119,5 @@ When using Docker, Jupyter is exposed on port 8888:
 
 ```bash
 # Access Jupyter in your browser
-http://localhost:8888
+http://localhost:8888/token
 ```
-
-## License
-
-[Add your license information here]
