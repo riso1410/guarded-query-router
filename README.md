@@ -11,26 +11,20 @@ This repository contains a prompt classification system that uses various machin
 
 ### Using UV (recommended)
 
-1. Install UV if you haven't already:
-```bash
-pip install uv
-```
-
-2. Clone the repository:
+1. Clone the repository:
 ```bash
 git clone https://github.com/riso1410/guarded-query-router.git
 cd Prompt-Classification
 ```
 
-3. Create and activate a virtual environment:
+2. Create virtual environment:
 ```bash
-uv venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+uv venv --python 3.12
 ```
 
-4. Install dependencies:
+3. Install dependencies:
 ```bash
-uv pip install -r requirements.txt
+uv sync
 ```
 
 ### Using Docker
@@ -109,7 +103,7 @@ Prompt-Classification/
 │   ├── models/         # Saved models
 │   │   ├── XGBoost_*.json  # XGBoost model files
 │   │   ├── fastText_*.bin  # fastText model files
-│   │   └── *.pt        # PyTorch model files
+│   │   └── other        # All models used + TFIDF
 │   └── cache/          # Cached embeddings
 │       └── embeddings/ # Embedding cache directory
 ├── Dockerfile          # Docker configuration
