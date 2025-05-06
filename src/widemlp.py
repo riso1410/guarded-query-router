@@ -13,11 +13,11 @@ def inverse_document_frequency(
 ) -> torch.FloatTensor:
     """
     Calculate inverse document frequency (IDF) scores for a corpus.
-    
+
     Args:
         encoded_docs (list[int]): List of documents where each document is represented as a list of token IDs
         vocab_size (int): Size of the vocabulary
-    
+
     Returns:
         torch.FloatTensor: IDF scores for each token in the vocabulary
     """
@@ -56,11 +56,11 @@ def prepare_inputs(
 ) -> tuple[torch.LongTensor, torch.LongTensor]:
     """
     Prepare inputs for the MLP model by flattening documents and calculating offsets.
-    
+
     Args:
         input_ids (list[int]): List of documents where each document is represented as a list of token IDs
         device (str, optional): Device to place tensors on. Defaults to None.
-    
+
     Returns:
         tuple[torch.LongTensor, torch.LongTensor]: A tuple containing the flattened input tensor and offsets tensor
     """
@@ -84,11 +84,11 @@ def prepare_inputs_optimized(
 ) -> tuple[torch.LongTensor, torch.LongTensor]:
     """
     Optimized version of prepare_inputs using torch operations for better performance.
-    
+
     Args:
         input_ids (list[list[int]]): List of documents where each document is represented as a list of token IDs
         device (str, optional): Device to place tensors on. Defaults to None.
-    
+
     Returns:
         tuple[torch.LongTensor, torch.LongTensor]: A tuple containing the flattened input tensor and offsets tensor
     """
@@ -106,7 +106,7 @@ def prepare_inputs_optimized(
 class MLP(nn.Module):
     """
     Simple Multi-Layer Perceptron for text classification.
-    
+
     This model uses an embedding bag to efficiently process documents of varying lengths,
     followed by one or more hidden layers with optional dropout.
     """
@@ -128,7 +128,7 @@ class MLP(nn.Module):
     ) -> None:
         """
         Initialize the MLP model.
-        
+
         Args:
             vocab_size (int): Size of the vocabulary
             num_classes (int): Number of output classes
@@ -142,7 +142,7 @@ class MLP(nn.Module):
             freeze (bool, optional): Whether to freeze embeddings. Defaults to True.
             embedding_dropout (float, optional): Dropout probability for embeddings. Defaults to 0.5.
             problem_type (str, optional): Type of problem ('classification', 'regression', 'multi_label_classification'). Defaults to "classification".
-        
+
         Returns:
             None
         """
@@ -197,12 +197,12 @@ class MLP(nn.Module):
     ) -> torch.tensor:
         """
         Forward pass through the MLP model.
-        
+
         Args:
             input (torch.tensor): Flattened token IDs for all documents in batch
             offsets (torch.tensor): Offsets indicating the start of each document
             labels (torch.tensor, optional): Ground truth labels. Defaults to None.
-        
+
         Returns:
             torch.tensor: If labels are provided, returns (loss, logits); otherwise just logits
         """

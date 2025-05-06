@@ -5,7 +5,7 @@ from datasets import concatenate_datasets, load_dataset
 def get_eval_datasets() -> dict:
     """
     Load and prepare various evaluation datasets for toxicity and hate speech classification.
-    
+
     Returns:
         dict: A dictionary of pandas DataFrames where keys are dataset names and values are the prepared datasets.
               Each dataset contains 'prompt' and 'label' columns.
@@ -68,28 +68,37 @@ def get_eval_datasets() -> dict:
     tuke_sk_df = tuke_sk_df.dropna(subset=["prompt"])
     tuke_sk_df = tuke_sk_df[tuke_sk_df["prompt"].str.strip() != ""]
 
-
     dkk_all = pd.read_parquet("data/test-00000-of-00001.parquet")
     dkk_all = dkk_all.rename(columns={"text": "prompt"})
     dkk_all["label"] = 0
     dkk_all = dkk_all.dropna(subset=["prompt"])
     dkk_all = dkk_all[dkk_all["prompt"].str.strip() != ""]
 
-    splits = {'train': 'data/train-00000-of-00001.parquet', 'test': 'data/test-00000-of-00001.parquet'}
-    web_questions = pd.read_parquet("hf://datasets/Stanford/web_questions/" + splits["test"])
+    splits = {
+        "train": "data/train-00000-of-00001.parquet",
+        "test": "data/test-00000-of-00001.parquet",
+    }
+    web_questions = pd.read_parquet(
+        "hf://datasets/Stanford/web_questions/" + splits["test"]
+    )
 
-    web_questions['prompt'] = web_questions['question']
-    web_questions['label'] = 0
-    web_questions['dataset'] = 'web_questions'
-    web_questions = web_questions[['prompt', 'label']]
+    web_questions["prompt"] = web_questions["question"]
+    web_questions["label"] = 0
+    web_questions["dataset"] = "web_questions"
+    web_questions = web_questions[["prompt", "label"]]
 
-    splits = {'train': 'data/train-00000-of-00001-7ebb9cdef03dd950.parquet', 'test': 'data/test-00000-of-00001-fbd3905b045b12b8.parquet'}
-    ml_questions = pd.read_parquet("hf://datasets/mjphayes/machine_learning_questions/" + splits["test"])
+    splits = {
+        "train": "data/train-00000-of-00001-7ebb9cdef03dd950.parquet",
+        "test": "data/test-00000-of-00001-fbd3905b045b12b8.parquet",
+    }
+    ml_questions = pd.read_parquet(
+        "hf://datasets/mjphayes/machine_learning_questions/" + splits["test"]
+    )
 
-    ml_questions['prompt'] = ml_questions['question']
-    ml_questions['label'] = 0
-    ml_questions['dataset'] = 'machine_learning_questions'
-    ml_questions = ml_questions[['prompt', 'label']]
+    ml_questions["prompt"] = ml_questions["question"]
+    ml_questions["label"] = 0
+    ml_questions["dataset"] = "machine_learning_questions"
+    ml_questions = ml_questions[["prompt", "label"]]
 
     datasets = {
         "jigsaw": jigsaw_df,
@@ -104,14 +113,14 @@ def get_eval_datasets() -> dict:
     return datasets
 
 
-def get_train_datasets(dataset_size: int=15000, split: float=0.2) -> dict:
+def get_train_datasets(dataset_size: int = 15000, split: float = 0.2) -> dict:
     """
     Load and prepare training datasets from different domains (law, finance, healthcare).
-    
+
     Args:
         dataset_size (int): Maximum number of samples to use from each domain. Defaults to 15000.
         split (float): Fraction of data to use for testing. Defaults to 0.2.
-        
+
     Returns:
         dict: A dictionary with 'train' and 'test' keys containing the respective datasets.
     """
@@ -173,12 +182,13 @@ def get_train_datasets(dataset_size: int=15000, split: float=0.2) -> dict:
     data = combined_dataset.train_test_split(test_size=split)
     return data
 
+
 def get_batch_data() -> pd.DataFrame:
     """
     Create a balanced batch of data for evaluation from multiple datasets.
-    
+
     Samples 100 examples from each evaluation dataset and each domain in the training data.
-    
+
     Returns:
         pd.DataFrame: Combined DataFrame containing sampled examples from all datasets.
     """
@@ -197,12 +207,15 @@ def get_batch_data() -> pd.DataFrame:
     for dataset in domain.domain.unique():
         subset = domain[domain["domain"] == dataset]
         subset = subset.sample(100).reset_index(drop=True)
-        subset =subset.rename(columns={"domain": "dataset", "text":"prompt"})
+        subset = subset.rename(columns={"domain": "dataset", "text": "prompt"})
         batch_data.append(subset)
 
     return pd.concat(batch_data)
 
-def create_domain_dataset(target_domain_data: pd.DataFrame, other_domains_data: pd.DataFrame) -> pd.DataFrame:
+
+def create_domain_dataset(
+    target_domain_data: pd.DataFrame, other_domains_data: pd.DataFrame
+) -> pd.DataFrame:
     """
     Create a binary classification dataset from target domain and other domains.
 
@@ -214,22 +227,31 @@ def create_domain_dataset(target_domain_data: pd.DataFrame, other_domains_data: 
         pd.DataFrame: Combined dataset with binary labels (1 for target domain, 0 for others)
     """
     target_domain_data = target_domain_data.copy()
-    target_domain_data['prompt'] = target_domain_data['prompt'].str.strip().str.replace(r'\n', ' ', regex=True)
-    target_domain_data['label'] = 1
+    target_domain_data["prompt"] = (
+        target_domain_data["prompt"].str.strip().str.replace(r"\n", " ", regex=True)
+    )
+    target_domain_data["label"] = 1
 
     other_domains = pd.concat(other_domains_data)
-    other_domains['prompt'] = other_domains['prompt'].str.strip().str.replace(r'\n', ' ', regex=True)
-    other_domains['label'] = 0
+    other_domains["prompt"] = (
+        other_domains["prompt"].str.strip().str.replace(r"\n", " ", regex=True)
+    )
+    other_domains["label"] = 0
 
-    return pd.concat([target_domain_data, other_domains]).sample(frac=1).reset_index(drop=True)
+    return (
+        pd.concat([target_domain_data, other_domains])
+        .sample(frac=1)
+        .reset_index(drop=True)
+    )
+
 
 def get_domain_data() -> dict:
     """
     Create binary classification datasets for each domain (finance, healthcare, law).
-    
+
     For each domain, creates a dataset where samples from that domain are labeled as positive (1)
     and samples from other domains are labeled as negative (0).
-    
+
     Returns:
         dict: Dictionary containing binary classification DataFrames for each domain.
     """
@@ -254,20 +276,27 @@ def get_domain_data() -> dict:
     law_dataset = law_dataset[["prompt", "label"]]
     law_dataset = law_dataset.sample(6000).reset_index(drop=True)
 
-    finance_positive = create_domain_dataset(finance_dataset, [healthcare_dataset, law_dataset])
-    healthcare_positive = create_domain_dataset(healthcare_dataset, [finance_dataset, law_dataset])
-    law_positive = create_domain_dataset(law_dataset, [finance_dataset, healthcare_dataset])
+    finance_positive = create_domain_dataset(
+        finance_dataset, [healthcare_dataset, law_dataset]
+    )
+    healthcare_positive = create_domain_dataset(
+        healthcare_dataset, [finance_dataset, law_dataset]
+    )
+    law_positive = create_domain_dataset(
+        law_dataset, [finance_dataset, healthcare_dataset]
+    )
 
     return {
         "finance": finance_positive,
         "healthcare": healthcare_positive,
-        "law": law_positive
+        "law": law_positive,
     }
+
 
 def get_ood_data() -> pd.DataFrame:
     """
     Load and combine all evaluation datasets (out-of-distribution data).
-    
+
     Returns:
         pd.DataFrame: Combined DataFrame containing all evaluation datasets.
     """

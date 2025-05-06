@@ -1,4 +1,4 @@
-# Prompt Classification
+# guarded-query-router
 
 This repository contains a prompt classification system that uses various machine learning models to classify text prompts into different domains (law, finance, healthcare).
 
@@ -14,7 +14,7 @@ This repository contains a prompt classification system that uses various machin
 1. Clone the repository:
 ```bash
 git clone https://github.com/riso1410/guarded-query-router.git
-cd Prompt-Classification
+cd guarded-query-router
 ```
 
 2. Create virtual environment:
