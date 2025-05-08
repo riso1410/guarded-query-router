@@ -29,7 +29,8 @@ uv sync
 ```
 
 ### Using Docker (systems with GPU and Docker)
-For this route you will need to setup Docker on your device. [Download](https://www.docker.com/products/docker-desktop/) \\
+For this route you will need to setup Docker on your device. [Download](https://www.docker.com/products/docker-desktop/) 
+
 Make sure you export `uv.lock` into `requirements.txt`
 
 ```bash
@@ -194,5 +195,9 @@ http://localhost:8888/?token=<token>
 
 OR 
 
-Through selecting Jupyter Notebook Server in IDE like Visual Studio Code. [Download]([https://full-url.com](https://code.visualstudio.com/download))
+Through selecting Jupyter Notebook Server in IDE like Visual Studio Code. [Download](https://code.visualstudio.com/download)
+
+Token can be found in terminal or in Docker Desktop conainer logs.
+
+![docker_guide](https://github.com/user-attachments/assets/49fd9844-fa63-4d8d-b783-1e9c124597ac)
 
