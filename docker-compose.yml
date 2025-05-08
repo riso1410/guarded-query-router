@@ -1,12 +1,10 @@
 services:
-  notebook:
+  guarded-query-router:
     build: .
     ports:
       - "8888:8888"
     volumes:
-      - .:/app
-      - ./data:/app/data
-      - ./models:/app/models
+      - ./src:/app/src
     env_file:
       - .env
     deploy:
@@ -14,8 +12,8 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              count: 1
               capabilities: [gpu]
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
+      - PYTHONPATH=/app:/app/src
     network_mode: host

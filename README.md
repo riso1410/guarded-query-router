@@ -1,6 +1,7 @@
 # guarded-query-router
 
 This repository contains a prompt classification system that uses various machine learning models to classify text prompts into different domains (law, finance, healthcare).
+Not suitable for CPU usage. (Proviedrs flag changes needed in code when vectorizing) 
 
 ## Requirements
 
@@ -9,7 +10,7 @@ This repository contains a prompt classification system that uses various machin
 
 ## Installation
 
-### Using UV (recommended)
+### Using UV (only on UNIX-based systems)
 
 1. Clone the repository:
 ```bash
@@ -27,14 +28,25 @@ uv venv --python 3.12
 uv sync
 ```
 
-### Using Docker
+### Using Docker (systems with GPU and Docker)
+Make sure you export `uv.lock` into `requirements.txt`
+
+```bash
+uv export --format requirements-txt > requirements.txt 
+```
 
 Alternatively, you can use Docker:
 
 ```bash
-docker build -t prompt-classification .
-docker run -it --gpus all -p 8888:8888 prompt-classification
+docker build -t guarded-query-router .
+docker run -it --gpus all -p 8888:8888 guarded-query-router 
 ```
+
+Docker flags explained:
+- `-it`: Enables interactive mode (`-i`) and allocates a pseudo-TTY (`-t`), allowing you to interact with the container
+- `--gpus all`: Gives the container access to all available NVIDIA GPUs on the host system
+- `-p 8888:8888`: Maps port 8888 from the container to port 8888 on your host machine (format: `host_port:container_port`)
+- `guarded-query-router`: The name of the Docker image to run
 
 ## Configuration
 
@@ -125,7 +137,7 @@ Performance metrics across different datasets can be found in:
 ## Project Structure
 
 ```
-Prompt-Classification/
+guarded-query-router/
 ├── src/                     # Source code and notebooks
 │   ├── Traditional ML Models: # Not a folder
 │   │   ├── fasttext.ipynb   # fastText model implementation
@@ -148,11 +160,10 @@ Prompt-Classification/
 │   │
 │   ├── data/                # Data directory
 │   │   ├── fasttext/        # FastText training data
-│   │   ├── batch/           # Batch processing results
 │   │   └── results/         # Model evaluation results
+|   |       ├── batch_modelname_embeddingname.csv # Batch run results
 │   │       ├── rtx4060_training.csv  # Training metrics
-│   │       ├── rtx4060_inference.csv # Inference metrics
-│   │       └── batch/       # Batch processing results
+│   │       └── rtx4060_inference.csv # Inference metrics
 │   │
 │   ├── models/              # Saved models directory
 │   │   ├── XGBoost_*.json   # XGBoost model files
@@ -168,7 +179,7 @@ Prompt-Classification/
 ├── Dockerfile               # Docker configuration
 ├── pyproject.toml           # Project metadata and settings
 ├── .env.example             # Example environment file
-└── README.md                # Project documentation```
+└── README.md                # Project documentation
 ```
 
 ## Running with Jupyter
