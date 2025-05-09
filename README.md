@@ -205,5 +205,6 @@ Token can be found in terminal or in Docker Desktop conainer logs.
 
 # IMPORTANT
 
-There might be an issues with FastText.py caused by numpy2.x \\
+There might be an issues with FastText.py caused by numpy2.x 
+
 To mitigate this error we fixed FastText.py by changing row 232 from array(proby, copy=True) to asarray(probs)  
