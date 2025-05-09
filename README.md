@@ -7,6 +7,7 @@ Not suitable for CPU usage. (Proviedrs flag changes needed in code when vectoriz
 
 - Python 3.12+
 - CUDA-compatible GPU
+- uv
 
 ## Installation
 
