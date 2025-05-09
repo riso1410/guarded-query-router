@@ -51,6 +51,13 @@ RUN python -m pip install --no-cache-dir --upgrade pip && \
 # Install PyTorch with CUDA 12.1 support (compatible with CUDA 12.3)
 RUN python -m pip install torch==2.3.1 --extra-index-url https://download.pytorch.org/whl/cu121
 
+# Copy new FastText.py to the Python package directory
+RUN python -c "import site; import os; \
+    fasttext_dir = os.path.join(site.getsitepackages()[0], 'fasttext'); \
+    os.makedirs(fasttext_dir, exist_ok=True); \
+    print(f'Copying FastText.py to {fasttext_dir}')" && \
+    cp /app/src/FastText.py $(python -c "import site; print(site.getsitepackages()[0])")/fasttext/FastText.py
+
 # Create data directories if they don't exist
 RUN mkdir -p src \
     src/data \

@@ -201,3 +201,7 @@ Token can be found in terminal or in Docker Desktop conainer logs.
 
 ![docker_guide](https://github.com/user-attachments/assets/49fd9844-fa63-4d8d-b783-1e9c124597ac)
 
+# IMPORTANT
+
+There might be an issues with FastText.py caused by numpy2.x \\
+To mitigate this error we fixed FastText.py by changing row 232 from array(proby, copy=True) to asarray(probs)  
