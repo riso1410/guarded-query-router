@@ -161,6 +161,7 @@ guarded-query-router/
 │   ├── Semantic Approaches: # Not a folder
 │   │   └── semantic-router.ipynb   # Semantic routing implementation
 │   │
+|   ├── FastText.py # Updated version compatible with Numpy2.x
 │   ├── data/                # Data directory
 │   │   ├── fasttext/        # FastText training data
 │   │   └── results/         # Model evaluation results
