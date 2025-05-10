@@ -164,4 +164,3 @@ cython_debug/
 fasttext/
 wandb/
 cache/
-models/
