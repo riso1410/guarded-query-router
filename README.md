@@ -2,6 +2,7 @@
 
 This repository contains a prompt classification system that uses various machine learning models to classify text prompts into different domains (law, finance, healthcare).
 Not suitable for CPU usage. (Proviedrs flag changes needed in code when vectorizing) 
+Models are save at 
 
 ## Requirements
 
