@@ -123,9 +123,9 @@ def evaluate_run(
     )
 
     if training:
-        metrics_file = "data/results/rtx4060_training.csv"
+        metrics_file = "data/results/results_training.csv"
     else:
-        metrics_file = "data/results/rtx4060_inference.csv"
+        metrics_file = "data/results/results_inference.csv"
 
     if os.path.exists(metrics_file):
         metrics_df.to_csv(metrics_file, mode="a", header=False, index=False)
