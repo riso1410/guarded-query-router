@@ -208,4 +208,16 @@ Token can be found in terminal or in Docker Desktop conainer logs.
 
 There might be an issues with FastText.py caused by numpy2.x 
 
-To mitigate this error we fixed FastText.py by changing row 232 from array(proby, copy=True) to asarray(probs)  
+To mitigate this error we fixed FastText.py by changing row 232 from array(proby, copy=True) to asarray(probs)
+
+# Citation
+```
+@misc{šléher2025guarded,
+      title={Guarded Query Routing for Large Language Models}, 
+      author={Richard Šléher and William Brach and Tibor Sloboda and Kristián Košťál and Lukas Galke},
+      year={2025},
+      eprint={2505.14524},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI}
+}
+```
