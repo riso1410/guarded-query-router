@@ -1,0 +1,9 @@
+2026-08-19 11:35:11,086 INFO args: {'models': 'xgb', 'embeds': 'baai,mini,tf_idf', 'variants': 'oe4,ctrl3', 'seed': 22, 'n_aux': None, 'epochs': 3, 'mlp_epochs': 30, 'batch_size': 16, 'max_len': 256, 'lr': 2e-05, 'ft_autotune': 300, 'results': '/Users/riso1410/School/BP/guarded-query-router/oe4/results/results.csv', 'dry_run': False}
+Using the latest cached version of the dataset since 4DR1455/finance_questions couldn't be found on the Hugging Face Hub
+2026-08-19 11:35:14,200 WARNING Using the latest cached version of the dataset since 4DR1455/finance_questions couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /Users/riso1410/.cache/huggingface/datasets/4DR1455___finance_questions/default/0.0.0/86347725eadb64f1b03656d7c1e83d7fb58480be (last modified on Wed Aug 19 11:09:37 2026).
+2026-08-19 11:35:14,203 WARNING Found the latest cached dataset configuration 'default' at /Users/riso1410/.cache/huggingface/datasets/4DR1455___finance_questions/default/0.0.0/86347725eadb64f1b03656d7c1e83d7fb58480be (last modified on Wed Aug 19 11:09:37 2026).
+Using the latest cached version of the dataset since 4DR1455/finance_questions couldn't be found on the Hugging Face Hub
+2026-08-19 11:35:17,573 WARNING Using the latest cached version of the dataset since 4DR1455/finance_questions couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /Users/riso1410/.cache/huggingface/datasets/4DR1455___finance_questions/default/0.0.0/86347725eadb64f1b03656d7c1e83d7fb58480be (last modified on Wed Aug 19 11:09:37 2026).
+2026-08-19 11:35:17,574 WARNING Found the latest cached dataset configuration 'default' at /Users/riso1410/.cache/huggingface/datasets/4DR1455___finance_questions/default/0.0.0/86347725eadb64f1b03656d7c1e83d7fb58480be (last modified on Wed Aug 19 11:09:37 2026).

@@ -1,0 +1,59 @@
+2026-08-19 11:29:43,656 INFO args: {'models': 'widemlp', 'embeds': 'baai,mini,tf_idf', 'variants': 'oe4,ctrl3', 'seed': 22, 'n_aux': None, 'epochs': 3, 'mlp_epochs': 30, 'batch_size': 16, 'max_len': 256, 'lr': 2e-05, 'ft_autotune': 300, 'results': 'results/dry.csv', 'dry_run': True}
+Using the latest cached version of the dataset since 4DR1455/finance_questions couldn't be found on the Hugging Face Hub
+2026-08-19 11:29:46,501 WARNING Using the latest cached version of the dataset since 4DR1455/finance_questions couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /Users/riso1410/.cache/huggingface/datasets/4DR1455___finance_questions/default/0.0.0/86347725eadb64f1b03656d7c1e83d7fb58480be (last modified on Wed Aug 19 11:09:37 2026).
+2026-08-19 11:29:46,502 WARNING Found the latest cached dataset configuration 'default' at /Users/riso1410/.cache/huggingface/datasets/4DR1455___finance_questions/default/0.0.0/86347725eadb64f1b03656d7c1e83d7fb58480be (last modified on Wed Aug 19 11:09:37 2026).
+Using the latest cached version of the dataset since 4DR1455/finance_questions couldn't be found on the Hugging Face Hub
+2026-08-19 11:29:49,875 WARNING Using the latest cached version of the dataset since 4DR1455/finance_questions couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /Users/riso1410/.cache/huggingface/datasets/4DR1455___finance_questions/default/0.0.0/86347725eadb64f1b03656d7c1e83d7fb58480be (last modified on Wed Aug 19 11:09:37 2026).
+2026-08-19 11:29:49,876 WARNING Found the latest cached dataset configuration 'default' at /Users/riso1410/.cache/huggingface/datasets/4DR1455___finance_questions/default/0.0.0/86347725eadb64f1b03656d7c1e83d7fb58480be (last modified on Wed Aug 19 11:09:37 2026).
+2026-08-19 11:30:01,019 INFO train 28800  val 7200  id_test 9000  ood_test 13457  aux_train 7680  aux_val 1920
+2026-08-19 11:30:01,030 INFO === widemlp_own_oe4_s22: fit on 400 texts (4 classes)
+/Users/riso1410/School/BP/guarded-query-router/oe4/retrain_oe4.py:344: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:823.)
+  tot += float(loss)
+2026-08-19 11:30:03,844 INFO widemlp epoch 0: train loss 1.3867  val loss 1.3807
+2026-08-19 11:30:03,946 INFO widemlp epoch 1: train loss 1.3842  val loss 1.3794
+2026-08-19 11:30:03,947 INFO widemlp_own_oe4_s22: trained in 3s
+2026-08-19 11:30:04,315 INFO widemlp_own_oe4_s22 [argmax] ID 0.3967  OOD 0.0047  GQR 0.0092  lat 0.70 ms  tau=None  aux_rej=0.0
+2026-08-19 11:30:04,331 INFO widemlp_own_oe4_s22 [tau] ID 0.3867  OOD 0.0141  GQR 0.0273  lat 0.70 ms  tau=0.2518  aux_rej=0.025
+2026-08-19 11:30:04,335 INFO === widemlp_own_ctrl3_s22: fit on 300 texts (3 classes)
+2026-08-19 11:30:05,962 INFO widemlp epoch 0: train loss 1.1021  val loss 1.1011
+2026-08-19 11:30:06,043 INFO widemlp epoch 1: train loss 1.0977  val loss 1.0994
+2026-08-19 11:30:06,044 INFO widemlp_own_ctrl3_s22: trained in 2s
+2026-08-19 11:30:06,452 INFO widemlp_own_ctrl3_s22 [argmax] ID 0.4267  OOD 0.0000  GQR 0.0000  lat 0.68 ms  tau=None  aux_rej=None
+2026-08-19 11:30:06,467 INFO widemlp_own_ctrl3_s22 [msp] ID 0.4267  OOD 0.0341  GQR 0.0631  lat 0.68 ms  tau=0.3366  aux_rej=None
+2026-08-19 11:30:06,472 INFO 
+   model embedding variant   rule  id_acc  ood_acc  gqr_score  avg_latency_s
+ XGBoost      baai     oe4 argmax  0.9433   0.9027     0.9225       0.000248
+ XGBoost      baai     oe4    tau  0.9567   0.8759     0.9145       0.000248
+ XGBoost      mini     oe4 argmax  0.9467   0.6892     0.7977       0.000249
+ XGBoost      mini     oe4    tau  0.9533   0.6163     0.7486       0.000249
+ XGBoost    tf_idf     oe4 argmax  0.7967   0.4315     0.5598       0.000317
+ XGBoost    tf_idf     oe4    tau  0.8700   0.0887     0.1611       0.000317
+ XGBoost      baai   ctrl3 argmax  0.9633   0.0000     0.0000       0.000236
+ XGBoost      baai   ctrl3    msp  0.9400   0.1470     0.2542       0.000236
+ XGBoost      mini   ctrl3 argmax  0.9733   0.0000     0.0000       0.000241
+ XGBoost      mini   ctrl3    msp  0.9533   0.1410     0.2456       0.000241
+ XGBoost    tf_idf   ctrl3 argmax  0.8867   0.0000     0.0000       0.000322
+ XGBoost    tf_idf   ctrl3    msp  0.8833   0.0136     0.0268       0.000322
+     SVM      baai     oe4 argmax  0.9900   0.9737     0.9818       0.000099
+     SVM      baai     oe4    tau  0.9800   0.9794     0.9797       0.000099
+     SVM      mini     oe4 argmax  0.9733   0.9631     0.9682       0.000105
+     SVM      mini     oe4    tau  0.9700   0.9731     0.9715       0.000105
+     SVM    tf_idf     oe4 argmax  0.9300   0.5194     0.6666       0.000201
+     SVM    tf_idf     oe4    tau  0.9533   0.3617     0.5245       0.000201
+     SVM      baai   ctrl3 argmax  0.9967   0.0000     0.0000       0.000085
+     SVM      baai   ctrl3    msp  0.9800   0.6522     0.7832       0.000085
+     SVM      mini   ctrl3 argmax  0.9733   0.0000     0.0000       0.000092
+     SVM      mini   ctrl3    msp  0.9600   0.6995     0.8093       0.000092
+     SVM    tf_idf   ctrl3 argmax  0.9567   0.0000     0.0000       0.000178
+     SVM    tf_idf   ctrl3    msp  0.9533   0.0771     0.1427       0.000178
+fastText       own     oe4 argmax  0.5433   0.0000     0.0000       0.000008
+fastText       own     oe4    tau  0.5233   0.4252     0.4692       0.000008
+fastText       own   ctrl3 argmax  0.5800   0.0000     0.0000       0.000008
+fastText       own   ctrl3    msp  0.5733   0.0010     0.0020       0.000008
+ WideMLP       own     oe4 argmax  0.3967   0.0047     0.0092       0.000696
+ WideMLP       own     oe4    tau  0.3867   0.0141     0.0273       0.000696
+ WideMLP       own   ctrl3 argmax  0.4267   0.0000     0.0000       0.000682
+ WideMLP       own   ctrl3    msp  0.4267   0.0341     0.0631       0.000682

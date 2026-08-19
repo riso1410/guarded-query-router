@@ -1,0 +1,56 @@
+2026-08-19 11:29:25,345 INFO args: {'models': 'fasttext', 'embeds': 'baai,mini,tf_idf', 'variants': 'oe4,ctrl3', 'seed': 22, 'n_aux': None, 'epochs': 3, 'mlp_epochs': 30, 'batch_size': 16, 'max_len': 256, 'lr': 2e-05, 'ft_autotune': 300, 'results': 'results/dry.csv', 'dry_run': True}
+Using the latest cached version of the dataset since 4DR1455/finance_questions couldn't be found on the Hugging Face Hub
+2026-08-19 11:29:28,150 WARNING Using the latest cached version of the dataset since 4DR1455/finance_questions couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /Users/riso1410/.cache/huggingface/datasets/4DR1455___finance_questions/default/0.0.0/86347725eadb64f1b03656d7c1e83d7fb58480be (last modified on Wed Aug 19 11:09:37 2026).
+2026-08-19 11:29:28,152 WARNING Found the latest cached dataset configuration 'default' at /Users/riso1410/.cache/huggingface/datasets/4DR1455___finance_questions/default/0.0.0/86347725eadb64f1b03656d7c1e83d7fb58480be (last modified on Wed Aug 19 11:09:37 2026).
+Using the latest cached version of the dataset since 4DR1455/finance_questions couldn't be found on the Hugging Face Hub
+2026-08-19 11:29:31,652 WARNING Using the latest cached version of the dataset since 4DR1455/finance_questions couldn't be found on the Hugging Face Hub
+Found the latest cached dataset configuration 'default' at /Users/riso1410/.cache/huggingface/datasets/4DR1455___finance_questions/default/0.0.0/86347725eadb64f1b03656d7c1e83d7fb58480be (last modified on Wed Aug 19 11:09:37 2026).
+2026-08-19 11:29:31,653 WARNING Found the latest cached dataset configuration 'default' at /Users/riso1410/.cache/huggingface/datasets/4DR1455___finance_questions/default/0.0.0/86347725eadb64f1b03656d7c1e83d7fb58480be (last modified on Wed Aug 19 11:09:37 2026).
+2026-08-19 11:29:43,001 INFO train 28800  val 7200  id_test 9000  ood_test 13457  aux_train 7680  aux_val 1920
+2026-08-19 11:29:43,013 INFO === fasttext_own_oe4_s22: fit on 400 texts (4 classes)
+Read 0M words
+Number of words:  7332
+Number of labels: 4
+Progress: 101.2% words/sec/thread:  117413 lr: -0.001192 avg.loss:  1.388926 ETA:   0h 0m 0sProgress: 100.0% words/sec/thread:  117232 lr:  0.000000 avg.loss:  1.388926 ETA:   0h 0m 0s
+2026-08-19 11:29:43,137 INFO fasttext_own_oe4_s22: trained in 0s
+2026-08-19 11:29:43,171 INFO fasttext_own_oe4_s22 [argmax] ID 0.5433  OOD 0.0000  GQR 0.0000  lat 0.01 ms  tau=None  aux_rej=0.0
+2026-08-19 11:29:43,189 INFO fasttext_own_oe4_s22 [tau] ID 0.5233  OOD 0.4252  GQR 0.4692  lat 0.01 ms  tau=0.2501  aux_rej=0.15
+2026-08-19 11:29:43,192 INFO === fasttext_own_ctrl3_s22: fit on 300 texts (3 classes)
+Read 0M words
+Number of words:  5897
+Number of labels: 3
+Progress: 101.6% words/sec/thread:   92801 lr: -0.001563 avg.loss:  1.101776 ETA:   0h 0m 0sProgress: 100.0% words/sec/thread:   92144 lr:  0.000000 avg.loss:  1.101776 ETA:   0h 0m 0s
+2026-08-19 11:29:43,304 INFO fasttext_own_ctrl3_s22: trained in 0s
+2026-08-19 11:29:43,351 INFO fasttext_own_ctrl3_s22 [argmax] ID 0.5800  OOD 0.0000  GQR 0.0000  lat 0.01 ms  tau=None  aux_rej=None
+2026-08-19 11:29:43,368 INFO fasttext_own_ctrl3_s22 [msp] ID 0.5733  OOD 0.0010  GQR 0.0020  lat 0.01 ms  tau=0.3334  aux_rej=None
+2026-08-19 11:29:43,373 INFO 
+   model embedding variant   rule  id_acc  ood_acc  gqr_score  avg_latency_s
+ XGBoost      baai     oe4 argmax  0.9433   0.9027     0.9225       0.000248
+ XGBoost      baai     oe4    tau  0.9567   0.8759     0.9145       0.000248
+ XGBoost      mini     oe4 argmax  0.9467   0.6892     0.7977       0.000249
+ XGBoost      mini     oe4    tau  0.9533   0.6163     0.7486       0.000249
+ XGBoost    tf_idf     oe4 argmax  0.7967   0.4315     0.5598       0.000317
+ XGBoost    tf_idf     oe4    tau  0.8700   0.0887     0.1611       0.000317
+ XGBoost      baai   ctrl3 argmax  0.9633   0.0000     0.0000       0.000236
+ XGBoost      baai   ctrl3    msp  0.9400   0.1470     0.2542       0.000236
+ XGBoost      mini   ctrl3 argmax  0.9733   0.0000     0.0000       0.000241
+ XGBoost      mini   ctrl3    msp  0.9533   0.1410     0.2456       0.000241
+ XGBoost    tf_idf   ctrl3 argmax  0.8867   0.0000     0.0000       0.000322
+ XGBoost    tf_idf   ctrl3    msp  0.8833   0.0136     0.0268       0.000322
+     SVM      baai     oe4 argmax  0.9900   0.9737     0.9818       0.000099
+     SVM      baai     oe4    tau  0.9800   0.9794     0.9797       0.000099
+     SVM      mini     oe4 argmax  0.9733   0.9631     0.9682       0.000105
+     SVM      mini     oe4    tau  0.9700   0.9731     0.9715       0.000105
+     SVM    tf_idf     oe4 argmax  0.9300   0.5194     0.6666       0.000201
+     SVM    tf_idf     oe4    tau  0.9533   0.3617     0.5245       0.000201
+     SVM      baai   ctrl3 argmax  0.9967   0.0000     0.0000       0.000085
+     SVM      baai   ctrl3    msp  0.9800   0.6522     0.7832       0.000085
+     SVM      mini   ctrl3 argmax  0.9733   0.0000     0.0000       0.000092
+     SVM      mini   ctrl3    msp  0.9600   0.6995     0.8093       0.000092
+     SVM    tf_idf   ctrl3 argmax  0.9567   0.0000     0.0000       0.000178
+     SVM    tf_idf   ctrl3    msp  0.9533   0.0771     0.1427       0.000178
+fastText       own     oe4 argmax  0.5433   0.0000     0.0000       0.000008
+fastText       own     oe4    tau  0.5233   0.4252     0.4692       0.000008
+fastText       own   ctrl3 argmax  0.5800   0.0000     0.0000       0.000008
+fastText       own   ctrl3    msp  0.5733   0.0010     0.0020       0.000008

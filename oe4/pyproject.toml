@@ -1,0 +1,20 @@
+[project]
+name = "gqr-oe4"
+version = "0.1.0"
+description = "Retrain the BC-thesis (GQR-Bench) classic models with a 4th 'background' class (outlier exposure: wikitext-103 + dolly-15k). Apple-silicon (MPS/CPU) friendly."
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "gqr>=0.0.5",
+    "torch>=2.7.0",
+    "transformers>=4.51",
+    "sentence-transformers>=3.0",
+    "datasets>=3.5",
+    "scikit-learn>=1.6",
+    "xgboost>=3.0",
+    "fasttext-wheel>=0.9.2",
+    "pandas>=2.2",
+    "numpy>=1.26",
+    "scipy>=1.13",
+    "tqdm>=4.67",
+    "accelerate>=1.0",
+]
