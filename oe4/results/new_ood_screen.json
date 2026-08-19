@@ -1,0 +1,58 @@
+{
+  "aux_vs_gqr_test": {
+    "shingle:gqr_id_test": 2,
+    "exact:gqr_id_test": 1,
+    "exact:gqr_ood_test": 1
+  },
+  "datasets": {
+    "trec": {
+      "n_raw": 500,
+      "n_kept": 496,
+      "dropped": {
+        "exact:aux(wikitext+dolly)": 4
+      }
+    },
+    "agnews_ws": {
+      "n_raw": 1000,
+      "n_kept": 1000,
+      "dropped": {}
+    },
+    "rotten_tomatoes": {
+      "n_raw": 1000,
+      "n_kept": 1000,
+      "dropped": {}
+    },
+    "codealpaca": {
+      "n_raw": 1000,
+      "n_kept": 999,
+      "dropped": {
+        "shingle:aux(wikitext+dolly)": 1
+      }
+    },
+    "gsm8k": {
+      "n_raw": 1000,
+      "n_kept": 1000,
+      "dropped": {}
+    },
+    "yahoo_se": {
+      "n_raw": 1000,
+      "n_kept": 999,
+      "dropped": {
+        "shingle:aux(wikitext+dolly)": 1
+      }
+    },
+    "tweets": {
+      "n_raw": 1000,
+      "n_kept": 1000,
+      "dropped": {}
+    },
+    "banking77": {
+      "n_raw": 1000,
+      "n_kept": 995,
+      "dropped": {
+        "shingle:gqr_train": 2,
+        "shingle:gqr_val": 3
+      }
+    }
+  }
+}

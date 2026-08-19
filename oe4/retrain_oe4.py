@@ -215,6 +215,12 @@ class XGBModel:
     def save(self, path):
         self.clf.save_model(str(path.with_suffix(".json")))
 
+    def load(self, path):
+        from xgboost import XGBClassifier
+        self.clf = XGBClassifier()
+        self.clf.load_model(str(path.with_suffix(".json")))
+        return self
+
 
 class SVMModel:
     name = "SVM"
@@ -235,6 +241,11 @@ class SVMModel:
     def save(self, path):
         with open(path.with_suffix(".pkl"), "wb") as f:
             pickle.dump(self.clf, f)
+
+    def load(self, path):
+        with open(path.with_suffix(".pkl"), "rb") as f:
+            self.clf = pickle.load(f)
+        return self
 
 
 class FastTextModel:
@@ -276,6 +287,12 @@ class FastTextModel:
 
     def save(self, path):
         self.clf.save_model(str(path.with_suffix(".bin")))
+
+    def load(self, path, n_classes):
+        import fasttext
+        self.clf = fasttext.load_model(str(path.with_suffix(".bin")))
+        self.n_classes = n_classes
+        return self
 
 
 def smooth_idf(encoded_docs, vocab_size):
@@ -398,6 +415,27 @@ class WideMLPModel:
         torch.save({"model_state_dict": self.model.state_dict(), "idf": self.model.idf.cpu()},
                    path.with_suffix(".pt"))
 
+    def load(self, path, n_classes):
+        import torch
+        from transformers import AutoTokenizer
+        from widemlp import MLP
+        self.tok = AutoTokenizer.from_pretrained("answerdotai/ModernBERT-base")
+        ck = torch.load(path.with_suffix(".pt"), map_location="cpu")
+        self.model = MLP(vocab_size=len(self.tok), num_hidden_layers=self.num_hidden_layers,
+                         num_classes=n_classes, idf=ck["idf"], problem_type="classification")
+        self.model.load_state_dict(ck["model_state_dict"])
+        self.device = torch_device()
+        try:
+            self.model.to(self.device)
+            self.model.idf = self.model.idf.to(self.device)
+            self._forward(self._encode(["probe"]))
+        except Exception:
+            self.device = "cpu"
+            self.model.to("cpu")
+            self.model.idf = self.model.idf.to("cpu")
+        self.model.eval()
+        return self
+
 
 class HFEncoderModel:
     """End-to-end fine-tuned transformer with a softmax (K or K+1)-way head."""
@@ -502,6 +540,16 @@ class HFEncoderModel:
         path.mkdir(parents=True, exist_ok=True)
         self.model.save_pretrained(path)
         self.tok.save_pretrained(path)
+
+    def load(self, path):
+        from transformers import AutoModelForSequenceClassification, AutoTokenizer
+        self.device = torch_device()
+        self.tok = AutoTokenizer.from_pretrained(path)
+        self.model = AutoModelForSequenceClassification.from_pretrained(path)
+        if hasattr(self.model.config, "reference_compile"):
+            self.model.config.reference_compile = False
+        self.model = self.model.to(self.device).eval()
+        return self
 
 
 # -----------------------------------------------------------------------------
