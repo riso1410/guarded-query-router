@@ -5,3 +5,6 @@ artifacts/
 results/preds/
 results/run.log
 __pycache__/
+results/log_*.txt
+results/run_all*.log
+results/dry*
