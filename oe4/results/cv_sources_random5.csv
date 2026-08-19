@@ -1,0 +1,9 @@
+bg,model_key,embedding,fold,cv_acc_mean,cv_acc_std,train_acc_mean,train_cv_gap
+v2,xgb,baai,random5,0.9643,0.0008,1.0,0.0357
+v1,xgb,mini,random5,0.9503,0.0016,1.0,0.0497
+v1,svm,baai,random5,0.9659,0.0023,0.9798,0.0139
+v2,xgb,mini,random5,0.9568,0.0019,1.0,0.0432
+v2,svm,baai,random5,0.9706,0.0009,0.9831,0.0125
+v1,svm,mini,random5,0.9604,0.0019,0.9858,0.0254
+v2,svm,mini,random5,0.9658,0.0012,0.9881,0.0223
+v1,xgb,baai,random5,0.9589,0.0016,1.0,0.0411

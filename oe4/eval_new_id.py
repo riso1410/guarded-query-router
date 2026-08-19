@@ -4,8 +4,10 @@ where they go.  The GQR ID-test set is drawn from the same three sources as the
 training data, so ID acc ≈ 0.99 there does not show in-domain generalisation.
 
 Panel (cap --cap per set, seed --seed; leakage-screened like eval_new_ood.py):
-  finance    banking77 (mteb/banking77), finance_alpaca (gbharti/finance-alpaca
-             instructions), fiqa (BeIR/fiqa queries)
+  finance    banking77 (mteb/banking77), fin_instruct (DeividasM/financial-instruction-aq22),
+             reddit_finance (winddude/reddit_finance_43_250k title+selftext)
+             [gbharti/finance-alpaca was dropped: its non-FiQA part is the GENERAL Stanford-Alpaca
+              instruction set, not finance; BeIR/fiqa dropped: the GQR finance source is derived from it]
   healthcare icliniq (lavita/ChatDoctor-iCliniq patient questions), medquad
              (keivalya/MedQuad-MedicalQnADataset questions), med_flashcards
              (medalpaca/medical_meadow_medical_flashcards)
@@ -51,10 +53,10 @@ def load_new_id(cap, seed):
     # ---- finance
     ds = _hf("mteb/banking77", "test")
     out["banking77"] = ("finance", take(ds["text"]))
-    ds = _hf("gbharti/finance-alpaca", "train")
-    out["finance_alpaca"] = ("finance", take([(r["instruction"] + (" " + r["input"] if r.get("input") else "")).strip() for r in ds]))
-    ds = _hf("BeIR/fiqa", "queries", name="queries")
-    out["fiqa"] = ("finance", take(ds["text"]))
+    ds = _hf("DeividasM/financial-instruction-aq22", "train")
+    out["fin_instruct"] = ("finance", take(ds["instruction"]))
+    ds = _hf("winddude/reddit_finance_43_250k", "train")
+    out["reddit_finance"] = ("finance", take([(r["title"] + "\n" + (r["selftext"] or "")).strip() for r in ds.select(range(40000))]))
     # ---- healthcare
     ds = _hf("lavita/ChatDoctor-iCliniq", "train")
     out["icliniq"] = ("healthcare", take(ds["input"]))

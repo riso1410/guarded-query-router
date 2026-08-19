@@ -8,36 +8,39 @@
       "shingle:gqr_train": 2
     }
   },
-  "finance_alpaca": {
+  "fin_instruct": {
     "domain": "finance",
     "n_raw": 1000,
-    "n_kept": 808,
+    "n_kept": 896,
     "dropped": {
-      "exact:gqr_train": 157,
-      "exact:gqr_id_test": 16,
-      "exact:gqr_val": 16,
-      "shingle:gqr_train": 1,
-      "shingle:aux(wikitext+dolly)": 2
+      "exact:gqr_val": 7,
+      "exact:gqr_train": 66,
+      "exact:gqr_id_test": 11,
+      "shingle:gqr_train": 14,
+      "shingle:gqr_val": 3,
+      "shingle:gqr_id_test": 2,
+      "shingle:aux(wikitext+dolly)": 1
     }
   },
-  "fiqa": {
+  "reddit_finance": {
     "domain": "finance",
     "n_raw": 1000,
-    "n_kept": 286,
+    "n_kept": 945,
     "dropped": {
-      "exact:gqr_train": 530,
-      "exact:gqr_val": 79,
-      "exact:gqr_id_test": 105
+      "shingle:gqr_train": 36,
+      "shingle:gqr_id_test": 12,
+      "shingle:gqr_val": 4,
+      "shingle:gqr_ood_test": 3
     }
   },
   "icliniq": {
     "domain": "healthcare",
     "n_raw": 1000,
-    "n_kept": 902,
+    "n_kept": 905,
     "dropped": {
-      "shingle:gqr_train": 68,
       "shingle:gqr_id_test": 18,
-      "shingle:gqr_val": 12
+      "shingle:gqr_train": 66,
+      "shingle:gqr_val": 11
     }
   },
   "medquad": {
@@ -49,43 +52,40 @@
   "med_flashcards": {
     "domain": "healthcare",
     "n_raw": 1000,
-    "n_kept": 996,
+    "n_kept": 998,
     "dropped": {
-      "shingle:aux(wikitext+dolly)": 1,
-      "shingle:gqr_id_test": 3
+      "shingle:gqr_id_test": 2
     }
   },
   "legal_reddit": {
     "domain": "law",
     "n_raw": 1000,
-    "n_kept": 903,
+    "n_kept": 913,
     "dropped": {
-      "shingle:gqr_train": 73,
-      "shingle:gqr_val": 10,
+      "shingle:gqr_train": 63,
       "shingle:gqr_id_test": 13,
-      "shingle:gqr_ood_test": 1
+      "shingle:gqr_val": 11
     }
   },
   "legal_qa_v1": {
     "domain": "law",
     "n_raw": 1000,
-    "n_kept": 978,
+    "n_kept": 985,
     "dropped": {
-      "shingle:gqr_train": 14,
-      "shingle:gqr_val": 6,
-      "shingle:gqr_id_test": 2
+      "shingle:gqr_train": 9,
+      "shingle:gqr_val": 2,
+      "shingle:gqr_id_test": 4
     }
   },
   "legal_qa_ib": {
     "domain": "law",
     "n_raw": 1000,
-    "n_kept": 902,
+    "n_kept": 926,
     "dropped": {
-      "shingle:gqr_train": 62,
-      "shingle:gqr_val": 17,
-      "shingle:gqr_id_test": 15,
-      "shingle:gqr_ood_test": 3,
-      "shingle:aux(wikitext+dolly)": 1
+      "shingle:gqr_val": 12,
+      "shingle:gqr_train": 48,
+      "shingle:gqr_ood_test": 1,
+      "shingle:gqr_id_test": 13
     }
   }
 }

@@ -117,13 +117,113 @@ def aux_outliers(n, seed=22, min_len=40):
     return out
 
 
-def load_all(seed, n_aux=None, aux_val_frac=0.2):
+# ---- ID-topic screen for the background corpus ------------------------------
+ID_TOPIC_RE = {
+    "finance": r"\b(stocks?|invest\w*|bank\w*|loans?|tax\w*|mortgage|credit|insurance|salary|401k|ira|dividends?|mutual funds?|hedge funds?|budget\w*|debts?|interest rates?|currenc\w*|bitcoin|crypto\w*|accounting|revenue|profits?|inflation|portfolio|equity|bonds?|shares?|trading|broker\w*|pension|retire\w*|payroll|wages?|financ\w*|econom\w*|gdp|paycheck|refinanc\w*|fico|debit|money|price\w*|cost\w*|pay\w*|income|fund\w*|cash|dollars?|euros?)\b",
+    "health": r"\b(doctors?|symptoms?|pain|diseases?|medic\w*|hospital\w*|patients?|diagnos\w*|treatments?|pills?|drugs?|cancer|diabet\w*|infection\w*|blood|surger\w*|pregnan\w*|health\w*|therap\w*|vaccin\w*|virus\w*|fever|rash|heart|tumou?r|clinic\w*|prescri\w*|dosage|antibiotic\w*|allerg\w*|asthma|injur\w*|nurse\w*|physician\w*|pharmac\w*|disorder\w*|anxiety|depress\w*|ache|cough|flu|covid|dental|dentist|kidney|liver|lungs?|skin|stomach|bones?|muscles?|diet|weight loss|obes\w*|sick\w*|ill\w*|headache|migraine|cholesterol|pressure|vitamin\w*|supplement\w*|sleep\w*|insomnia|periods?|menstru\w*|sex\w*|std|hiv|aids|body|brain|nerv\w*|swell\w*|bleed\w*|eye|ear|throat|nose|chest|back pain|knee|hip|shoulder|bowel|urin\w*|penis|vagina|breast|testicle\w*)\b",
+    "law": r"\b(laws?|legal\w*|courts?|judges?|attorney\w*|lawyers?|sue[ds]?|lawsuits?|contracts?|police|arrest\w*|crim\w*|illegal|statute\w*|copyright\w*|patents?|tenants?|landlords?|custody|divorce\w*|visas?|immigration|constitution\w*|jurisdiction|liabilit\w*|plaintiff|defendant|felony|misdemeanor|prosecut\w*|warrant|legislat\w*|regulation\w*|rights|leases?|evict\w*|trademark\w*|licens\w*|fine[ds]?|penalt\w*|jail|prison|bail|charges?|charged|testif\w*|witness\w*|notary|will|inherit\w*|estate|trust|alimony|harass\w*|discriminat\w*|employer|fired|terminated|hoa|dui|dwi|ticket\w*|speeding|permit\w*|zoning|lawful|unlawful|agreement\w*|clause\w*|terms of service|gdpr|privacy)\b",
+}
+_ID_RX = {k: __import__("re").compile(v, __import__("re").I) for k, v in ID_TOPIC_RE.items()}
+
+
+def id_topic_hit(text):
+    """Return the first ID domain whose keyword list matches, else None."""
+    for k, rx in _ID_RX.items():
+        if rx.search(text):
+            return k
+    return None
+
+
+def aux_outliers_v2(n, seed=22, min_len=40, clf_filter=True):
+    """Cleaned, register-diverse background: 1/3 wikitext-103 prose, 1/3 dolly
+    instructions, 1/3 Yahoo-Answers TRAIN questions from non-ID topics (Society
+    & Culture, Science & Math, Education & Reference, Computers & Internet —
+    Health, Business & Finance, Politics & Government, Family & Relationships,
+    Sports, Entertainment excluded; the last two are held for the new-OOD test
+    panel). Every candidate must (1) contain no finance / health / law keyword
+    (ID_TOPIC_RE) and (2) not be classified as ID with p>0.8 by the 3-class
+    SVM/bge-small control model trained on GQR only (p>0.99 = very confidently ID) (no test data involved).
+    Yahoo test split is never touched."""
+    path = ARTIFACTS / f"aux_v2_{n}_{seed}.json"
+    if path.exists():
+        return json.loads(path.read_text())
+    from datasets import load_dataset
+    per = n // 3
+    pools = {"wikitext": [], "dolly": [], "yahoo": []}
+    stats = {}
+
+    def ok(t):
+        return len(t) >= min_len and id_topic_hit(t) is None
+
+    ds = load_dataset("Salesforce/wikitext", "wikitext-103-raw-v1", split="train", streaming=True)
+    seen = 0
+    for row in ds.shuffle(seed=seed, buffer_size=50_000):
+        t = row["text"].strip()
+        if len(t) >= min_len and not t.startswith("="):
+            seen += 1
+            if ok(t):
+                pools["wikitext"].append(t[:2000])
+            if len(pools["wikitext"]) >= int(per * 2.5):
+                break
+    stats["wikitext_seen"] = seen
+    dolly = load_dataset("databricks/databricks-dolly-15k", split="train").shuffle(seed=seed)
+    seen = 0
+    for row in dolly:
+        t = row["instruction"].strip()
+        if len(t) >= 15:
+            seen += 1
+            if id_topic_hit(t) is None:
+                pools["dolly"].append(t[:2000])
+    stats["dolly_seen"] = seen
+    ya = load_dataset("community-datasets/yahoo_answers_topics", split="train").shuffle(seed=seed)
+    seen = 0
+    for row in ya:
+        if row["topic"] not in (0, 1, 3, 4):
+            continue
+        t = (row["question_title"] + " " + row["question_content"]).strip()
+        if len(t.split()) >= 4:
+            seen += 1
+            if id_topic_hit(t) is None:
+                pools["yahoo"].append(t[:2000])
+        if len(pools["yahoo"]) >= int(per * 2.5):
+            break
+    stats["yahoo_seen"] = seen
+    for k in pools:
+        stats[f"{k}_after_keyword"] = len(pools[k])
+
+    if clf_filter:
+        # second stage: drop candidates the 3-class GQR control model finds ID-like
+        try:
+            import pickle
+            clf = pickle.load(open(MODELS / "svm_baai_ctrl3_s22.pkl", "rb"))
+            for k in pools:
+                X = embed(pools[k], "baai")
+                p = clf.predict_proba(X).max(1)
+                keep = p <= 0.99
+                stats[f"{k}_clf_dropped"] = int((~keep).sum())
+                pools[k] = [t for t, kp in zip(pools[k], keep) if kp]
+        except Exception as e:   # control model not trained yet -> keyword filter only
+            log.warning("aux v2: classifier filter skipped (%s)", e)
+    rng = np.random.default_rng(seed)
+    out = []
+    for k in ("wikitext", "dolly", "yahoo"):
+        pool = pools[k]
+        rng.shuffle(pool)
+        out += pool[:per]
+        stats[f"{k}_used"] = min(per, len(pool))
+    path.write_text(json.dumps(out))
+    (ARTIFACTS / f"aux_v2_{n}_{seed}_stats.json").write_text(json.dumps(stats, indent=2))
+    log.info("aux v2: %d passages -> %s  stats %s", len(out), path, stats)
+    return out
+
+
+def load_all(seed, n_aux=None, aux_val_frac=0.2, bg="v1"):
     import gqr
     train, val = gqr.load_train_dataset()
     id_test = gqr.load_id_test_dataset()
     ood_test = gqr.load_ood_test_dataset()
     n_aux = n_aux or max(len(train) // len(ID_LABELS), 1000)   # 9600 by default
-    aux = aux_outliers(n_aux, seed=seed)
+    aux = aux_outliers(n_aux, seed=seed) if bg == "v1" else aux_outliers_v2(n_aux, seed=seed)
     rng = np.random.default_rng(seed)
     perm = rng.permutation(len(aux))
     n_va = int(len(aux) * aux_val_frac)
@@ -591,10 +691,10 @@ def latency_probe(model, texts, n=200):
     return (time.perf_counter() - t0) / len(probe)
 
 
-def run_one(model, model_key, embed_key, variant, D, seed, results_csv, hparams, rules_wanted=("argmax",)):
+def run_one(model, model_key, embed_key, variant, D, seed, results_csv, hparams, rules_wanted=("argmax",), bg="v1"):
     texts, labels = training_set(D, variant)
     n_classes = len(ID_LABELS) + (1 if variant == "oe4" else 0)
-    tag = f"{model_key}_{embed_key or 'own'}_{variant}_s{seed}"
+    tag = f"{model_key}_{embed_key or 'own'}_{variant}_s{seed}" + ("" if bg == "v1" else f"_bg{bg}")
     log.info("=== %s: fit on %d texts (%d classes)", tag, len(texts), n_classes)
     t0 = time.time()
     model.fit(texts, labels, n_classes)
@@ -630,7 +730,7 @@ def run_one(model, model_key, embed_key, variant, D, seed, results_csv, hparams,
                  tag, rule, id_acc, ood_acc, gqr, lat * 1e3,
                  None if tau is None else round(tau, 4), aux_rej.get(rule))
         rows.append(dict(timestamp=time.strftime("%Y%m%d_%H%M%S"), model=model.name,
-                         model_key=model_key, embedding=embed_key or "own", variant=variant,
+                         model_key=model_key, embedding=embed_key or "own", variant=variant, bg=bg,
                          rule=rule, seed=seed, id_acc=round(id_acc, 4), ood_acc=round(ood_acc, 4),
                          gqr_score=round(gqr, 4), id_val_acc=round(val_acc, 4),
                          aux_val_reject=None if rule not in aux_rej else round(aux_rej[rule], 4),
@@ -655,6 +755,7 @@ def main():
     ap.add_argument("--variants", default="oe4", help="oe4 = 4-class (law/finance/healthcare/background); ctrl3 = 3-class control")
     ap.add_argument("--rules", default="argmax", help="decision rules to report: argmax (default, plain 4-class prediction); add tau / msp for thresholded variants")
     ap.add_argument("--seed", type=int, default=22)
+    ap.add_argument("--bg", default="v1", choices=["v1", "v2"], help="background corpus: v1 = wikitext+dolly (raw); v2 = wikitext+dolly+yahoo(non-ID topics), ID-topic filtered")
     ap.add_argument("--n-aux", type=int, default=None, help="aux outliers (default len(train)/3 = 9600)")
     ap.add_argument("--epochs", type=int, default=3, help="bert/modernbert epochs")
     ap.add_argument("--mlp-epochs", type=int, default=30)
@@ -672,7 +773,7 @@ def main():
                         handlers=[logging.StreamHandler(),
                                   logging.FileHandler(RESULTS / "run.log")])
     log.info("args: %s", vars(args))
-    D = load_all(args.seed, n_aux=args.n_aux)
+    D = load_all(args.seed, n_aux=args.n_aux, bg=args.bg)
     if args.dry_run:
         for k in ("train", "val", "id_test", "ood_test"):
             D[k] = D[k].sample(n=min(300, len(D[k])), random_state=args.seed).reset_index(drop=True)
@@ -682,7 +783,7 @@ def main():
     variants = args.variants.split(",")
     rules = tuple(args.rules.split(","))
     embeds = args.embeds.split(",")
-    hp = dict(seed=args.seed, alpha=ALPHA, n_aux=len(D["aux_train"]) + len(D["aux_val"]),
+    hp = dict(seed=args.seed, bg=args.bg, alpha=ALPHA, n_aux=len(D["aux_train"]) + len(D["aux_val"]),
               epochs=args.epochs, mlp_epochs=args.mlp_epochs, batch_size=args.batch_size,
               max_len=args.max_len, lr=args.lr, ft_autotune=args.ft_autotune, dry_run=args.dry_run)
 
@@ -697,18 +798,18 @@ def main():
                         else:
                             feat = (lambda k: (lambda texts: embed(texts, k)))(ek)
                         M = (XGBModel if mk == "xgb" else SVMModel)(feat, ek, args.seed)
-                        run_one(M, mk, ek, variant, D, args.seed, results_csv, hp, rules)
+                        run_one(M, mk, ek, variant, D, args.seed, results_csv, hp, rules, args.bg)
                 elif mk == "fasttext":
                     run_one(FastTextModel(args.seed, autotune_duration=0 if args.dry_run else args.ft_autotune, val=val),
-                            mk, None, variant, D, args.seed, results_csv, hp, rules)
+                            mk, None, variant, D, args.seed, results_csv, hp, rules, args.bg)
                 elif mk == "widemlp":
                     run_one(WideMLPModel(args.seed, epochs=2 if args.dry_run else args.mlp_epochs, val=val),
-                            mk, None, variant, D, args.seed, results_csv, hp, rules)
+                            mk, None, variant, D, args.seed, results_csv, hp, rules, args.bg)
                 elif mk in ("bert", "modernbert"):
                     run_one(HFEncoderModel(mk, args.seed, epochs=1 if args.dry_run else args.epochs,
                                            batch_size=args.batch_size, lr=args.lr, max_len=args.max_len,
                                            val=val, eval_every=20 if args.dry_run else 500),
-                            mk, None, variant, D, args.seed, results_csv, hp, rules)
+                            mk, None, variant, D, args.seed, results_csv, hp, rules, args.bg)
                 else:
                     log.error("unknown model %s", mk)
             except Exception:

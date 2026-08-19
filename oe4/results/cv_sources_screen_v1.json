@@ -1,0 +1,134 @@
+{
+  "law/legal_reddit": {
+    "n_raw": 3000,
+    "n_kept": 2875,
+    "dropped": {
+      "shingle:gqr_id_test": 61,
+      "shingle:gqr_val": 59,
+      "shingle:aux": 2,
+      "shingle:gqr_ood_test": 3
+    }
+  },
+  "law/legal_qa_v1": {
+    "n_raw": 3000,
+    "n_kept": 2949,
+    "dropped": {
+      "shingle:law/legal_reddit": 27,
+      "shingle:gqr_val": 14,
+      "shingle:gqr_id_test": 10
+    }
+  },
+  "law/legal_qa_ib": {
+    "n_raw": 3000,
+    "n_kept": 2617,
+    "dropped": {
+      "shingle:law/legal_reddit": 238,
+      "shingle:gqr_val": 69,
+      "shingle:gqr_id_test": 50,
+      "shingle:law/legal_qa_v1": 23,
+      "shingle:aux": 3
+    }
+  },
+  "finance/banking77": {
+    "n_raw": 3000,
+    "n_kept": 2993,
+    "dropped": {
+      "shingle:law/legal_reddit": 2,
+      "shingle:law/legal_qa_v1": 2,
+      "shingle:gqr_id_test": 2,
+      "shingle:law/legal_qa_ib": 1
+    }
+  },
+  "finance/fin_instruct": {
+    "n_raw": 3000,
+    "n_kept": 2820,
+    "dropped": {
+      "exact:gqr_val": 69,
+      "shingle:gqr_val": 20,
+      "shingle:law/legal_qa_ib": 3,
+      "exact:gqr_id_test": 56,
+      "shingle:gqr_id_test": 22,
+      "shingle:law/legal_reddit": 5,
+      "shingle:aux": 4,
+      "shingle:law/legal_qa_v1": 1
+    }
+  },
+  "finance/reddit_finance": {
+    "n_raw": 3000,
+    "n_kept": 2807,
+    "dropped": {
+      "shingle:law/legal_qa_ib": 38,
+      "shingle:law/legal_reddit": 78,
+      "shingle:gqr_val": 33,
+      "shingle:gqr_id_test": 22,
+      "shingle:gqr_ood_test": 4,
+      "shingle:law/legal_qa_v1": 6,
+      "shingle:finance/banking77": 3,
+      "shingle:finance/fin_instruct": 8,
+      "shingle:aux": 1
+    }
+  },
+  "healthcare/icliniq": {
+    "n_raw": 3000,
+    "n_kept": 2874,
+    "dropped": {
+      "shingle:gqr_val": 31,
+      "shingle:gqr_id_test": 57,
+      "shingle:law/legal_reddit": 16,
+      "shingle:law/legal_qa_v1": 7,
+      "shingle:law/legal_qa_ib": 10,
+      "shingle:finance/banking77": 3,
+      "shingle:finance/reddit_finance": 2
+    }
+  },
+  "healthcare/medquad": {
+    "n_raw": 3000,
+    "n_kept": 3000,
+    "dropped": {}
+  },
+  "healthcare/med_flashcards": {
+    "n_raw": 3000,
+    "n_kept": 2995,
+    "dropped": {
+      "shingle:aux": 1,
+      "shingle:gqr_id_test": 2,
+      "shingle:gqr_val": 2
+    }
+  },
+  "law/gqr": {
+    "n_raw": 3000,
+    "n_kept": 2932,
+    "dropped": {
+      "shingle:legal_qa_ib": 14,
+      "shingle:legal_reddit": 38,
+      "shingle:legal_qa_v1": 4,
+      "shingle:icliniq": 3,
+      "shingle:fin_instruct": 2,
+      "shingle:reddit_finance": 6,
+      "shingle:banking77": 1
+    }
+  },
+  "finance/gqr": {
+    "n_raw": 3000,
+    "n_kept": 2946,
+    "dropped": {
+      "exact:fin_instruct": 42,
+      "shingle:fin_instruct": 9,
+      "shingle:banking77": 1,
+      "shingle:legal_qa_ib": 1,
+      "shingle:med_flashcards": 1
+    }
+  },
+  "healthcare/gqr": {
+    "n_raw": 3000,
+    "n_kept": 2941,
+    "dropped": {
+      "shingle:icliniq": 34,
+      "shingle:legal_qa_ib": 6,
+      "shingle:legal_qa_v1": 1,
+      "shingle:legal_reddit": 13,
+      "shingle:banking77": 2,
+      "shingle:reddit_finance": 3
+    }
+  }
+}
