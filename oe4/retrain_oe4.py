@@ -427,6 +427,9 @@ class HFEncoderModel:
         rng = np.random.default_rng(self.seed)
         order = np.arange(len(texts))
         best, best_state, step = float("inf"), None, 0
+        if self.val is not None:
+            vi = np.random.default_rng(self.seed).permutation(len(self.val[0]))[:2000]
+            self._val_sub = ([self.val[0][i] for i in vi], np.asarray(self.val[1])[vi])
         t0 = time.time()
         for ep in range(self.epochs):
             rng.shuffle(order)
@@ -435,9 +438,11 @@ class HFEncoderModel:
             for i in range(0, len(order), self.batch_size):
                 idx = order[i:i + self.batch_size]
                 bt = self.tok([texts[j] for j in idx], padding=True, truncation=True,
-                              max_length=self.max_len, return_tensors="pt").to(self.device)
-                logits = self.model(**bt).logits
-                loss = F.cross_entropy(logits, y[idx].to(self.device))
+                              max_length=self.max_len, pad_to_multiple_of=32, return_tensors="pt").to(self.device)
+                with torch.autocast(device_type=self.device, dtype=torch.float16,
+                                    enabled=self.device in ("mps", "cuda")):
+                    logits = self.model(**bt).logits
+                loss = F.cross_entropy(logits.float(), y[idx].to(self.device))
                 opt.zero_grad()
                 loss.backward()
                 torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
@@ -450,7 +455,7 @@ class HFEncoderModel:
                     log.info("%s ep %d step %d/%d loss %.4f  (%.0fs)", self.key, ep, step, steps,
                              tot / nb, time.time() - t0)
                 if self.val is not None and step % self.eval_every == 0:
-                    vl = self._val_loss(*self.val)
+                    vl = self._val_loss(*self._val_sub)
                     log.info("%s step %d val loss %.4f", self.key, step, vl)
                     if vl < best:
                         best = vl
@@ -478,8 +483,10 @@ class HFEncoderModel:
         with torch.no_grad():
             for i in range(0, len(texts), self._infer_bs):
                 bt = self.tok(list(texts[i:i + self._infer_bs]), padding=True, truncation=True,
-                              max_length=self.max_len, return_tensors="pt").to(self.device)
-                out.append(self.model(**bt).logits.float().cpu())
+                              max_length=self.max_len, pad_to_multiple_of=32, return_tensors="pt").to(self.device)
+                with torch.autocast(device_type=self.device, dtype=torch.float16,
+                                    enabled=self.device in ("mps", "cuda")):
+                    out.append(self.model(**bt).logits.float().cpu())
         return torch.cat(out)
 
     def _val_loss(self, texts, labels):
