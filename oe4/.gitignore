@@ -11,3 +11,6 @@ results/dry*
 results/log_newood_*.txt
 results/new_ood.log
 results/new_ood_run.log
+results/log_newid_*.txt
+results/new_id.log
+results/new_id_run.log
