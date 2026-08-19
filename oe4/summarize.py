@@ -1,6 +1,7 @@
 """Summarise oe4/results/results.csv into a markdown table.
 
-usage: .venv/bin/python summarize.py [results/results.csv] [--md out.md]
+usage: .venv/bin/python summarize.py [results/results.csv] [--md out.md] [--rules argmax,tau] [--variants oe4,ctrl3]
+default: plain 4-class argmax rows only
 """
 import json
 import sys
@@ -11,6 +12,12 @@ path = sys.argv[1] if len(sys.argv) > 1 and not sys.argv[1].startswith("--") els
 out_md = sys.argv[sys.argv.index("--md") + 1] if "--md" in sys.argv else None
 
 df = pd.read_csv(path)
+rules = sys.argv[sys.argv.index("--rules") + 1].split(",") if "--rules" in sys.argv else ["argmax"]
+df = df[df.rule.isin(rules)]
+if "--variants" in sys.argv:
+    df = df[df.variant.isin(sys.argv[sys.argv.index("--variants") + 1].split(","))]
+else:
+    df = df[df.variant == "oe4"]
 # keep the latest row per (model_key, embedding, variant, rule, seed)
 df = df.sort_values("timestamp").drop_duplicates(
     ["model_key", "embedding", "variant", "rule", "seed"], keep="last")
@@ -29,10 +36,11 @@ for _, r in df.iterrows():
                  f"{'' if pd.isna(r.aux_val_reject) else f'{r.aux_val_reject:.3f}'} | "
                  f"{r.avg_latency_s * 1e3:.2f} | {r.train_time_s:.0f} |")
 
-# best-per-model comparison: oe4 (best rule) vs ctrl3/msp
-lines += ["", "### Best rule per model: 4th background class (oe4) vs 3-class control (ctrl3, MSP reject)", "",
+# best-per-model comparison: oe4 (best rule) vs ctrl3/msp — only when the control was requested
+if (df.variant == "ctrl3").any():
+  lines += ["", "### Best rule per model: 4th background class (oe4) vs 3-class control (ctrl3, MSP reject)", "",
           "| model | embedding | ctrl3/msp GQR | oe4 best GQR (rule) | Δ GQR | oe4 ID | oe4 OOD |", "|---|---|---|---|---|---|---|"]
-for (mk, em), g in df.groupby(["model_key", "embedding"], sort=False):
+for (mk, em), g in (df.groupby(["model_key", "embedding"], sort=False) if (df.variant == "ctrl3").any() else []):
     c = g[(g.variant == "ctrl3") & (g.rule == "msp")]
     o = g[g.variant == "oe4"]
     if o.empty:

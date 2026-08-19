@@ -1,6 +1,8 @@
-"""Retrain the BC-thesis (GQR-Bench) classic classifiers with a 4th "background"
-class — outlier exposure (Hendrycks et al. 2019) with auxiliary wikitext-103 +
-dolly-15k passages, the same recipe as `scorer_oe` in the DP repo (safe-router).
+"""Retrain the BC-thesis (GQR-Bench) classic classifiers as plain 4-class models:
+law / finance / healthcare / background, where the background class is trained
+from auxiliary wikitext-103 + dolly-15k passages (the aux corpus used by
+`scorer_oe` in the DP repo).  Default = plain training + argmax prediction
+(predict "ood" iff background is the argmax).  No thresholds, no calibration.
 
 Models (the "old" families from the bachelor thesis):
   xgb        XGBoost            x {baai, mini, tf_idf} embeddings
@@ -589,7 +591,7 @@ def latency_probe(model, texts, n=200):
     return (time.perf_counter() - t0) / len(probe)
 
 
-def run_one(model, model_key, embed_key, variant, D, seed, results_csv, hparams):
+def run_one(model, model_key, embed_key, variant, D, seed, results_csv, hparams, rules_wanted=("argmax",)):
     texts, labels = training_set(D, variant)
     n_classes = len(ID_LABELS) + (1 if variant == "oe4" else 0)
     tag = f"{model_key}_{embed_key or 'own'}_{variant}_s{seed}"
@@ -617,6 +619,7 @@ def run_one(model, model_key, embed_key, variant, D, seed, results_csv, hparams)
     else:
         rules = {"argmax": None, "msp": float(np.quantile(P_val[:, :3].max(1), ALPHA))}
         aux_rej = {}
+    rules = {r: t for r, t in rules.items() if r in rules_wanted}
 
     rows = []
     for rule, tau in rules.items():
@@ -649,7 +652,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--models", default="xgb,svm,fasttext,widemlp,bert,modernbert")
     ap.add_argument("--embeds", default="baai,mini,tf_idf", help="for xgb/svm")
-    ap.add_argument("--variants", default="oe4,ctrl3")
+    ap.add_argument("--variants", default="oe4", help="oe4 = 4-class (law/finance/healthcare/background); ctrl3 = 3-class control")
+    ap.add_argument("--rules", default="argmax", help="decision rules to report: argmax (default, plain 4-class prediction); add tau / msp for thresholded variants")
     ap.add_argument("--seed", type=int, default=22)
     ap.add_argument("--n-aux", type=int, default=None, help="aux outliers (default len(train)/3 = 9600)")
     ap.add_argument("--epochs", type=int, default=3, help="bert/modernbert epochs")
@@ -676,6 +680,7 @@ def main():
     results_csv = Path(args.results)
     models = args.models.split(",")
     variants = args.variants.split(",")
+    rules = tuple(args.rules.split(","))
     embeds = args.embeds.split(",")
     hp = dict(seed=args.seed, alpha=ALPHA, n_aux=len(D["aux_train"]) + len(D["aux_val"]),
               epochs=args.epochs, mlp_epochs=args.mlp_epochs, batch_size=args.batch_size,
@@ -692,18 +697,18 @@ def main():
                         else:
                             feat = (lambda k: (lambda texts: embed(texts, k)))(ek)
                         M = (XGBModel if mk == "xgb" else SVMModel)(feat, ek, args.seed)
-                        run_one(M, mk, ek, variant, D, args.seed, results_csv, hp)
+                        run_one(M, mk, ek, variant, D, args.seed, results_csv, hp, rules)
                 elif mk == "fasttext":
                     run_one(FastTextModel(args.seed, autotune_duration=0 if args.dry_run else args.ft_autotune, val=val),
-                            mk, None, variant, D, args.seed, results_csv, hp)
+                            mk, None, variant, D, args.seed, results_csv, hp, rules)
                 elif mk == "widemlp":
                     run_one(WideMLPModel(args.seed, epochs=2 if args.dry_run else args.mlp_epochs, val=val),
-                            mk, None, variant, D, args.seed, results_csv, hp)
+                            mk, None, variant, D, args.seed, results_csv, hp, rules)
                 elif mk in ("bert", "modernbert"):
                     run_one(HFEncoderModel(mk, args.seed, epochs=1 if args.dry_run else args.epochs,
                                            batch_size=args.batch_size, lr=args.lr, max_len=args.max_len,
                                            val=val, eval_every=20 if args.dry_run else 500),
-                            mk, None, variant, D, args.seed, results_csv, hp)
+                            mk, None, variant, D, args.seed, results_csv, hp, rules)
                 else:
                     log.error("unknown model %s", mk)
             except Exception:
