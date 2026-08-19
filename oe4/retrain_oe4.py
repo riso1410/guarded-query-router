@@ -168,13 +168,17 @@ def st_model(key):
 
 
 def embed(texts, key, batch_size=256):
+    # cache only big batches (train/val/test sets); single-query latency probes
+    # must always run the encoder for real
+    use_cache = len(texts) >= 500
     path = CACHE / f"emb_{key}_{_hash(texts)}.npy"
-    if path.exists():
+    if use_cache and path.exists():
         return np.load(path)
     m = st_model(key)
     X = m.encode(list(texts), batch_size=batch_size, normalize_embeddings=True,
-                 show_progress_bar=True, convert_to_numpy=True).astype(np.float32)
-    np.save(path, X)
+                 show_progress_bar=use_cache, convert_to_numpy=True).astype(np.float32)
+    if use_cache:
+        np.save(path, X)
     return X
 
 
