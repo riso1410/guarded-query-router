@@ -1,17 +1,17 @@
 | model | embedding | variant | rule | ID acc | OOD acc | **GQR** | τ | aux-val rej | latency ms | train s |
 |---|---|---|---|---|---|---|---|---|---|---|
-| XGBoost | baai | oe4 | argmax | 0.9933 | 0.8630 | **0.9236** |  | 0.957 | 8.84 | 4 |
-| XGBoost | mini | oe4 | argmax | 0.9900 | 0.9042 | **0.9452** |  | 0.948 | 3.88 | 4 |
-| XGBoost | tf_idf | oe4 | argmax | 0.9732 | 0.7499 | **0.8471** |  | 0.903 | 0.33 | 18 |
-| SVM | baai | oe4 | argmax | 0.9948 | 0.8728 | **0.9298** |  | 0.970 | 9.07 | 56 |
-| SVM | mini | oe4 | argmax | 0.9908 | 0.9174 | **0.9527** |  | 0.960 | 4.42 | 122 |
-| SVM | tf_idf | oe4 | argmax | 0.9842 | 0.8709 | **0.9241** |  | 0.960 | 2.81 | 526 |
-| fastText | own | oe4 | argmax | 0.9917 | 0.7032 | **0.8229** |  | 0.964 | 0.02 | 312 |
-| WideMLP | own | oe4 | argmax | 0.9918 | 0.7448 | **0.8507** |  | 0.970 | 1.03 | 547 |
-| BERT-multilingual | own | oe4 | argmax | 0.9964 | 0.5457 | **0.7052** |  | 0.977 | 10.65 | 599 |
-| ModernBERT | own | oe4 | argmax | 0.9974 | 0.4285 | **0.5995** |  | 0.980 | 14.13 | 1012 |
+| XGBoost | baai | bg4 | argmax | 0.9933 | 0.8630 | **0.9236** |  | 0.957 | 8.84 | 4 |
+| XGBoost | mini | bg4 | argmax | 0.9900 | 0.9042 | **0.9452** |  | 0.948 | 3.88 | 4 |
+| XGBoost | tf_idf | bg4 | argmax | 0.9732 | 0.7499 | **0.8471** |  | 0.903 | 0.33 | 18 |
+| SVM | baai | bg4 | argmax | 0.9948 | 0.8728 | **0.9298** |  | 0.970 | 9.07 | 56 |
+| SVM | mini | bg4 | argmax | 0.9908 | 0.9174 | **0.9527** |  | 0.960 | 4.42 | 122 |
+| SVM | tf_idf | bg4 | argmax | 0.9842 | 0.8709 | **0.9241** |  | 0.960 | 2.81 | 526 |
+| fastText | own | bg4 | argmax | 0.9917 | 0.7032 | **0.8229** |  | 0.964 | 0.02 | 312 |
+| WideMLP | own | bg4 | argmax | 0.9918 | 0.7448 | **0.8507** |  | 0.970 | 1.03 | 547 |
+| BERT-multilingual | own | bg4 | argmax | 0.9964 | 0.5457 | **0.7052** |  | 0.977 | 10.65 | 599 |
+| ModernBERT | own | bg4 | argmax | 0.9974 | 0.4285 | **0.5995** |  | 0.980 | 14.13 | 1012 |
 
-### Per-OOD-dataset accuracy (oe4, best rule)
+### Per-OOD-dataset accuracy (bg4, best rule)
 
 | model | embedding | rule | jigsaw | olid | hate_xplain | hate_speech_slovak | dkhate | web_questions | ml_questions |
 |---|---|---|---|---|---|---|---|---|---|

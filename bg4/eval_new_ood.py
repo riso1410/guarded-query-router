@@ -1,4 +1,4 @@
-"""Evaluate the saved oe4 / ctrl3 models on NEW out-of-distribution datasets that
+"""Evaluate the saved bg4 / ctrl3 models on NEW out-of-distribution datasets that
 were never used anywhere in the pipeline, with an explicit leakage screen.
 
 New OOD panel (capped at --cap per set, seed --seed):
@@ -38,7 +38,7 @@ import pandas as pd
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-import retrain_oe4 as R  # noqa: E402
+import retrain_bg4 as R  # noqa: E402
 
 log = logging.getLogger("new_ood")
 SHINGLE = 8
@@ -147,7 +147,7 @@ def screen(index, texts):
 # model loading
 
 def build(model_key, emb, variant, D, seed, hp):
-    n_classes = 4 if variant == "oe4" else 3
+    n_classes = 4 if variant == "bg4" else 3
     tag = f"{model_key}_{emb}_{variant}_s{seed}"
     path = R.MODELS / tag
     if model_key in ("xgb", "svm"):
@@ -168,7 +168,7 @@ def build(model_key, emb, variant, D, seed, hp):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--models", default="xgb,svm,fasttext,widemlp,bert,modernbert,bge")
-    ap.add_argument("--variants", default="oe4,ctrl3")
+    ap.add_argument("--variants", default="bg4,ctrl3")
     ap.add_argument("--seed", type=int, default=22)
     ap.add_argument("--cap", type=int, default=1000)
     ap.add_argument("--results", default=str(R.RESULTS / "results.csv"))

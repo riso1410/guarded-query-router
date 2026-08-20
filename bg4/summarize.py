@@ -1,6 +1,6 @@
-"""Summarise oe4/results/results.csv into a markdown table.
+"""Summarise bg4/results/results.csv into a markdown table.
 
-usage: .venv/bin/python summarize.py [results/results.csv] [--md out.md] [--rules argmax,tau] [--variants oe4,ctrl3]
+usage: .venv/bin/python summarize.py [results/results.csv] [--md out.md] [--rules argmax,tau] [--variants bg4,ctrl3]
 default: plain 4-class argmax rows only
 """
 import json
@@ -17,7 +17,7 @@ df = df[df.rule.isin(rules)]
 if "--variants" in sys.argv:
     df = df[df.variant.isin(sys.argv[sys.argv.index("--variants") + 1].split(","))]
 else:
-    df = df[df.variant == "oe4"]
+    df = df[df.variant == "bg4"]
 # keep the latest row per (model_key, embedding, variant, rule, seed)
 df = df.sort_values("timestamp").drop_duplicates(
     ["model_key", "embedding", "variant", "rule", "seed"], keep="last")
@@ -36,13 +36,13 @@ for _, r in df.iterrows():
                  f"{'' if pd.isna(r.aux_val_reject) else f'{r.aux_val_reject:.3f}'} | "
                  f"{r.avg_latency_s * 1e3:.2f} | {r.train_time_s:.0f} |")
 
-# best-per-model comparison: oe4 (best rule) vs ctrl3/msp — only when the control was requested
+# best-per-model comparison: bg4 (best rule) vs ctrl3/msp — only when the control was requested
 if (df.variant == "ctrl3").any():
-  lines += ["", "### Best rule per model: 4th background class (oe4) vs 3-class control (ctrl3, MSP reject)", "",
-          "| model | embedding | ctrl3/msp GQR | oe4 best GQR (rule) | Δ GQR | oe4 ID | oe4 OOD |", "|---|---|---|---|---|---|---|"]
+  lines += ["", "### Best rule per model: 4th background class (bg4) vs 3-class control (ctrl3, MSP reject)", "",
+          "| model | embedding | ctrl3/msp GQR | bg4 best GQR (rule) | Δ GQR | bg4 ID | bg4 OOD |", "|---|---|---|---|---|---|---|"]
 for (mk, em), g in (df.groupby(["model_key", "embedding"], sort=False) if (df.variant == "ctrl3").any() else []):
     c = g[(g.variant == "ctrl3") & (g.rule == "msp")]
-    o = g[g.variant == "oe4"]
+    o = g[g.variant == "bg4"]
     if o.empty:
         continue
     ob = o.loc[o.gqr_score.idxmax()]
@@ -50,11 +50,11 @@ for (mk, em), g in (df.groupby(["model_key", "embedding"], sort=False) if (df.va
     lines.append(f"| {ob.model} | {em} | {cg:.4f} | **{ob.gqr_score:.4f}** ({ob.rule}) | "
                  f"{ob.gqr_score - cg:+.4f} | {ob.id_acc:.4f} | {ob.ood_acc:.4f} |")
 
-# per-OOD-dataset accuracy for the oe4 best rows
-lines += ["", "### Per-OOD-dataset accuracy (oe4, best rule)", ""]
+# per-OOD-dataset accuracy for the bg4 best rows
+lines += ["", "### Per-OOD-dataset accuracy (bg4, best rule)", ""]
 first = True
 for (mk, em), g in df.groupby(["model_key", "embedding"], sort=False):
-    o = g[g.variant == "oe4"]
+    o = g[g.variant == "bg4"]
     if o.empty:
         continue
     ob = o.loc[o.gqr_score.idxmax()]

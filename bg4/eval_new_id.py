@@ -32,7 +32,7 @@ import pandas as pd
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-import retrain_oe4 as R  # noqa: E402
+import retrain_bg4 as R  # noqa: E402
 from eval_new_ood import SeenIndex, _hf, build, screen  # noqa: E402
 
 log = logging.getLogger("new_id")
@@ -77,7 +77,7 @@ def load_new_id(cap, seed):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--models", default="xgb,svm,fasttext,widemlp,bert,modernbert")
-    ap.add_argument("--variants", default="oe4,ctrl3")
+    ap.add_argument("--variants", default="bg4,ctrl3")
     ap.add_argument("--seed", type=int, default=22)
     ap.add_argument("--cap", type=int, default=1000)
     ap.add_argument("--results", default=str(R.RESULTS / "results.csv"))

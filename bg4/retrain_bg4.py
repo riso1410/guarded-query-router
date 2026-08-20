@@ -13,7 +13,7 @@ Models (the "old" families from the bachelor thesis):
   modernbert answerdotai/ModernBERT-base               (fine-tuned end-to-end)
 
 Variants:
-  oe4    4-way (law / finance / healthcare / background) trained on GQR train +
+  bg4    4-way (law / finance / healthcare / background) trained on GQR train +
          auxiliary outliers.  Rejection rules reported:
            argmax : predict ood iff background is the argmax
            tau    : predict ood iff p(background) > tau, tau = (1-ALPHA)-quantile of
@@ -49,7 +49,7 @@ os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "src"))  # widemlp.py from the BC repo
 
-log = logging.getLogger("oe4")
+log = logging.getLogger("bg4")
 
 ID_LABELS = (0, 1, 2)          # law, finance, healthcare (gqr.domain2label)
 BG = 3                         # background class == gqr "ood" label 3
@@ -242,7 +242,7 @@ def training_set(D, variant):
     """Return (texts, labels) for the given variant."""
     texts = list(D["train"]["text"])
     labels = list(D["train"]["label"].astype(int))
-    if variant == "oe4":
+    if variant == "bg4":
         texts += D["aux_train"]
         labels += [BG] * len(D["aux_train"])
     return texts, np.asarray(labels)
@@ -251,7 +251,7 @@ def training_set(D, variant):
 def validation_set(D, variant):
     texts = list(D["val"]["text"])
     labels = list(D["val"]["label"].astype(int))
-    if variant == "oe4":
+    if variant == "bg4":
         texts += D["aux_val"]
         labels += [BG] * len(D["aux_val"])
     return texts, np.asarray(labels)
@@ -663,7 +663,7 @@ def decide(P, rule, tau=None):
     id_arg = P[:, :len(ID_LABELS)].argmax(1)
     if rule == "argmax":
         return P.argmax(1)                       # for ctrl3 this never returns 3
-    if rule == "tau":                            # oe4: background prob threshold
+    if rule == "tau":                            # bg4: background prob threshold
         return np.where(P[:, BG] > tau, BG, id_arg)
     if rule == "msp":                            # ctrl3: max-softmax-prob threshold
         return np.where(P[:, :len(ID_LABELS)].max(1) < tau, BG, id_arg)
@@ -694,7 +694,7 @@ def latency_probe(model, texts, n=200):
 
 def run_one(model, model_key, embed_key, variant, D, seed, results_csv, hparams, rules_wanted=("argmax",), bg="v1"):
     texts, labels = training_set(D, variant)
-    n_classes = len(ID_LABELS) + (1 if variant == "oe4" else 0)
+    n_classes = len(ID_LABELS) + (1 if variant == "bg4" else 0)
     tag = f"{model_key}_{embed_key or 'own'}_{variant}_s{seed}" + ("" if bg == "v1" else f"_bg{bg}")
     log.info("=== %s: fit on %d texts (%d classes)", tag, len(texts), n_classes)
     t0 = time.time()
@@ -712,7 +712,7 @@ def run_one(model, model_key, embed_key, variant, D, seed, results_csv, hparams,
     val_acc = float((P_val[:, :3].argmax(1) == D["val"]["label"].to_numpy()).mean())
     lat = latency_probe(model, list(D["id_test"]["text"][:100]) + list(D["ood_test"]["text"][:100]))
 
-    if variant == "oe4":
+    if variant == "bg4":
         rules = {"argmax": None, "tau": float(np.quantile(P_val[:, BG], 1 - ALPHA))}
         # diagnostic: held-out aux rejection (NOT a benchmark number)
         P_aux = model.proba(D["aux_val"])
@@ -753,7 +753,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--models", default="xgb,svm,fasttext,widemlp,bert,modernbert")
     ap.add_argument("--embeds", default="baai,mini,tf_idf", help="for xgb/svm")
-    ap.add_argument("--variants", default="oe4", help="oe4 = 4-class (law/finance/healthcare/background); ctrl3 = 3-class control")
+    ap.add_argument("--variants", default="bg4", help="bg4 = 4-class (law/finance/healthcare/background); ctrl3 = 3-class control")
     ap.add_argument("--rules", default="argmax", help="decision rules to report: argmax (default, plain 4-class prediction); add tau / msp for thresholded variants")
     ap.add_argument("--seed", type=int, default=22)
     ap.add_argument("--bg", default="v1", choices=["v1", "v2"], help="background corpus: v1 = wikitext+dolly (raw); v2 = wikitext+dolly+yahoo(non-ID topics), ID-topic filtered")

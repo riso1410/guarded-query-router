@@ -37,7 +37,7 @@ import pandas as pd
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-import retrain_oe4 as R  # noqa: E402
+import retrain_bg4 as R  # noqa: E402
 from eval_new_id import DOM  # noqa: E402
 from eval_new_ood import SeenIndex, _hf, load_new_sets, screen  # noqa: E402
 
