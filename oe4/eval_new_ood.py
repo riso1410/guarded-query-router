@@ -167,7 +167,7 @@ def build(model_key, emb, variant, D, seed, hp):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--models", default="xgb,svm,fasttext,widemlp,bert,modernbert")
+    ap.add_argument("--models", default="xgb,svm,fasttext,widemlp,bert,modernbert,bge")
     ap.add_argument("--variants", default="oe4,ctrl3")
     ap.add_argument("--seed", type=int, default=22)
     ap.add_argument("--cap", type=int, default=1000)

@@ -64,7 +64,8 @@ for d in (ARTIFACTS, CACHE, MODELS, RESULTS, RESULTS / "preds"):
 EMBED_NAMES = {"baai": "BAAI/bge-small-en-v1.5",
                "mini": "sentence-transformers/all-MiniLM-L6-v2"}
 ENCODER_NAMES = {"bert": "google-bert/bert-base-multilingual-cased",
-                 "modernbert": "answerdotai/ModernBERT-base"}
+                 "modernbert": "answerdotai/ModernBERT-base",
+                 "bge": "BAAI/bge-small-en-v1.5"}   # = the DP `oe` recipe (fine-tuned end-to-end)
 
 
 def torch_device():
@@ -546,7 +547,7 @@ class HFEncoderModel:
                  eval_every=500):
         self.key, self.seed, self.epochs, self.batch_size = key, seed, epochs, batch_size
         self.lr, self.max_len, self.val, self.eval_every = lr, max_len, val, eval_every
-        self.name = {"bert": "BERT-multilingual", "modernbert": "ModernBERT"}[key]
+        self.name = {"bert": "BERT-multilingual", "modernbert": "ModernBERT", "bge": "bge-small-ft(DP-oe)"}[key]
         self.model_name = ENCODER_NAMES[key]
 
     def fit(self, texts, labels, n_classes):
@@ -805,7 +806,7 @@ def main():
                 elif mk == "widemlp":
                     run_one(WideMLPModel(args.seed, epochs=2 if args.dry_run else args.mlp_epochs, val=val),
                             mk, None, variant, D, args.seed, results_csv, hp, rules, args.bg)
-                elif mk in ("bert", "modernbert"):
+                elif mk in ("bert", "modernbert", "bge"):
                     run_one(HFEncoderModel(mk, args.seed, epochs=1 if args.dry_run else args.epochs,
                                            batch_size=args.batch_size, lr=args.lr, max_len=args.max_len,
                                            val=val, eval_every=20 if args.dry_run else 500),

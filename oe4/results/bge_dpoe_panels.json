@@ -1,0 +1,24 @@
+{
+  "auroc_gqr": 0.9805,
+  "auroc_gqr_dsbal": 0.9745,
+  "auroc_unseen": 0.8409,
+  "new_id_acc": {
+    "argmax": 0.528,
+    "tau": 0.455
+  },
+  "new_id_per_set_tau": {
+    "banking77": 0.762,
+    "fin_instruct": 0.026,
+    "reddit_finance": 0.021,
+    "icliniq": 0.99,
+    "medquad": 0.002,
+    "med_flashcards": 0.016,
+    "legal_reddit": 0.964,
+    "legal_qa_v1": 0.653,
+    "legal_qa_ib": 0.659
+  },
+  "new_ood_rej": {
+    "argmax": 0.806,
+    "tau": 0.912
+  }
+}

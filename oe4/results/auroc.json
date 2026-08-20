@@ -1,0 +1,17 @@
+{
+  "svm/mini": {
+    "auroc_gqr": 0.9966,
+    "auroc_gqr_dsbal": 0.9966,
+    "auroc_unseen": 0.9296
+  },
+  "xgb/mini": {
+    "auroc_gqr": 0.9955,
+    "auroc_gqr_dsbal": 0.9951,
+    "auroc_unseen": 0.9153
+  },
+  "svm/baai": {
+    "auroc_gqr": 0.9958,
+    "auroc_gqr_dsbal": 0.9958,
+    "auroc_unseen": 0.9137
+  }
+}
