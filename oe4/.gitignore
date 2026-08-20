@@ -18,3 +18,5 @@ results/log_cv_*.txt
 results/cv_run*.log
 results/probe.txt
 !artifacts/aux_v2_*_stats.json
+results/final_bp.log
+results/log_final_bp.txt
